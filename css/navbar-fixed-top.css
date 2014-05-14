@@ -1,0 +1,49 @@
+body {
+  padding-top: 70px;
+}
+
+.navbar-fixed-top {
+  padding: 20px 0px;
+  height: 95px;
+  border: none;  
+}
+
+.nav .active {
+  background: none;
+}
+
+
+h1, h2, h3 {
+  color: #74b73f;
+}
+
+.hero {
+/*  background: #a0a0FF;*/
+  background: #74b73f;
+  color: white;
+  height: 22em;
+  width: 100%;
+}
+
+body.frontpage > .container {
+  margin-top: -21em;
+}
+
+body.releases > .container {
+  margin-top: 3em;
+}
+
+.jumbotron {
+  background: none;
+}
+
+.jumbotron h1, .jumbotron h2 {
+  text-align: center;
+}
+
+#footer {
+  /*background: #f8f8f8;*/
+  margin-top: 5em;
+  margin-bottom: 5em;
+  text-align: center;	
+}

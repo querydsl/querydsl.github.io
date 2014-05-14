@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Querydsl">
+    <meta name="author" content="Timo Westkämper">
+    <link rel="shortcut icon" href="ico/favicon.ico">
+
+    <title>Querydsl - Unified Queries for Java</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Font Awesome icons -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/navbar-fixed-top.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body class="frontpage">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Querydsl</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">                        
+            <li><a href="releases.html">Releases</a></li>
+          </ul> 
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="http://www.github.com/querydsl/querydsl">GitHub</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/querydsl">Google Group</a></li>
+            <li><a href="http://www.github.com/querydsl/querydsl/issues">Issues</a></li>
+          </ul> 
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="hero"></div>
+
+    <div class="container">
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Querydsl</h1>
+        <h2>Unified Queries for Java</h2>
+        <p>Querydsl provides a unified querying layer for multiple backends in Java. Compared to the alternatives Querydsl is more compact, safer and easier to learn. Try it today!</p>        
+      </div>
+
+      <div class="some-buttons">
+        <table>
+          <tr>
+            <td>
+              <iframe src="http://ghbtns.com/github-btn.html?user=querydsl&repo=querydsl&type=watch&count=true" height="30" width="118" frameborder="0" scrolling="0" style="width:118px; height: 30px;" allowTransparency="true"></iframe>
+            </td>
+            <td>
+              <iframe src="http://ghbtns.com/github-btn.html?user=querydsl&repo=querydsl&type=fork&count=true" height="30" width="118" frameborder="0" scrolling="0" style="width:118px; height: 30px;" allowTransparency="true"></iframe>
+            </td>
+            <td>
+              <iframe src="http://ghbtns.com/github-btn.html?user=querydsl&type=follow&count=true" height="30" width="168" frameborder="0" scrolling="0" style="width:168px; height: 30px;" allowTransparency="true"></iframe>
+            </td>
+            <td>
+              <a href="https://twitter.com/querydsl" class="twitter-follow-button" data-show-count="false">Follow @querydsl</a>
+            </td>
+            <td>
+              <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.querydsl.com" data-via="querydsl">Tweet</a>
+            </td> 
+          </tr>
+        </table>
+
+      </div>
+
+      <!-- <section id="examples">
+        <h2>Reasons</h2>
+        <div class="row">
+          <div class="col-md-12">TODO: slide show</div>
+        </div>
+        <div class="clear"></div>
+      </section> -->
+
+      <section id="modules">
+        <div class="row">
+        <div class="col-md-3">
+        <h2>Modules</h2>
+        </div>  
+
+        <div class="col-md-3">
+        <h4>JPA</h4>        
+        <p>The popular choice for SQL persistence with a focus on CRUD and simple queries for object loading.</p>                  
+        </div>
+
+        <div class="col-md-3">
+        <h4>SQL</h4>        
+        <p>The alternative SQL abstraction with a focus on SQL operations and the full expressivity of the SQL standard.</p>                
+        </div>
+
+        <div class="col-md-3">
+        <h4>Mongodb</h4>       
+        <p>ODM support via Morphia for MongoDB, the NoSQL of choice for many</p>                
+        </div>
+        </div>
+
+        <div class="row">
+        <div class="col-md-3">&nbsp;</div>
+
+        <div class="col-md-3">
+        <h4>JDO</h4>        
+        <p>JDO support for Object, SQL and NoSQL storage abstraction.</p>                
+        </div>
+
+        <div class="col-md-3">
+        <h4>Lucene</h4>        
+        <p>Full text indexing via Lucene, the most popular fulltext index for Java.</p>                
+        </div>
+
+        <div class="col-md-3">
+        <h4>Collections</h4>        
+        <p>Java Collection querying</p>        
+        </div>
+        </div> 
+      </section>
+
+      <section id="docs">
+        <div class="row">
+        
+        <div class="col-md-3">
+        <h2>Documentation</h2>
+        </div>
+
+        <div class="col-md-3">
+        <p>Version selection <select class="version"></select></p>
+        <ul>
+          <li><a class="docs" href="#">Reference documentation</a></li>
+          <li><a class="javadocs" href="#">Javadocs</a></li>
+          <li><a class="downloads" href="#">Downloads</a></li>
+        </ul>
+        <p>The downloads bundles are meant to be used if other build systems than Maven are used, such as Ant. All Querydsl releases are available via the public Maven repositories.</p>
+        </div>
+
+        <div class="col-md-3">
+        <p>Documentation is also available in the form of blog posts.</p>
+        <ul>
+          <li><a href="http://blog.mysema.com/2013/03/querydsl-30-in-nutshell.html">Querydsl 3.0 in a nutshell</a></li>
+          <li><a href="http://blog.mysema.com/2011/08/querydsl-in-wild.html">Querydsl in the wild</a>
+          </li><li><a href="http://blog.mysema.com/2011/01/querying-in-sql-with-querydsl.html">Querying in SQL with Querydsl</a></li>
+          <li><a href="http://blog.mysema.com/2010/07/querying-hibernate-with-querydsl.html">Querying Hibernate with Querydsl</a></li>          
+          <li><a href="http://blog.mysema.com/2010/11/mongodb-with-querydsl.html">MongoDB with Querydsl</a></li>
+          <li><a href="http://blog.mysema.com/2010/10/sql-queries-in-scala.html">SQL queries in Scala</a></li>
+          <li><a href="http://blog.mysema.com/2010/10/using-querydsl-in-eclipse.html">Using in Querydsl in Eclipse</a></li>
+          <li><a href="http://blog.mysema.com/2010/09/querying-with-scala.html">Querying with Scala</a></li>
+          <li><a href="http://blog.mysema.com/2010/07/query-extensions-in-action.html">Query Extensions in Action</a></li>
+          <li><a href="http://blog.mysema.com/2010/04/querydsl-as-alternative-to-jpa-2.html">Querydsl as an alternative to the JPA 2 Criteria API</a></li>
+        </ul>
+        </div>
+        </div>
+
+      </section>	
+
+      <section id="community">
+        <h2>Community</h2> 
+
+        <div class="row">      
+        <div class="col-md-3">
+        <h4>Querydsl Group</h4>
+        <a href="https://groups.google.com/forum/#!forum/querydsl">Querydsl Group</a> provides a free support forum and a place to discuess Querydsl design issues
+        </div>
+      
+        <div class="col-md-3">
+        <h4>Twitter</h4>
+        <a href="http://www.twitter.com/mysema">Twitter</a> is used for release announcements and links to articles on Querydsl
+        </div>
+      
+        <div class="col-md-3">
+        <h4>GitHub</h4> 
+        <a href="https://github.com/querydsl/querydsl">GitHub</a> is where Querydsl is hosted. Querydsl is licensed under the 
+        <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0 license</a>
+        </div>
+      
+        <div class="col-md-3">
+        <h4>Issues</h4>
+        <a href="https://github.com/querydsl/querydsl/issues">Issues</a> can be filed at <a href="https://github.com/querydsl/querydsl/issues">GitHub issues</a>.
+        </div>      
+        </div>
+        <div class="clear"></div>
+      </section>
+
+      <section id="examples">
+        <h2>Examples</h2>
+        <div class="row">
+          <div class="col-md-12">TODO: slide show</div>
+        </div>
+        <div class="clear"></div>
+      </section>
+
+    </div> <!-- /container -->
+
+    <div id="footer">
+      <p>&copy; 2014 by Timo Westkämper, sponsored by <a href="http://www.mysema.com">Mysema</a></p>
+      <p>Querydsl licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License, Version 2.0</a></p>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/versions.js"></script>
+
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </body>
+</html>
+

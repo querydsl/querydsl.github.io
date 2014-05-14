@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Querydsl">
+    <meta name="author" content="Timo Westkämper">
+    <link rel="shortcut icon" href="ico/favicon.ico">
+
+    <title>Querydsl - Unified Queries for Java</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!--Font Awesome icons -->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/navbar-fixed-top.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body class="releases">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Querydsl</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">                        
+            <li><a href="releases.html">Releases</a></li>
+          </ul> 
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="http://www.github.com/querydsl/querydsl">GitHub</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/querydsl">Google Group</a></li>
+            <li><a href="http://www.github.com/querydsl/querydsl/issues">Issues</a></li>
+          </ul> 
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+
+      <h1>Release History</h2>
+
+      <h2>3.3</h2> 
+
+<p>3.3.2 (24.3.2014)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/676">NullPointerException on Deserialization of a QTuple</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/675">Q classes not generated properly for oneToMany relationships</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/666">Left join been generated for queries with embedded mappings</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/665">Treat unknown types as simple types in JPADomainExporter and HibernateDomainExporter</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/664">Support @QueryType annotation in JPADomainExporter and HibernateDomainExporter</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/673">Rename SQLQueryFactory -&gt; SQLCommonQueryFactory and SQLQueryFactoryImpl to SQLQueryFactory</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/668">SQLExpressions.datediff in seconds does not work in Postgres</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/667">Improve documentation of Configuration.register()</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/662">Document expected Java &lt;-&gt; SQL mapping</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/661">no code generated for functions or types</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/671">Disable any() expansions in Mongodb module</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/670">Problem querying from collection with multiple logical operations in where part, then one of them contains "any()".</a></li>
+</ul>
+
+<p>3.3.1 (8.2.2014)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/642">protected method validate() in final class PathBuilder</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/640">NotSerializableException on QTuple$TupleImpl</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/635">Support Enums in CaseBuilder</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/654">JPA API should be an optional dependency</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/644">Custom UserType with Hibernate, Regression</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/636">sum() operator applied to NumberExpression&lt;Long&gt; fails due to ClassCastException</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/633">JPASQLQuery : Projection columns collision</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/626">Number conversion for native query fails with nested factory expressions</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/624">Allow JPA 2.1 Api</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/620">Invalid query when using a JPASQLQuery with an entity and column projection</a><</li>
+  <li><a href="https://github.com/mysema/querydsl/issues/627">Support comma separated list of table names in tableNamePattern</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/621">Maven plugin : Cross-schema foreign keys support</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/619">Provider better customizability of DML clause serialization</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/618">Wrong db reverse type generation in 3.3.0</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/617">Support for SQLException translation</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/616">Extends some DML clause with limit and orderby</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/611">Custom schema and table name for RelationalPath instances</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/602">Unify and optimize limit and offset serialization</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/628">OSGi - lucene4 module has wrong lucene import version ranges</a></li>
+</ul>
+
+<p>3.3.0 (23.12.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/606">Documentation on path initialization is out-of-date</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/604">Javadoc wrong for ComparableExpression.loe method</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/596">QTuple Expression to value mapping inconsistent</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/595">Improve ProjectionRole expansion</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/597">Exceptions from SQL configuration</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/593">Postgresql - "in with union" is missing parenthesis</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/586">Favor SQL standard functions in SQLTemplates</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/561">Teradata as a supported DB in Querydsl SQL</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/556">TeraData dedicated pagination support</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/555">Ordered Analytic support</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/553">Session and Statement Query Banding</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/552">Support for literal serialization</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/592">NPE occures in query.clone</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/574">Support for DateExpression in CaseBuilder</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/573">Take ProjectionRole into account in subquery projections</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/572">Better configuration of BeanSerializer in Querydsl maven plugin</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/567">QList doesn't accept null args</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/565">Support QuerySupertype as an alternative, if no supertype annotation is available</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/548">Vagrant/Puppet setup for querydsl</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/514">Allow result iteration in GroupBy ResultTransformer</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/584">Add code generation support based on orm.xml mapping file</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/582">Generic querydsl orderBy dynamic path generation with left joins</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/575">JPASQL: mapping of enums throws "illegal argument type" when mapping string from DB to setter for corresponding enum on DTO</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/569">Querydsl JPA's documentation does not specify the DML limitations</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/587">Count distinct broken for PostgreSQL</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/580">Improve SQLSubQuery signature</a
+  <li><a href="https://github.com/mysema/querydsl/issues/578">Tune JDBC numeric mappings</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/577">Add more configuration options to SQL metadata export via Maven</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/576">Support offset without limit for all databases</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/571">Better documentation of SQL DML clauses</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/566">NullPointerException generating Query Types for SQLite</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/560">Error running tests on Mac OS X</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/583">Improve reference handling in Mongodb</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/533">Improve surefire compat of Querydsl tests</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/468">Make backends more exchangable</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/532">Use namespaced operators</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/531">Move Querydsl SQL and JPA operator instances to new class</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/546">Document Querydsl Roo support better</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/540">Projection of SQL query onto JPA entities and aliases</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/537">API inconsistency between JPA SQL and regular SQL: withRecursive()</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/82">Entity model using interfaces does not generate Q classes correctly</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/539">Type error using castToNum method</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/558">Make querydsl:export generate SQL domain beans implement java.io.Serializable</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/550">Maven plugin should addCompileSourceRoot</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/543">Enhancement or option for the foreign key generation</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/538">LocalDateTime conversion fails on DST transition</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/541">WITH query with one column</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/534">Provide SQLBindings for AbstractSQLClause</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/535">Oracle numeric type mapping with no specifications of precision / scale</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/283">Column MetaData Access Via Path</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/518">Misleading error message for SQLDeleteClause</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/528">QueryFlag extractor for SELECT ... FOR UPDATE</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/530">Improve signature and javadocs of SQLListener</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/559">Support of ReadPreference option from Mongo</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/521">Upgrade Morphia version of MongoDB</a></li>
+</ul>  
+
+      <h2>3.2</h2>
+
+<p>3.2.4 (20.10.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/522">Generics cause codegen to fail</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/473">Allow multiple fields in GroupBy ResultTransformer</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/517">Add a configuration parameter to allow code generation for specific classes</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/501">Give example of SELECT [literal] in documentation</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/495">ClassPathUtils.scanJar fails to handle paths containing spaces</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/500">Typo in documentation</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/489">Illegal type with string aggregation</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/478">APT jar is not included on sql module bundle</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/480">Q class with the @QueryProjection annotation via GenericExporter</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/516">"not in" clause occurs error in hibernate</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/485">Semantics are unclear for eager joins</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/486">Add support for Common Table Expressions</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/483">Listening for table operations</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/510">Clarify semantics of columns().select() versus set() for INSERT ... SELECT statements</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/513">querydsl-sql generation of Boolean from Oracle DB</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/502">SQLQueryFactory.from() inconsistent with SQLQuery().from()</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/499">Not clear how to get a SQLQueryFactory</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/503">SQL profile should build querydsl-maven-plugin</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/519">Create "left" and "right" string manipulation functions in QueryDSL</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/493">Lucene search performance can be greatly improved</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/491">Support to lucene module for converting a query to a Lucene QueryWrapperFilter</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/492">Support for chained filters to lucene queries</a></li>
+</ul>
+
+<p>3.2.3 (27.8.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/481">Serialized predicate causes issues with ConstImpl cache</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/465">ArrayIndexOutOfBoundsException when transforms results using alias</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/472">Problem QEntity Genarator with byte/Byte Array</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/471">ClassCastException in AbstractQuerydslProcessor.<wbr>class</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/466">Collection query distinct() throws java.lang.NullPointerException for nulls values</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/475">Cannot perform right substring</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/474">yearMonth composite operations break grouping?</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/467">From arguments should be optional in JPA native queries</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/463">Add better handling of EntityPath properties in SQL queries</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/476">querydsl-sql-X.X.X-sources.jar is not included in querydsl-sql-codegen bundle</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/417">NullPointerException in JavaTypeMapping.findType</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/469">Improve batching performance on Oracle</a></li>
+</ul>
+
+<p>3.2.2 (29.7.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/462">multiply QuerySyntaxException after Update from 2.9.0 to 3.2.1</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/462">SQL</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/461">OrderSpecifier nullsFirst/nullsLast does not follow the JPQL grammar</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/460">Problem with datediff using Datepart.day</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/457">QueryHandler support to JPA SQL</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/440">JPQL Templates doesn't identify the JPA Provider</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/448">Different types returned for production code (Oracle) and in integration tests (HSQLDB)</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/458">Round(x) Function</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/454">Querydsl SQL + UUID</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/7">Merge query support</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/363">Getting SQL strings and bindings from SQLQuery</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/13">Add nullchecks to filters</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/315">Not able to get .max() OR .count() and potentially others</a></li>
+</ul>
+
+<p>3.2.1 (26.6.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/430">Java 7 compatibility - ASM/ CGLIB upgrade needed</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/434">YearWeek</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/438">Escape character in LIKE expressions is not escaped by querydsl</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/439">Order by null value first/last on mysql </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/427">Setting limit on QueryBase causes list() method with query projection return additional rd column, that cannot be mapped to any field in query projection</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/431">wrong space/newline support on columns name</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/432">A custom operator with 2 arguments may fails</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/444">union of single ListSubQuery fails</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/445">OriginalNamingStrategy inconsistent</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/436">Query for a collection property size using Mongodb and QueryDSL</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/442">Predicate With Multiple Conditions On The Same Field Fails</a>  </li>
+</ul>
+
+<p>3.2.0 (27.5.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/416">ArrayIndexOutOfBoundsException during code generation</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/414">Primitive arrays mustn't be converted into arrays of the wrapper type</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/402">Provide option for querydsl-maven-plugin to produce binary Q-classes</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/400">cannot remove default Q prefix using apt-maven-plugin</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/397">Throw exception when regex can't be converted to like</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/388">Document querydsl-maven-plugin</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/404">HibernateDomainExporter - issues with generic Map definitions inside component types</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/403">Date column should refer @Temporal annotation to generate DatePath or TimePath</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/398">Default template of JPAQueryFactory differs from one provided by JPAQuery</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/420">Schema and table name customization</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/413">Date_Trunc and CastToDate</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/412">Wrong FK Generation on Multiple fields FK</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/408">Support For SQL Window Functions</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/406">Support for offset() in mssql 2012</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/405">Fix mssql limit template </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/418">Typo in Lucene documentation</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/415">Split querydsl-lucene into querydsl-lucene3 and querydsl-lucene4</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/375">Add support for Lucene 4.2.0</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/423">Support outer joins in the collections module</a></li>
+</ul>
+
+      <h2>3.1</h2>
+
+<p>3.1.1 (16.4.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/384">Allow AbstractGenericExportMojo to fully configure GenericExporter</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/319">One Page HTML Docs</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/392">`limit` requires a long yet casts it into an int</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/386">Use of querydsl-maven-plugin/jpa-<wbr>export goal without &lt;packages&gt; in &lt;configuration&gt; throws NPE</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/379">JPAQueryMixin.normalize isn't null safe anymore starting from 3.0.0</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/382">apt-maven-plugin version 1.0.8: won't generate Q classes for @RooJpaEntity annotated classes</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/389">Update JDO API dependency to 3.0.1</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/393">Using union all with SQLSubQuery</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/380">DateDiff</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/378">ParamExpressions for DML clauses are ignored</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/396">ArrayIndexOutOfBoundsException -1 when using CollQuery with Jacoco</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/381">CompileFailure on generated class when querying a collection</a></li>
+</ul>
+
+<p>3.1.0 (27.3.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/376">Query do not inherit parameters setted on subquery</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/374">Separate artifacts used at build time from those used at runtime</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/373">Make querydsl-apt dependency use "provided" scope in QueryDSL 3.0.0+ </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/372">Improve validation of subqueries</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/371">Handle unknown operators gracefully in subqueries</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/377">NoClassDefFoundError in JPAProvider.&lt;clinit&gt;</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/370">PostgresQuery uses MySQLTemplates</a></li>
+</ul>
+
+      <h2>3.0</h2>
+
+<p>3.0.0 (21.3.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/174">Support for ORDER BY ... NULLS FIRST</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/368">Maven build throws IllegalStateException : Did not find type T in []</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/364">Skip org.joda.time types for unknownAsEmbedded type detection</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/353">"mvn package" should just work</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/349">Make sure that optional dependencies aren't included in uberjars</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/346">Implement iterate with org.eclipse.persistence.queries.Cursor</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/354">Factory interface for DML</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/351">Sum fails with NPE if there's nothing to sum</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/348">JPA query hints should not be stored in java.util.HashMap</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/347">Implement Date arithmetic</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/365">Document AntMetaDataExporter parameters</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/362">Support for older version of mssql</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/355">Builder methods for SQLTemplates subclasses</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/357">Add Scala 2.10 support</a></li>
+</ul>
+
+<p>3.0.0.BETA2 (20.2.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/341">Not synchronized com.mysema.query.types.<wbr>TemplateFactory cache</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/336">@QueryInit in child class fails if @QueryInit is not null in his parent.</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/330">Add README for each module</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/343">NoClassDefFoundError in AbstractJPAQuery static initializer </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/333">"Only root path are allowed" since update from 2.8.1 to 2.9.0 </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/329">Call to exists() on JPAQuery will produce stacktrace log in case nothing is found</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/265">Test QueryDSL against Batoo JPA</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/345">Support for NumberExpression with seeded "random"</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/344">Wrong type in code generation</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/338">Add option to disable views export from database</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/337">Oracle issues</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/334">Invalid schema generation when the column starts with a number</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/327">SQL: select for update with uniqueResult</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/342">DefaultQueryEngine pulls JDKEvaluatorFactory because of the public static field DEFAULT</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/332">OSGi bundle for querydsl-collections</a></li>
+</ul>
+
+<p>3.0.0.BETA1 (13.1.2013)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/312">Rename *Grammar/*Utils classes to *Expressions</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/303">Simplify distinct usage in API</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/301">Deeper default initialization for paths</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/300">Simplified Template expressions</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/296">Simplified Tuple projection</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/295">ClassCastException when using nested MappingProjection with single Expression</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/293">Update codegen version</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/194">APT is not stable</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/191">Add nullif support</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/186">Unify query class naming</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/323">Common ancestor for JPQL subqueries</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/318">Support for Roo annotations</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/317">any() in combination with as(...) fails</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/305">How to set null values in result projection to zero with QueryDSL</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/299">JPA rename with to on</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/317">Add Prefix and Postfix to RelationalFunctionCall</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/314">Remove duplicate columns from projection</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/313">Support for multi-column in-clauses</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/310">Misses parenthesis on union with inner subquery</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/309">ClassCastException in EnumByNameType When Setting To Null</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/304">Improve performance of SQL binding</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/292">Aggregate functions on boolean</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/291">MongodbSerializer does not support Ops.CONTAINS_KEY</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/205">Projections in MongoDB</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/325">BigDecimal not handle correctly</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/298">MiniApi rename</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/173">Integrate Hamcrest matcher</a></li>  
+</ul>
+
+      <h2>2.9</h2>
+
+<p>2.9.0 (19.11.2012)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/276">StoreClause.size() or StoreClause.isEmpty()</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/274">MappingProjection for Group</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/264">java.lang.StackOverflowError on recursive generic type</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/269">JPAQuery.clone(EntityManager) doesn't detect the template of the given EntityManager</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/267">queries with "in" referencing entities can have some null ids even if they are not</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/262">QueryDSL JPA on AppEngine not working because of escape character</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/261">Order-by an attribute from a collection fails</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/282">GroupBy with union of ListSubQuery</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/273">Improved type-mapping for numbers</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/278">Query with having - Variable a1 is unbound and cannot be determined</a></li>
+</ul>
+
+      <h2>2.8</h2>
+
+<p>2.8.2 (30.10.2012)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/259">Avoid populating Collections with null values in GroupBy projections </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/258">Bug in .any().as() since 2.7.3</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/254">argument is not within bounds of type-variable Q</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/251">JPAAnnotationProcessor produces uncompilable code </a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/257">Embedded error during code generation </a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/256">Problem with Hibernate XML Mappings and composite-id's </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/252">"com.mysema.query.QueryException: Compilation of ... failed." occurs </a></li>
+</ul>
+
+<p>2.8.1 (19.10.2012)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/247">QueryDSL objects are using my Path object instead if its own Path object </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/246">IndexOutOfBoundsException when apt has unknownAsEmbeddable enabled</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/242">Code generation on a parameterized class generates a compiler warning</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/202">Support like operation for Numbers </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/250">Join condition leads to Hibernate QuerySyntaxException after Querydsl migration from 2.7.0 to 2.8.0 </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/249">instanceOf places fqdn into resulting query</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/240">Problem with Hibernate custom types and HibernateDomainExporter in 2.8.0 </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/243">NPE when exporting JDO using maven plugin </a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/244">Support for Sum function for grouping collection</a></li>
+</ul>
+
+<p>2.8.0 (29.9.2012)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/227"> com.mysema.commons.lang 0.2.3 is not OSGi bundle</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/226">uses the javax.annotation.Nullable from JSR305 but no dep available</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/231">java.lang.StackOverflowError</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/229">Nullpointer Exception when using embedable in deep hierarchy</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/237">Invalid code generated with Custom types and HibernateDomainExporter</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/238">Persistent property wrongly recognized as custom type</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/235">Problem with Hibernate DomainExporter and persistent field declared in superclasses</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/234">Problem with HibernateDomainExporter and bidirectional one-to-many associations</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/230">Setting a value to null using JPAUpdateClause throws NullPointerException</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/228">Exception with BigDecimal constant in JPAQuery creation</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/236">java.lang.StackOverflowError with generic document type in mongo</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/233">Support for DBRef collection traversal in Querydsl Mongodb</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/216">Support for common Scala types</a></li>
+</ul>
+
+      <h2>2.7</h2>
+
+<p>2.7.3 (10.9.2012)</p>
+
+<ul> 
+  <li><a href="https://github.com/mysema/querydsl/issues/225">Migrate Maven hosting to Sonatype</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/218">ClassPathUtils should initialize classes</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/222">querydsl-maven-plugin should ship m2e metadata</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/224">com.mysema.query.collections.<wbr>ColQueryFunctions doesn't handle $ and other regex metacharacters</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/217">Using collection.any().in(...) in element collections</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/210">Problem with Hibernate xml codegeneration</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/223">Generic @MappedSuperclass with @Embedded =&gt; Compiler error in _super initialization for @Entity subclass</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/219">HibernateDomainExporter and composite-element</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/213">Invalid Java field names in schema export</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/212">Java field name clashes</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/211">Exporting from schema with foreign key reference to another schema produces invalid code</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/216">Support for common Scala types</a></li>
+</ul>
+
+<p>2.7.2 (4.8.2012)</p>
+
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/209">Wrong templates object for embedded function used when calling SUBSTR_2ARGS function</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/200">orderBy does not support aliases declared in select</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/208">sum().negate() fails with OpenJPA</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/201">Querydsl 2.7.1 + Jodatime + postgres</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/198">Simplify JPA module tests</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/207">Improve BigDecimal handling in Collections</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/206">Improve OSGI compatibility of Collections</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/204">select in scala causes runtime error</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/203">select in scala only works with up to 5 fields</a></li>
+</ul>
+
+<p>2.7.1 (17.7.2012)</p>
+
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/196">Compile error in generated query class for an Entity which uses Inheritance in multi-module Maven project</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/193">APT delegate handling</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/192">Constructing DTO:s with Querydsl and ConstructorExpression.create()</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/190">Add asc() and desc() to Coalesce</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/183">Add support for intermediate any() paths in projection</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/180">Support annotation processor default discovery process for javac</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/182">Disallow subquery joins in JPA module</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/197">Simplify SQL module tests</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/189">Table hint in SqlSubQuery</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/187">SQL Server fix table hints</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/199">Support for like(...) in MongoDB</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/195">Include an APT service descriptor in querydsl-mongodb-&lt;version&gt;.jar</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/184">Improve support for any() expressions in Collections module</a></li>
+</ul>
+
+<p>2.7.0 (28.6.2012)</p>
+
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/179">Clean Ops and Templates</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/181">Support any() paths in list() expressions</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/167">ProjectableQuery &amp; its subclasses should implement equals &amp; hashCode</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/163">Projections.<wbr>ConstructorExpression throws ExpressionException for a vararg constructor</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/176">JPA/Eclipselink : improve collection.any() serialization</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/175">JPA/Eclipselink : support entity in collection predicates</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/161">HibernateDomainExporter and composite-id</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/169">Add support for SQLite database</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/168">Add support for CUBRID database</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/162">beanPackageName overrides packageName in MetaDataExporter?</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/159">Syntax error concerning alias for SQLSubQuery with "*" string expression in projection</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/164">QueryDSL MongoDB does not work with an OSGi environment</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/172">Provide adapters for Guava Predicates</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/171">Improve documentation for querying collections</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/170">Maven test execution fails for collection queries</a></li>
+</ul>
+
+      <h2>2.6</h2>
+
+<p>2.6.0 (25.5.2012)</p>
+
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/153">ExtendedTypeFactory.visitDeclared throws IllegalArgumentException when generic type is an annotation type</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/152">Predicate hashCode() should return different values among unequal objects for better performance</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/146">Document classloading issues workaround in reference docs</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/145">Remove 'in' from Collection typed expressions</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/142">Update Scala section in reference docs</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/138">Create Maven plugin goal for GenericExporter execution</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/150">Should import of com.mysema.query.sql in querydsl-jpa be optional as well?</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/148">javax.persistence package should be imported with version [1.1.0,2.1.0)</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/147">Non-optional Hibernate dependencies in querydsl.jpa MANIFEST.MF</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/143">Improve union API for SQL in JPA and JDO</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/136">Wrong result set for unions containing null-constant projections</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/131">HibernateQuery doesn't support right joins</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/140">AbstractSQLQuery listResults with offset and limit causes SQLSyntaxErrorException in Oracle11g</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/139">Fix oracle dependency in querydsl-sql</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/137">MetaDataExporter not available in querysl-sql-2.5.0-full-deps.zip</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/129">Missing UNION ALL for SQLSubQueries</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/128">querydsl-collection doesn't support Joda Time</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/135">Improve Scala code generation for domain types</a></li>
+</ul>
+
+      <h2>2.5</h2>
+
+<p>2.5.0 (20.4.2012)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/130">OSGi resolver issue with querydsl-sql-2.3.3.jar and javax.annotation</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/127">Replace commons-* deps with Guava</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/126">Pimp instanceOf() with varargs</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/123">Problem with Joda Time DateTimes in Predicate</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/117">GroypBy.list() returns only first expression of ContructorExpressions</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/112">Groovy Bean serialization</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/106">Move codegen logic to own modules</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/120">IllegalArgumentException when executing JPASQLQuery with OpenJPA</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/119">Cannot change the escape character.</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/118">Doesn't escape the escape character.</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/125">MSSQL: insert query generation bug</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/116">MSSQL : Add datediff and dateadd support</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/115">MongoDB: support $elemMatch feature</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/113">Support MongoDB DbRef fields</a></li>
+</ul>
+
+      <h2>2.3</h2>
+
+<p>2.3.3 (11.3.2012)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/114">APT processor general issue</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/109">Add more tests for GenericExporter vs APT comparison</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/108">Add stop class handling to GenericExporter</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/107">Improve handling of generic properties in GenericExporter</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/104">@QueryEmbedded generates a wrong type in subclass in some cases</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/102">Support for type(entity) in JPA</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/100">HibernateDomainExporter: Call buildMappings() on Hibernate configuration</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/101">Lucene complex sorting</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/111">CollectionQueries fail compiling evaluator classes due to protected or different named getter methods.</a></li>
+</ul>
+
+<p>2.3.2 (19.2.2012)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/99">Improve reference doc tutorials on Q-type usage</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/16">QueryInit compile time check</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/98">PostgreSQL with wrong SQL escape</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/97">Access generated keys fails for Oracle</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/96">Mapper implementations suffer from NPE potentially</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/95">DefaultMapper should consider fields from complete class hierarchy</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/74">Add batch with null values</a></li>
+</ul>
+
+<p>2.3.1 (7.2.2012)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/93">GenericExporter doesn't check for keywords</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/79">Check properties existence in PathBuilder</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/77">Fix Embedded handling for Collection&lt;String&gt;</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/76">ListPath generation issues with Eclipse APT</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/71">Track property inits of external types properly</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/69">Improve GroupBy projection</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/94">fix substring pattern with 2 args</a></li> 
+  <li><a href="https://github.com/mysema/querydsl/issues/87">templates using like need escape</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/83">exists() doesn't work for OpenJPA</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/80">JPASQL: List&lt;Object[]&gt; contains wrong results</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/75">Support for querying against @MappedSuperclass </a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/72">Invalid JPQL generated on IN clauses</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/92">add option to use schema name in package</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/89">handle column names with spaces correctly</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/85">equalsIgnoreCase doesn't work</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/81">MongodbSerializer unnecessarily calls getKeyForPath(...)</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/70">FactoryExpression utilities for Scala</a></li>
+</ul>
+
+<p>2.3.0 (14.12.2011)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/66">Change license to Apache 2.0</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/65">Support SearchResults with FactoryExpressions</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/64">Add QTuple creation to Projections class</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/63">Fix Querydsl APT Eclipse</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/60">Remove wrapping of collection and array typed paths</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/67">Add support for union on JPASQLQuery</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/58">Add method to RelationalPath to cache projections</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/55">New NamingStrategy for Querydsl SQL</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/53">Remove @Schema and @Table annotations</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/52">Making @Column annotations in Bean types optional</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/42">Mapping for sqlinsertclause based upon annotations</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/59">Querydsl Scala support to Querydsl Maven plugin</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/57">Add compact DSL for Querydsl SQL + Scala</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/54">Case class serialization for Scala / SQL</a> </li>
+  <li><a href="https://github.com/mysema/querydsl/issues/48">Use Manifests in com.mysema.query.scala.BeanPath</a></li>  
+</ul>
+
+      <h2>2.2</h2>
+
+<p>2.2.5 (19.11.2011)</p>
+<ul>
+ <li><a href="https://github.com/mysema/querydsl/issues/49">@QueryInit seems broken</a></li>
+ <li><a href="https://github.com/mysema/querydsl/issues/44">GenericExporter should be able to configure the output package directly</a></li>
+ <li><a href="https://github.com/mysema/querydsl/issues/40">Update Apache Commons dependencies</a></li>
+ <li><a href="https://github.com/mysema/querydsl/issues/39">Add generation for toString and constructor in data beans</a></li>
+ <li><a href="https://github.com/mysema/querydsl/issues/34">Fix escaping of default variable name</a></li> 
+ <li><a href="https://github.com/mysema/querydsl/issues/27">NPE in APT plugin</a></li>
+ <li><a href="https://github.com/mysema/querydsl/issues/17">Support for result transformer</a></li>
+ <li><a href="https://github.com/mysema/querydsl/issues/4">Map entity property throws an NPE</a> </li>
+ <li><a href="https://github.com/mysema/querydsl/issues/3">APT NullPointer when generating query with JPA and Collections common base class</a></li> 
+ <li><a href="https://github.com/mysema/querydsl/issues/46">Typo in SQLInsertClause.executeWithKey Javadocs</a></li>
+ <li><a href="https://github.com/mysema/querydsl/issues/45">Unclear documentation in Projectable.uniqueResult()</a></li> 
+ <li><a href="https://github.com/mysema/querydsl/issues/41">Support for sequence.nextval</a></li>
+ <li><a href="https://github.com/mysema/querydsl/issues/37">Make SQL custom types assignable to other JDBC types</a></li> 
+ <li><a href="https://github.com/mysema/querydsl/issues/35">Support for table valued functions</a></li>)
+</ul>
+
+<p>2.2.4 (7.11.2011)</p>
+<ul>
+  <li><a href="https://github.com/mysema/querydsl/issues/33">Improve "Undeclared Path X" error message</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/31">generate Path constructor argument instead of BeanPath</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/30">properly exclude @QueryExclude annotated classes</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/24">SubQuery problem</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/23">QBean doesn't work with superclass' fields</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/21">com.mysema.commons.lang is not osgified</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/18">PathImpl convenience constructor support for creating path with parent</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/2">Tuple with equals and hashCode</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/26">querydsl "export" should avoid updating files if possible</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/22">NPE in AbstractSQLQuery when no connection provided</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/28">setComment(String) for HibernateQuery</a></li>
+  <li><a href="https://github.com/mysema/querydsl/issues/29">MongodbSerializer.asDBObject(...) should be pluggable</a></li>
+</ul>
+
+<p>2.2.3 (27.9.2011)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/841795">Generated QClasses do not compile under certain circumstances</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/849734">Deeper path initialization for any() paths</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/852574">code.mysema.codegen Manifest.MF not osgi able</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/853702">Problem with @ElementCollection(targetClass = byte[].class, fetch = FetchType.LAZY)</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/855289">Children entity Qtype fields inherited incorrectly for generic types</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/855442">extended Null checks for (Predicate...) methods</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/856563">JavaTypeMapping fails to load when Joda-Time is not in classpath</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/857336">MySQLQuery generates invalid SQL when mixing limit and for update</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/859598">UtilDateType should use TIMESTAMP type</a></li>
+</ul>
+
+<p>2.2.2 (12.9.2011)</p>
+<ul>
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/824334">Default instances for Embeddable Q-types</a></li>  
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/827358">Released binaries do not contain generated MANIFEST.MF</a></li>  
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/834521">Implement equals() for DefaultQueryMetadata</a>  </li>
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/839346">Real cloning for Query implementations</a>  </li>
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/839353">Add some common interfaces</a> </li>
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/842360">Make Query extend SimpleQuery</a>  </li>
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/847598">Add adapter for SimpleQuery &amp; Projectable</a></li>  
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/839349">Configurable PropertyAccessInvocationHandler</a> </li> 
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/823782">Invalid query generated for Element Collection in Embeddable</a></li> 
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/826552">Add JPAQuery.setFlushMode</a>  </li>
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/838834">HibernateSQLQuery projection with domain query type</a></li> 
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/839344">Enable access to all-parametres query constructors</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/841568">Generation of Query classes within a type hie... using @Column annotation</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/837903">UNION with ORDER BY fails</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/842363">Configurable charset encoding for MetaDataExporter</a></li>   
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/842558">Support for INSERT ... ON DUPLICATE KEY UPDATE Syntax</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/837934">Problems with certain IN queries</a></li>
+</ul>
+
+<p>2.2.1 (10.8.2011)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/812859">Generic types are not generated fully qualified for EntityPathBases</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/813368">Provide an annotation to exclude classes from query class generation</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/816000">Problem with abstract fields and generics</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/819861">apt generator not working with java7</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/820371">Patch to generate Generated annotations in Q* classes</a> </li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/820093">Patch to fix querydsl-docs pom.xml</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/785520">JPA Test OutOfMemoryError</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/810835">Malformed HQL when QTuple in where clause</a></li>  
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/819865">Unable to query JPA entities with @Entity(name="NotClassName")</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/820948">Scala implicit conversion for Java enums is missing</a> </li>
+</ul>
+
+<p>2.2.0 (18.7.2011)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/542913">Test with EclipseLink JPA</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/798653">Generics fail using JPAAnnotationProcessor</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/800698">Enums in HQL contains</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/805881">UNION ALL support</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/809289">Support custom row-mapping projections</a></li>  
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/809817">Scala source generation issue with column named type</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/779743">Add OSGi metadata to Querydsl modules</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/783546">Q-Type for @Embeddable in foreigen package is not created</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/788125">Query utils</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/804433">apt plugin does not cooperate with others well</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/806838">Constructor generated by query projection ignores primitives</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/806305">com.mysema.query.apt.jpa.JPAAnnotationProcess... of beta5 apt-one-jar.jar</a></li> 
+</ul>
+
+<p>2.2.0.beta5</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/772983">Allow calling hql functions not in order</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/776935">Support customization of Native Query classes</a></li>  
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/783298">bulk delete queries must use DELETE FROM</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/799254">Queryprojection error with springframework proxies</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/775520">Shortcut for null constants in insert clause</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/776943">Support for SQL Server table hints</a</li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/780541">Querydsl SQL DDL examples promotion of create table</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/780948">Querydsl SQL DDL throws an NPE with primitive types</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/798958">VARBINARY should map to byte[] under H2</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/785511">MongodbSerializerTest LessAndGreaterAndBetween</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/789021">Enums in MongoDB cannot be serialized</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/777768">Supporting extending existing QueryMetadata</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/782242">'Between' functions on paths should be nullsafe</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/785935">Comparable&lt;...&gt; interface on class causing Alias.$(..) to return null</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/790955">QueryMixin.normalize should skip nulls</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/791043">No string type for @QueryType</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/798922">Unclear return value for Projectable.list*()</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/767024">Refactor APT Configuration to allow demarcati...jects without annotations</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/776219">Support annotationless entity superclasses</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/779132">Scala + SQL code generation generates reserved words</a></li> 
+</ul>
+
+<p>2.2.0-beta4</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/765710">Implement JPA 2.0 INDEX(collectionelement) function</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/765731">COUNT broken for subqueries</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/767500">Native Queries : IN condition fails</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/768345">Native Queries : COUNT fails in MYSQL</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/771285">Support DISTINCT properly</a>  /li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/754743">Querydsl-sql produced invalid SQL for fullJoin()</a></li>  
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/754749">Please provide examples of SQL joins</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/754923">AbstractSQLSubQuery.rightJoin() maps to leftJoin()</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/754955">Not clear how to return multiple columns using SQL union()</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/759130">BeanSerializer with hashCode + equals + toString</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/766859">Direct support for Joda Time types</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/766885">Support for InsertClause.set(path, value) in select-based inserts</a></li>  
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/772188">Single column projection with UNION fails</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/765798">Querydsl Mongodb ObjectId search does not work</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/737069">Validate queries before execution</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/755034">Incorrect URI to File conversion in GenericExporter</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/766877">Better support for constants in sub query projection</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/766896">Boolean constants</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/754503">Make sure that available external Q-types are not re-created</a></li> 
+</ul>
+
+<p>2.2.0-beta3</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/740166">Create .exists() in SimpleProjectable</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/751557">Possibiliy to exclude packages and classes in the APT process</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/742415">Parametrized SQLQueryFactory</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/750003">Support declaration of custom types via querydsl-maven-plugin</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/736206">uniqueResult should take limit and offset into account</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/734703">FieldSelector support for Querydsl lucene</a> </li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/753205">Mongo DB module contains Morphia packages</a> </li>
+</ul>
+
+<p>2.2.0-beta2</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/735310">Add Projectable.singleResult()</a>  </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/734319">Add PathBuilder.getEnum</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/733172">Add validation for parameters in MetaDataExporter</a></li>  
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/733215">querydsl-maven-plugin throws Exception if not...x/suffix patterns are set</a></li> 
+</ul>
+
+
+<p>2.2.0-beta1</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/732611">Removal of QueryMethod functionality</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/632396">Possibility to define Q-type package</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/720032">Factory for queries and clauses</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/724941">Support custom type declarations</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/727053">Negation as own operation</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/725547">Support serialization of schema name</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/731368">Fix bean property name capitalization</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/732409">Clarify SQLInsertClause.executeWithKey() return value</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/728458">new BooleanBuilder(new BooleanBuilder()) throws a NPE</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/728325">limit and offset are summed together without ...cause an integer overflow</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/723186">Way to set lucene filters on queries</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/727942">Support for geospatial queries in Mongodb</a></li>
+</ul>
+
+      <h2>2.1</h2>
+
+<p>2.1.2 (22.2.2011)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/717563">Projectable.uniqueResult() semantics</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/719698">Missing aggregate functions</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/719837">BooleanExpression or extensions</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/720078">eq throws NPE from ConstantImpl</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/720187">Java Keyword as generated constant name</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/720590">Move FactoryExpression expansion and compression to an adapter</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/720105">NPE in com.mysema.query.apt.ElementHandler.handleNormalType</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/716068">uniqueResult ignores modifiers</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/704638">Codegen with no Prefix Overwrites Bean Files</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/704617">Explain schema and table name pattern</a> </li>
+</ul>
+
+
+<p>2.1.1 (9.2.2011)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/708801">Supported nested projections</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/710842">Support for case-insensitive regex match</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/713341">MetadataExporter should log tables</a> </li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/715617">Lucene sorting always uses english locale</a></li> 
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/713025">Make Mongo accessor API pluggable</a> </li>
+</ul>
+
+<p>2.1.0 (3.2.2011)</p>
+<ul>
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/708804">Add common Factory class for FactoryExpression creation</a></li>
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/708806">Add field access to QBean</a></li> 
+   <li><a href="https://bugs.launchpad.net/querydsl/+bug/709160">LuceneQuery.list() throws an IllegalArgumentException from Lucene if nDocs is 0</a></li> 
+</ul>
+
+<p>2.1.0-beta3</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/705527">Projectable.uniqueResult() Javadoc does not d...pens if no match is found</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/705409">Potentially off-by-one when setting SQL prepared statement parameters</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/705516">Improve Reference docs for Querydsl SQL</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/707467">Improve QBean support for Querydsl SQL</a></li>
+</ul>
+
+<p>2.1.0-beta2</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/704364">Issues with Alias collection, list, set and map properties</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/704617">Explain schema and table name pattern</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/705038">Maven 3 (M3) Needs parent.relativePath, Dead Repo, querydsl-docs Version</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/705126">Add Repo for Hibernate to querydsl-scala/pom.xml</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/705177">Direct derby.log to SVN Ignored Directory</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/705316">Apt plugin reports an error which it should not</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/705023">SQLInsertClause.executeWithKey() is missing Javadoc</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/705333">Lucene : support for deep paths</a></li>
+</ul>
+
+<p>2.1.0-beta1</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/702872">Apt-plugin throws nullpointerexception on generalized type</a></li>
+</ul>
+
+    <h2>2.0</h2>
+
+<p>2.0.9 (13.1.2011)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/700663">Fix references to 1.* types in reference documentation</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/701996">Embedded types with generic signature cause problems</a></li>
+</ul>
+
+<p>2.0.8 (3.1.2011)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/691930">currently distinct only works on last level of query</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/659916">Improve support for join flags</a></li>
+</ul>
+
+<p>2.0.7 (31.12.2010)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/692478">wrong SQL generated on Oracle when using like</a></li>
+</ul>
+
+<p>2.0.6 (17.12.2010)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/676458">Add exists() method on Projectable</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/680370">Reopen of 623696 (NPE)</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/684636">from(subQueryExpression, path) for alias</a></li>
+</ul>
+
+<p>2.0.5 (22.11.2010)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/674917">Naming clash between column and primary key</a></li>
+</ul>
+
+<p>2.0.4 (10.11.2010)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/667362">Collection.any() support for Collections module</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/672925">Querydsl JDO fails to build if JDO2 API not in Maven repository</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/670933">LuceneQuery.iterate() should be optimized</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/669828">Implement fuzzy search functionality</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/670808">Lucene query fails if result count &lt; offset</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/672276">Fix zip packaging of SQL module</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/672278">Add ANT-task for Querydsl SQL</a></li>
+</ul>
+
+<p>2.0.3 (27.10.2010)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/664351">Add tests for created one jars</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/660058">Make Collection.any() work for JPA and JDO modules</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/666442">Using APT in eclipse with the defaultOverwrit...s to loose the extensions</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/666723">It is not possible to apply query extensions to primitive types</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/665828">Extend dialect specific Query and DML clause subclasses</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/666232">Include default types for other binary types</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/666233">Include a constructor receiving the configuration for all DB specific types</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/665127">Upgrade JDO module to use JDO API v 3.0</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/666161">Support subquery contains expression</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/660353">Generate from Hibernate .hbm.xml does not include primary key</a></li>
+</ul>
+
+<p>2.0.2 (13.10.2010)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/654532">Remove transitive APT dependencies from JDO and JPA</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/658188">Support for declaring embedded annotation for...n to embeddable for types</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/658206">Need a way to query elements of an collections</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/658409">An option to build only necessary modules</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/656199">MapPath containsKey not working for hibernate</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/656847">Support Hibernate XML Mappings</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/657721">Support settings hints for JPAQuery</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/656208">Skip the projection, if it's the candidate</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/655983">ScalaMetaDataSerializer incorrect placing of @Table annotation</a></li>
+</ul>
+
+<p>2.0.1</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/651044">Better packaged releases</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/651074">Document custom expression usage</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/583186">Make general result transformation work with the JPA API</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/650589">Remove all DSL expression references from JPQLCommonQuery</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/652970">Subquery class naming</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/653206">Right joins are generating invalid SQL</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/653210">DML with a subquery.notExists() is generating a invalid statement</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/650617">It is not possible to use an SQLUpdateClause which sets columns to expressions</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/650753">The configuration type mapping should also search for implemented interfaces</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/652337">Projection type to populate multiple beans</a></li>
+</ul>
+
+<p>2.0.0 (28.9.2010)</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/648872">Simplify Configuration</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/648338">Consistent Expressivity in Expression DSL types</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/648740">CloseableIterator.close() without IOException</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/648484">Fix mapping for REAL</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/645255">Maven build fails in Windows</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/638930">Wildcard.all() cannot be passed to QTuple</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/631576">Mongodb support added</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/405692">Scala support added</a></li>
+  <li>Modules name changes : querydsl-hql -&gt; querydsl-jpa, querydsl-jdoql -&gt; querydsl-jdo</li>
+  <li>Interface name changes : HQLQuery -&gt; JPQLQuery , HQLSubQuery -&gt; JPQLSubQuery</li>
+  <li><a href="http://source.mysema.com/forum/mvnforum/viewthread_thread,160">Details on changes</a></li>
+</ul>
+
+    <h2>1.9</h2>
+
+<p>1.9.7</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/634885">Reusing SQL subquery results in corrupted projection</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/635736">Primitive arrays are not handled properly</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/636516">Batch support for Merge clause</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/636517">Create unique index support</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/634764">Unnecessary IOException on JDOQLQuery.close()</a></li>
+</ul>
+
+<p>1.9.6</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/631522">Improve Visitor signature</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/633128">Shortcut for Expr.as(Path)</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/632155">SQL module dependency in JPA and JDO modules optional</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/634103">Support for packageless entity classes</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/633110">Intuitive way for count(&#42;)</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/633136">Escaping non alpha-numeric path variable names</a></li>
+</ul>
+
+<p>1.9.4</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/628731">META-INF/services missing</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/628838">Make sure entity annoted Enum types extend PENum</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/623994">Put schema constraints into bean model</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/624737">Unify Configuration and JDBCTypeMapping</a></li>
+</ul>
+
+<p>1.9.3</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/626692">Index addition for CreateTableClause</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/627376">Keep camel-case of database identifiers</a></li>
+</ul>
+
+<p>1.9.2</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/624602">Renamed SubQuery to SubQueryExpression</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/624618">Fixed EString signature issues</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/624727">uniqueResult throws NoResultException instead of returning null</a></li>
+</ul>
+
+<p>1.9.1</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/622601">Improve support for Enums in Expression model</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/604727">Bean class code generation</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/608105">Support for batch in DML clauses</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/623933">SQLInsertClause.executeWithKeys throws Exception</a></li>
+</ul>
+
+<p>1.9.0</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/539788">Cache no-arg methods in Q-types</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/611577">Don't use PEntity for embeddable Q-types</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/611836">Make QueryMetadata serializable</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/617279">Constructor projection doesn't always work</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/596625">Generic access to schema metadata in Q-types</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/619667">Add support for special options in DML clauses</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/608932">Restructured Reference Documentation</a></li>
+</ul>
+
+<p>1.8.6</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/616476">Sorting didn't work in distinct projections</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/616826">Q&lt;Entity&gt;.all() unboxed as Expr[]</a></li>
+</ul>
+
+    <h2>1.8</h2>
+
+<p>1.8.5</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/614374">Prevent using non-root alias paths in joins</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/613133">Foreign key code generation</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/613523">FetchPlan modification via query</a></li>
+</ul>
+
+<p>1.8.4</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/611836">Serializable QueryMetadata</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/612115">Improvements to Code generation</a></li>
+</ul>
+
+<p>1.8.2</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/606028">Identified operators</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/595972">Support extensions to built-in types</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/525769">Support for JDO/SQL</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/605559">Support for user types</a></li>
+</ul>
+
+<p>1.8.0</p>
+<ul>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/601607">Consistent DML signature</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/603575">Union for subqueries</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/603946">Query extension support</a></li>
+  <li><a href="https://bugs.launchpad.net/querydsl/+bug/604726">Support for DDL clauses</a></li>
+</ul>
+
+    </div> <!-- /container -->
+
+    <div id="footer">
+      <p>&copy; 2014 by Timo Westkämper, sponsored by <a href="http://www.mysema.com">Mysema</a></p>
+      <p>Querydsl licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License, Version 2.0</a></p>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+  </body>
+</html>
+
