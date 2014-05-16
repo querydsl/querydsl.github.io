@@ -2,10 +2,19 @@ body {
   padding-top: 70px;
 }
 
+.navbar-default .navbar-brand {
+  color: #202020;
+}
+
 .navbar-fixed-top {
   padding: 20px 0px;
-  height: 95px;
+  height: 90px;
   border: none;  
+}
+
+.navbar-fixed-top.slim {
+  padding: 8px 0px;
+  height: 60px;
 }
 
 .nav .active {
@@ -18,27 +27,23 @@ h1, h2, h3 {
 }
 
 .hero {
-/*  background: #a0a0FF;*/
-  background: #74b73f;
+  background: url(img/jean-cocteau-museum-menton.png);
+  background: #a0a0ff;
   color: white;
-  height: 22em;
+  padding-top: 15em; 
+  margin-bottom: 1em;
+  height: 42em;
   width: 100%;
 }
 
-body.frontpage > .container {
-  margin-top: -21em;
+.hero h1 {
+  color: white;
+  font-size: 4em;
+  text-align: center;
 }
 
 body.releases > .container {
   margin-top: 3em;
-}
-
-.jumbotron {
-  background: none;
-}
-
-.jumbotron h1, .jumbotron h2 {
-  text-align: center;
 }
 
 #footer {
