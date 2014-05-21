@@ -28,8 +28,8 @@ h1, h2, h3 {
 }
 
 .hero {
-  background: url(../img/jean-cocteau-museum-menton.png);
-/* background: #a0a0ff;*/
+  background: url(../img/jean-cocteau-museum-menton.png) no-repeat center;
+  background-size: cover;
   color: white;
   padding-top: 12em; 
   margin-bottom: 1em;
