@@ -23,14 +23,15 @@ body {
 
 
 h1, h2, h3 {
+  margin-top: 10px;
   color: #74b73f;
 }
 
 .hero {
-  background: url(img/jean-cocteau-museum-menton.png);
-  background: #a0a0ff;
+  background: url(../img/jean-cocteau-museum-menton.png);
+/* background: #a0a0ff;*/
   color: white;
-  padding-top: 15em; 
+  padding-top: 12em; 
   margin-bottom: 1em;
   height: 42em;
   width: 100%;
@@ -38,8 +39,14 @@ h1, h2, h3 {
 
 .hero h1 {
   color: white;
-  font-size: 4em;
+  font-size: 5em;
   text-align: center;
+}
+
+.some-buttons {
+  width: 50em;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 body.releases > .container {
@@ -51,4 +58,10 @@ body.releases > .container {
   margin-top: 5em;
   margin-bottom: 5em;
   text-align: center;	
+}
+
+@media (max-width: 600px) {
+  .hero {
+    font-size: 60%;
+  }
 }
