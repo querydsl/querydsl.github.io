@@ -184,6 +184,62 @@
 
       </section>	
 
+      <section id="examples">
+        <div class="row">
+        <div class="col-md-3">
+          <h2>Examples</h2>
+        </div>
+
+        <div class="col-md-5">
+          <h4>Basic query</h4>
+          <pre class="prettyprint">
+JPAQuery query = new JPAQuery(entityManager);
+List&lt;Person&gt; persons = query.from(person)
+  .where(
+    person.firstName.eq("John"),
+    person.lastName.eq("Doe"))
+  .list(person);
+          </pre>
+        </div>
+
+        <div class="col-md-4">
+          <h4>Order</h4>
+          <pre class="prettyprint">
+List&lt;Person&gt; persons = query.from(person)
+  .orderBy(person.lastName.asc(), 
+           person.firstName.desc())
+  .list(person);
+          </pre>     
+        </div>
+        </div>
+ 
+        <div class="row">
+        <div class="col-md-3">&nbsp;</div>     
+
+        <div class="col-md-5">
+          <h4>Subqueries</h4>
+          <pre class="prettyprint">
+List&lt;Person&gt; persons = query.from(person)
+  .where(person.children.size().eq(
+    new JPASubQuery().from(parent)
+        .uniqueResult(parent.children.size().max())
+  )).list(person);
+          </pre>
+        </div>
+
+        <div class="col-md-4">
+          <h4>Tuple projection</h4>
+          <pre class="prettyprint">
+List&lt;Tuple&gt; tuples = query.from(person)
+  .list(person.lastName,
+        person.firstName,
+        person.yearOfBirth);  
+          </pre> 
+        </div>
+        </div>
+
+      </section>
+
       <section id="community">
         <div class="row">      
         <div class="col-md-3">
@@ -194,28 +250,20 @@
         <h4>Querydsl Group</h4>
         <a href="https://groups.google.com/forum/#!forum/querydsl">Querydsl Group</a> provides a free support forum and a place to discuss Querydsl design issues.
         </div>
-      
+
+        <div class="col-md-3">
+        <h4>GitHub</h4>
+        <a href="https://github.com/querydsl/querydsl">GitHub</a> is where Querydsl is hosted. Querydsl is licensed under the
+        <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0 license</a>
+        </div>
+
         <div class="col-md-3">
         <h4>Twitter</h4>
         <a href="http://www.twitter.com/mysema">Twitter</a> is used for release announcements and links to articles on Querydsl
         </div>
-      
-        <div class="col-md-3">
-        <h4>GitHub</h4> 
-        <a href="https://github.com/querydsl/querydsl">GitHub</a> is where Querydsl is hosted. Querydsl is licensed under the 
-        <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0 license</a>
         </div>
-        </div>
+      </section>
 
-      </section>
-<!--
-      <section id="examples">
-        <h2>Examples</h2>
-        <div class="row">
-          <div class="col-md-12">TODO: slide show</div>
-        </div>
-      </section>
--->
     </div> <!-- /container -->
 
     <div id="footer">
@@ -232,6 +280,8 @@
     <script src="js/versions.js"></script>
     <script src="js/scroll.js"></script>
     <script src="js/ga.js"></script>
+
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
 
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
