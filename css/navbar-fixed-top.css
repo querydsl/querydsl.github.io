@@ -44,11 +44,19 @@ h1, h2, h3 {
   text-shadow: 0px 0px 10px rgba(150, 150, 150, 1);
 }
 
-.some-buttons {
-  width: 50em;
+.some-buttons table {
+  width: 40em;
   margin-left: auto;
   margin-right: auto;
 }
+
+.some-buttons td:nth-child(1) {
+  padding-top: 5px;
+}
+
+.some-buttons td:nth-child(2) {
+  padding-top: 5px;
+} 
 
 body.releases > .container {
   margin-top: 3em;
