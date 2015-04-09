@@ -58,7 +58,8 @@ h1, h2, h3 {
   padding-top: 5px;
 } 
 
-body.releases > .container {
+body.releases > .container, 
+body.team > .container {
   margin-top: 3em;
 }
 
