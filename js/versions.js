@@ -9,7 +9,7 @@ $(document).ready(function() {
     "2.9.0","2.8.0","2.7.0","2.6.0","2.5.0","2.4.0","2.3.0","2.2.0","2.1.0","2.0.0"];
 
   _.each(versions, function(arg) {
-    var opt = ["<option value='", arg, "'>", arg, "</option>"].join("");
+    var opt = $('<option />').val(arg).text(arg);
     $("#docs .version").append(opt);
   });
 
