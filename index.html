@@ -45,8 +45,8 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">         
-            <li><a href="team.html">Team</a></li>               
-            <li><a href="releases.html">Releases</a></li>
+            <li><a href="team">Team</a></li>
+            <li><a href="releases">Releases</a></li>
           </ul> 
           <ul class="nav navbar-nav navbar-right">
             <li><a href="http://www.github.com/querydsl/querydsl">GitHub</a></li>
@@ -148,7 +148,7 @@
         <p>Version selection <select class="version"></select></p>
         <ul>
           <li><a class="docs" href="#">Reference documentation</a></li>
-          <li><a class="korean" href="#">Korean reference docs</a></li>
+          <!-- <li><a class="korean" href="#">Korean reference docs</a></li> -->
           <li><a class="javadocs" href="#">Javadocs</a></li>
           <li><a class="downloads" href="#">Downloads</a></li>
         </ul>
@@ -184,22 +184,21 @@
         <div class="col-md-5">
           <h4>Basic query</h4>
           <pre class="prettyprint">
-JPAQuery query = new JPAQuery(entityManager);
-List&lt;Person&gt; persons = query.from(person)
+List&lt;Person&gt; persons = queryFactory.selectFrom(person)
   .where(
     person.firstName.eq("John"),
     person.lastName.eq("Doe"))
-  .list(person);
+  .fetch();
           </pre>
         </div>
 
         <div class="col-md-4">
           <h4>Order</h4>
           <pre class="prettyprint">
-List&lt;Person&gt; persons = query.from(person)
+List&lt;Person&gt; persons = queryFactory.selectFrom(person)
   .orderBy(person.lastName.asc(), 
            person.firstName.desc())
-  .list(person);
+  .fetch();
           </pre>     
         </div>
         </div>
@@ -210,21 +209,21 @@ List&lt;Person&gt; persons = query.from(person)
         <div class="col-md-5">
           <h4>Subqueries</h4>
           <pre class="prettyprint">
-List&lt;Person&gt; persons = query.from(person)
+List&lt;Person&gt; persons = queryFactory.selectFrom(person)
   .where(person.children.size().eq(
-    new JPASubQuery().from(parent)
-        .uniqueResult(parent.children.size().max())
-  )).list(person);
+    JPAExpressions.select(parent.children.size().max())
+                  .from(parent)))
+  .fetch();
           </pre>
         </div>
 
         <div class="col-md-4">
           <h4>Tuple projection</h4>
           <pre class="prettyprint">
-List&lt;Tuple&gt; tuples = query.from(person)
-  .list(person.lastName,
-        person.firstName,
-        person.yearOfBirth);  
+List&lt;Tuple&gt; tuples = queryFactory.select(
+    person.lastName, person.firstName, person.yearOfBirth)
+  .from(person)
+  .fetch();
           </pre> 
         </div>
         </div>
