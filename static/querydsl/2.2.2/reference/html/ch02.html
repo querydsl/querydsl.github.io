@@ -1,0 +1,270 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.&nbsp;Tutorials</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="index.html" title="Querydsl"><link rel="prev" href="ch01s02.html" title="1.2.&nbsp;Principles"><link rel="next" href="ch02s02.html" title="2.2.&nbsp;Querying JPA"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.&nbsp;Tutorials</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s02.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en-US"><div class="titlepage"><div><div><h2 class="title"><a name="tutorials"></a>2.&nbsp;Tutorials</h2></div></div></div><p>
+    Instead of a general Getting started guide we provide integration
+    guides for the main backends of Querydsl.
+    </p><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jdo_integration"></a>2.1.&nbsp;Querying JDO</h2></div></div></div><p>
+    Querydsl defines a general statically typed syntax for querying on top of
+    persisted domain model data. JDO and JPA are the primary integration
+    technologies for Querydsl. This guide describes how to use Querydsl
+    in combination with JDO. 
+    </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e112"></a>2.1.1.&nbsp;Maven integration</h3></div></div></div><p>
+      Add the following dependencies to your Maven project and make sure that
+      the Maven 2 repo of Mysema Source
+      (http://source.mysema.com/maven2/releases) is accessible from your
+      POM if the version cannot yet be found in other public Maven repos :
+    </p><pre class="programlisting">
+<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;dependency&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>com.mysema.querydsl<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>querydsl-apt<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>${querydsl.version}<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;scope&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>provided<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/scope&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/dependency&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>        
+    
+<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;dependency&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>com.mysema.querydsl<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>querydsl-jdo<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>${querydsl.version}<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/dependency&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+
+<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;dependency&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>org.slf4j<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>slf4j-log4j12<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>1.6.1<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/dependency&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>    
+</pre><p>
+      And now, configure the Maven APT plugin which generates the query types
+      used by Querydsl :
+  </p><pre class="programlisting">
+<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;project&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;build&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;plugins&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      ...
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;plugin&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+        <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>com.mysema.maven<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+        <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>maven-apt-plugin<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+        <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>1.0<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+        <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;executions&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+          <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;execution&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+            <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;goals&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+              <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;goal&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>process<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/goal&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+            <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/goals&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+            <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;configuration&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+              <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;outputDirectory&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>target/generated-sources/java<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/outputDirectory&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+              <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;processor&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>com.mysema.query.apt.jdo.JDOAnnotationProcessor<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/processor&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+            <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/configuration&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+          <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/execution&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+        <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/executions&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/plugin&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    ...
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/plugins&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/build&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/project&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+</pre><p>
+      The JDOAnnotationProcessor finds domain types annotated with the
+      javax.jdo.annotations.PersistenceCapable annotation and generates
+      Querydsl query types for them.
+    </p><p>
+      Run clean install and you will get your Query
+      types generated into target/generated-sources/java.
+    </p><p>
+      If you use Eclipse, run mvn eclipse:eclipse to update your Eclipse project to include target/generated-sources/java
+      as a source folder. 
+    </p><p>
+      Now you are able to construct JDOQL query instances and instances of the
+      query domain model.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e131"></a>2.1.2.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the following tasks for Querydsl code generation :</p><pre class="programlisting">
+    <font color="red">&lt;http://xslthl.sf.net:comment&gt;&lt;!-- APT based code generation --&gt;&lt;/http://xslthl.sf.net:comment&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;javac&lt;/http://xslthl.sf.net:tag&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;srcdir&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"${src}"&lt;/http://xslthl.sf.net:value&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;classpathref&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"cp"&lt;/http://xslthl.sf.net:value&gt;</font><font color="red">&lt;http://xslthl.sf.net:tag&gt;&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;compilerarg&lt;/http://xslthl.sf.net:tag&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;value&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"-proc:only"&lt;/http://xslthl.sf.net:value&gt;</font><font color="red">&lt;http://xslthl.sf.net:tag&gt;/&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>      
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;compilerarg&lt;/http://xslthl.sf.net:tag&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;value&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"-processor"&lt;/http://xslthl.sf.net:value&gt;</font><font color="red">&lt;http://xslthl.sf.net:tag&gt;/&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;compilerarg&lt;/http://xslthl.sf.net:tag&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;value&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"com.mysema.query.apt.jdo.JDOAnnotationProcessor"&lt;/http://xslthl.sf.net:value&gt;</font><font color="red">&lt;http://xslthl.sf.net:tag&gt;/&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;compilerarg&lt;/http://xslthl.sf.net:tag&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;value&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"-s"&lt;/http://xslthl.sf.net:value&gt;</font><font color="red">&lt;http://xslthl.sf.net:tag&gt;/&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;compilerarg&lt;/http://xslthl.sf.net:tag&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;value&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"${generated}"&lt;/http://xslthl.sf.net:value&gt;</font><font color="red">&lt;http://xslthl.sf.net:tag&gt;/&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/javac&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    
+    <font color="red">&lt;http://xslthl.sf.net:comment&gt;&lt;!-- compilation --&gt;&lt;/http://xslthl.sf.net:comment&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;javac&lt;/http://xslthl.sf.net:tag&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;classpathref&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"cp"&lt;/http://xslthl.sf.net:value&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;destdir&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"${build}"&lt;/http://xslthl.sf.net:value&gt;</font><font color="red">&lt;http://xslthl.sf.net:tag&gt;&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>      
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;src&lt;/http://xslthl.sf.net:tag&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;path&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"${src}"&lt;/http://xslthl.sf.net:value&gt;</font><font color="red">&lt;http://xslthl.sf.net:tag&gt;/&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;src&lt;/http://xslthl.sf.net:tag&gt;</font> <font color="red">&lt;http://xslthl.sf.net:attribute&gt;path&lt;/http://xslthl.sf.net:attribute&gt;</font>=<font color="red">&lt;http://xslthl.sf.net:value&gt;"${generated}"&lt;/http://xslthl.sf.net:value&gt;</font><font color="red">&lt;http://xslthl.sf.net:tag&gt;/&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/javac&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>    
+</pre><p>Replace <span class="emphasis"><em>src</em></span> with your main source folder, <span class="emphasis"><em>generated</em></span> with your folder for generated sources 
+    and <span class="emphasis"><em>build</em></span> with your target folder.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e149"></a>2.1.3.&nbsp;Using query types</h3></div></div></div><p>
+      To create queries with Querydsl you need to instantiate variables and
+      Query implementations. We will start with the variables.
+    </p><p>
+      Let's assume that your project has the following domain type :
+    </p><pre class="programlisting">
+@PersistenceCapable
+public class Customer {
+  private String firstName;
+  private String lastName;
+  
+  public String getFirstName(){
+    return firstName;
+  }
+  
+  public String getLastName(){
+    return lastName;
+  }
+  
+  public void setFirstName(String fn){
+    firstName = fn;
+  }
+  
+  public void setLastName(String ln)[
+    lastName = ln;
+  }
+}
+</pre><p>
+      Querydsl will generate a query type with the simple name QCustomer into the
+      same package as Customer. QCustomer can be used as a statically
+      typed variable in Querydsl as a representative for the
+      Customer type.
+  </p><p>
+      QCustomer has a default instance variable which can be accessed as a static
+      field :
+  </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+</pre><p>
+      Alternatively you can define your own Customer variables like this :
+  </p><pre class="programlisting">
+QCustomer customer = new QCustomer("myCustomer");
+</pre><p>
+      QCustomer reflects all the properties of the original type Customer as public
+      fields. The firstName field can be accessed like this
+  </p><pre class="programlisting">
+customer.firstName;
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e172"></a>2.1.4.&nbsp;Querying with JDOQL</h3></div></div></div><p>
+      For the JDOQL-module JDOQLQueryImpl is the main Query implementation. It
+      is instantiated like this :
+    </p><pre class="programlisting">
+PersistenceManager pm = ...;
+JDOQLQuery query = new JDOQLQueryImpl (pm);
+</pre><p>
+      To retrieve the customer with the first name Bob you would construct a
+      query like this :
+  </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+JDOQLQuery query = new JDOQLQueryImpl (pm);
+Customer bob = query.from(customer)
+  .where(customer.firstName.eq("Bob"))
+  .uniqueResult(customer);
+query.close();
+</pre><p>
+      The from call defines the query source, the where part defines the
+      filter and uniqueResult defines the projection and tells Querydsl
+      to return a single element. Easy, right?
+  </p><p>
+    To create a query with multiple sources you just use the JDOQLQuery interface like this :
+  </p><pre class="programlisting">
+query.from(customer, company);    
+</pre><p>
+   And to use multiple filters use it like this
+   </p><pre class="programlisting">
+query.from(customer)
+    .where(customer.firstName.eq("Bob"), customer.lastName.eq("Wilson"));   
+</pre><p>Or like this</p><pre class="programlisting">
+query.form(customer)
+    .where(customer.firstName.eq("Bob").and(customer.lastName.eq("Wilson")));
+</pre><p>If you want to combine the filters via "or" then use the following pattern</p><pre class="programlisting">
+query.form(customer)
+    .where(customer.firstName.eq("Bob").or(customer.lastName.eq("Wilson")));
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e201"></a>2.1.5.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the JDOQLQuery interface like this</p><p><span class="emphasis"><em>from :</em></span> Define the query sources here, the first argument becomes the main source 
+  and the others are treated as variables.</p><p><span class="emphasis"><em>where :</em></span> Define the query filters, either in varargs form separated via commas or 
+  cascaded via the and-operator.</p><p><span class="emphasis"><em>groupBy :</em></span> Define the group by arguments in varargs form.</p><p><span class="emphasis"><em>having :</em></span> Define the having filter of the "group by" grouping as an varargs array of 
+  Predicate expressions.</p><p><span class="emphasis"><em>orderBy :</em></span> Define the ordering of the result as an varargs array of order expressions. 
+  Use asc() and desc() on numeric, string and other comparable expression to access the OrderSpecifier instances. </p><p><span class="emphasis"><em>limit, offset, restrict :</em></span> Define the paging of the result. Limit for max results, 
+  offset for skipping rows and restrict for defining both in one call.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e230"></a>2.1.6.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting"> 
+query.from(customer)
+    .orderBy(customer.lastName.asc(), customer.firstName.desc())
+    .list(customer);
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e237"></a>2.1.7.&nbsp;Grouping</h3></div></div></div><p>Grouping can be done in the following form</p><pre class="programlisting"> 
+query.from(customer)
+    .groupBy(customer.lastName)
+    .list(customer.lastName);
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e244"></a>2.1.8.&nbsp;Delete clauses</h3></div></div></div><p>Delete clauses in Querydsl JDOQL follow a simple delete-where-execute form. Here are some examples :</p><pre class="programlisting">   
+QCustomer customer = QCustomer.customer;
+// delete all customers
+new JDOQLDeleteClause(pm, customer).execute();
+// delete all customers with a level less than 3
+new JDOQLDeleteClause(pm, customer).where(customer.level.lt(3)).execute();  
+</pre><p>The second parameter of the JDOQLDeleteClause constructor is the entity to be deleted.
+  The where call is optional and the execute call performs the deletion and returns the amount of deleted entities.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e253"></a>2.1.9.&nbsp;Subqueries</h3></div></div></div><p>To create
+  a subquery you create a JDOQLSubQuery instance, define the query parameters via from, where 
+  etc and use unique or list to create a subquery, which is just a type-safe Querydsl expression 
+  for the query. unique is used for a unique result and list for a list result.</p><pre class="programlisting">
+query.from(department)
+    .where(department.employees.size().eq(
+        new JDOQLSubQuery().from(d).unique(AggregationFunctions.max(d.employees.size()))
+     )).list(department);  
+</pre><p>represents the following native JDOQL query</p><pre class="programlisting">
+SELECT this FROM com.mysema.query.jdoql.models.company.Department
+WHERE this.employees.size() == 
+(SELECT max(d.employees.size()) FROM com.mysema.query.jdoql.models.company.Department d)
+</pre><p>Another example</p><pre class="programlisting">
+query.from(employee)
+    .where(employee.weeklyhours.gt(
+        new JDOQLSubQuery().from(employee.department.employees, e)
+        .where(e.manager.eq(employee.manager))
+        .unique(AggregationFunctions.avg(e.weeklyhours))
+    )).list(employee);
+</pre><p>which represents the following native JDOQL query</p><pre class="programlisting">
+SELECT this FROM com.mysema.query.jdoql.models.company.Employee 
+WHERE this.weeklyhours &gt; 
+(SELECT avg(e.weeklyhours) FROM this.department.employees e WHERE e.manager == this.manager)
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e272"></a>2.1.10.&nbsp;Using Native SQL</h3></div></div></div><p>Querydsl supports Native SQL in JDO via the JDOSQLQuery class.</p><p>To use it, you must generate Querydsl query types for your SQL schema. This can be done for example
+    with the following Maven configuration : </p><pre class="programlisting">
+<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;plugin&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>com.mysema.querydsl<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>querydsl-maven-plugin<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>${project.version}<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;executions&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;execution&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;goals&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+        <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;goal&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>export<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/goal&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/goals&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/execution&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>            
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/executions&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;configuration&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;jdbcDriver&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>org.apache.derby.jdbc.EmbeddedDriver<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/jdbcDriver&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;jdbcUrl&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>jdbc:derby:target/demoDB;create=true<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/jdbcUrl&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;packageName&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>com.mycompany.mydomain<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/packageName&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;targetFolder&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>${project.basedir}/target/generated-sources/java<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/targetFolder&gt;&lt;/http://xslthl.sf.net:tag&gt;</font> 
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/configuration&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;dependencies&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;dependency&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>org.apache.derby<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/groupId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>derby<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/artifactId&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+      <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>${derby.version}<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/version&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+    <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/dependency&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+  <font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/dependencies&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+<font color="red">&lt;http://xslthl.sf.net:tag&gt;&lt;/plugin&gt;&lt;/http://xslthl.sf.net:tag&gt;</font>
+</pre><p>When the query types have successfully been generated into the location of your choice, you can use them in your
+  queries.
+  </p><p>Single column query :</p><pre class="programlisting">
+// serialization templates
+SQLTemplates templates = new DerbyTemplates(); 
+// query types (S* for SQL, Q* for domain types)
+SAnimal cat = new SAnimal("cat");   
+SAnimal mate = new SAnimal("mate"); 
+ 
+JDOSQLQuery query = new JDOSQLQuery(pm, templates);
+List&lt;String&gt; names = query.from(cat).list(cat.name);
+</pre><p>Query multiple columns :</p><pre class="programlisting">
+query = new JDOSQLQuery(pm, templates);
+List&lt;Object[]&gt; rows = query.from(cat).list(cat.id, cat.name);
+</pre><p>Query all columns :</p><pre class="programlisting">
+List&lt;Object[]&gt; rows = query.from(cat).list(cat.all());
+ </pre><p>Query with joins : </p><pre class="programlisting">
+query = new JDOSQLQuery(pm, templates);
+cats = query.from(cat)
+    .innerJoin(mate).on(cat.mateId.eq(mate.id))
+    .where(cat.dtype.eq("Cat"), mate.dtype.eq("Cat"))
+    .list(catEntity);
+</pre><p>Query and project into DTO : </p><pre class="programlisting">
+query = new JDOSQLQuery(pm, templates);
+List&lt;CatDTO&gt; catDTOs = query.from(cat)
+    .orderBy(cat.name.asc())
+    .list(ConstructorExpression.create(CatDTO.class, cat.id, cat.name));
+</pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s02.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">1.2.&nbsp;Principles&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.2.&nbsp;Querying JPA</td></tr></table></div></body></html>

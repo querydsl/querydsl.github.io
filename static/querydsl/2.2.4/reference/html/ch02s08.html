@@ -1,0 +1,143 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.8.&nbsp;Querying in Scala</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s07.html" title="2.7.&nbsp;Querying Mongodb"><link rel="next" href="ch03.html" title="3.&nbsp;General usage"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.8.&nbsp;Querying in Scala</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s07.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scala"></a>2.8.&nbsp;Querying in Scala</h2></div></div></div><p>Generic support for Querydsl usage in Scala is available via querydsl-scala module. To add it to your Maven build, use the following snippet :</p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-scala<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+</pre><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1164"></a>2.8.1.&nbsp;DSL expressions for Scala</h3></div></div></div><p>Querydsl for Scala provides an alternative DSL for expression construction. The Scala DSL utilizes language features such as operator overloading,
+  	function pointers and implicit imports for enhanced readability and conciseness.</p><p>Here is an overview of the main alternatives :</p><pre class="programlisting">
+//Standard              Enhanced
+
+expr isNotNull          expr is not(null)
+expr isNull             expr is null
+expr eq "Ben"           expr === "Ben"
+expr ne "Ben"           expr !== "Ben"
+expr append "X"         expr + "X"
+expr isEmpty            expr is empty
+expr isNotEmpoty        expr not empty
+
+// boolean
+left and right          left &amp;&amp; right
+left or right           left || right
+expr not                !expr
+
+// comparison
+expr lt 5               expr &lt; 5
+expr loe 5              expr &lt;= 5
+expr gt 5               expr &gt; 5
+expr goe 5              expr &gt;= 5
+expr notBetween(2,6)    expr not between (2,6)
+expr negate             -expr
+ 
+// numeric
+expr add 3              expr + 3
+expr subtract 3      	expr - 3
+expr divide 3           expr / 3
+expr multiply 3         expr * 3
+expr mod 5              expr % 5
+
+// collection
+list.get(0)             list(0)
+map.get("X")            map("X")
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1173"></a>2.8.2.&nbsp;Querying with SQL</h3></div></div></div><p>
+  		Like with Querydsl SQL for Java you need to generate Query types to be able to construct your queries. 
+  		The following two unit test methods show how this is done :</p><pre class="programlisting">  
+  <span class="hl-annotation">@Test</span>
+  def Generation_without_Beantypes() {
+    val namingStrategy = <span class="hl-keyword">new</span> DefaultNamingStrategy();
+    val exporter = <span class="hl-keyword">new</span> MetaDataExporter();
+    exporter.setNamePrefix(<span class="hl-string">"Q"</span>);
+    exporter.setPackageName(<span class="hl-string">"test"</span>);
+    exporter.setTargetFolder(<span class="hl-keyword">new</span> File(<span class="hl-string">"target/gen1"</span>));
+    exporter.setSerializerClass(classOf[ScalaMetaDataSerializer]);
+    exporter.setCreateScalaSources(true);
+    exporter.setTypeMappings(ScalaTypeMappings.create);
+    exporter.export(connection.getMetaData);
+  }
+
+  <span class="hl-annotation">@Test</span>
+  def Generation_with_Beantypes() {
+    val namingStrategy = <span class="hl-keyword">new</span> DefaultNamingStrategy();
+    val beanSerializer = <span class="hl-keyword">new</span> ScalaBeanSerializer();
+    val exporter = <span class="hl-keyword">new</span> MetaDataExporter();
+    exporter.setNamePrefix(<span class="hl-string">"Q"</span>);
+    exporter.setPackageName(<span class="hl-string">"test"</span>);
+    exporter.setTargetFolder(<span class="hl-keyword">new</span> File(<span class="hl-string">"target/gen2"</span>));
+    exporter.setSerializerClass(classOf[ScalaMetaDataSerializer]);
+    exporter.setBeanSerializer(beanSerializer)
+    exporter.setCreateScalaSources(true);
+    exporter.setTypeMappings(ScalaTypeMappings.create);
+    exporter.export(connection.getMetaData);
+  }  
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1180"></a>2.8.3.&nbsp;Querying with other backends</h3></div></div></div><p>When querying with other backends the Expression model has to be created manually or alternatively the alias functionality can be used.</p><p>Here is a minimal example with JPA/Hibernate :</p><pre class="programlisting">  
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> User {
+  <span class="hl-annotation">@BeanProperty</span>
+  <span class="hl-annotation">@Id</span>
+  var id: Integer = _;
+  <span class="hl-annotation">@BeanProperty</span>
+  var userName: String = _;
+  <span class="hl-annotation">@BeanProperty</span>
+  <span class="hl-annotation">@ManyToOne</span>
+  var department: Department = _;
+}
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Department {
+  <span class="hl-annotation">@BeanProperty</span>
+  <span class="hl-annotation">@Id</span>
+  var id: Integer = _;
+  <span class="hl-annotation">@BeanProperty</span>
+  var name: String = _;
+}
+</pre><p>And here are some query examples</p><pre class="programlisting">
+<span class="hl-keyword">import</span> com.mysema.query.scala.Conversions._
+<span class="hl-keyword">import</span> com.mysema.query.jpa.impl.JPAQuery
+
+<span class="hl-keyword">import</span> com.mysema.query.types.path._
+<span class="hl-keyword">import</span> org.junit.Test
+
+<span class="hl-keyword">class</span> JPAQueryTest {
+
+  val person = alias(classOf[Person])
+
+  <span class="hl-annotation">@Test</span>
+  def Various() {
+    <span class="hl-comment">// list</span>
+    query from person where (person.firstName $like <span class="hl-string">"Rob%"</span>) 
+      .list person
+
+    <span class="hl-comment">// unique result</span>
+    query from person where (person.firstName $like <span class="hl-string">"Rob%"</span>) 
+      .unique person
+
+    <span class="hl-comment">// long where</span>
+    query from person 
+      .where (person.firstName $like <span class="hl-string">"Rob%"</span>, person.lastName $like <span class="hl-string">"An%"</span>) 
+      .list person
+
+    <span class="hl-comment">// order</span>
+    query from person orderBy (person.firstName asc) list person
+
+    <span class="hl-comment">// not null </span>
+    query from person 
+      .where (person.firstName $isEmpty, person.lastName $isNotNull) 
+      .list person
+  }
+
+  def query() = <span class="hl-keyword">new</span> JPAQuery(entityManager)
+
+}
+</pre><p>The main import for Querydsl Scala integration is the following</p><pre class="programlisting">
+<span class="hl-keyword">import</span> com.mysema.query.scala.Conversions._
+</pre><p>The factory method for query creation is</p><pre class="programlisting">
+def query() = <span class="hl-keyword">new</span> JPAQuery(entityManager)
+</pre><p>In addition to queries you need variables which can be created like this</p><pre class="programlisting">
+var person = alias(classOf[Person])
+</pre><p>The person variable is a proxy instance of the the Person class which can be used in queries. Now you can construct your queries, populate them via from-where-...-orderBy calls and get the projection out via list/uniqueResult/listResults calls.</p><p>Querydsl expressions are constructed via method calls starting with the "$" sign.</p><p>With the Querydsl Java API a simple like expression would be constructed like this :</p><pre class="programlisting">  
+person.firstName.like(<span class="hl-string">"Rob%"</span>)
+</pre><p>Using the Scala API it is</p><pre class="programlisting">
+person.firstName $like <span class="hl-string">"Rob%"</span>   
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s07.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.7.&nbsp;Querying Mongodb&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.&nbsp;General usage</td></tr></table></div></body></html>

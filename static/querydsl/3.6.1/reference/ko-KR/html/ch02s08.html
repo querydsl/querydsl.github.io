@@ -1,0 +1,198 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.8. Scala&#50640;&#49436; &#53244;&#47532;&#54616;&#44592;</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl - &#47112;&#54140;&#47088;&#49828; &#47928;&#49436;"><link rel="up" href="ch02.html" title="2&#51109;. &#53916;&#53664;&#47532;&#50620;"><link rel="prev" href="ch02s07.html" title="2.7. &#53084;&#47113;&#49496; &#53244;&#47532;"><link rel="next" href="ch03.html" title="3&#51109;. &#51068;&#48152; &#49324;&#50857;&#48277;"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.8. Scala&#50640;&#49436; &#53244;&#47532;&#54616;&#44592;</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s07.html">&#51060;&#51204;</a>&nbsp;</td><th width="60%" align="center">2&#51109;. &#53916;&#53664;&#47532;&#50620;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">&#45796;&#51020;</a></td></tr></table><hr></div><div class="sect1" lang="ko-KR"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scala"></a>2.8. Scala&#50640;&#49436; &#53244;&#47532;&#54616;&#44592;</h2></div></div></div><p>querydsl-scala &#47784;&#46280;&#51012; &#53685;&#54644; Scala&#50640;&#49436; Querydsl&#51012; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+    &#51060; &#47784;&#46280;&#51012; &#49324;&#50857;&#54616;&#47140;&#47732; &#47700;&#51060;&#48656; &#48716;&#46300;&#50640; &#45796;&#51020;&#51032; &#53076;&#46300;&#47484; &#52628;&#44032;&#54620;&#45796;.
+  </p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-scala<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+</pre><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1690"></a>2.8.1. Scala&#47484; &#50948;&#54620; DSL &#54364;&#54788;</h3></div></div></div><p>Scala &#50857; Querydsl&#51008; &#54364;&#54788;&#49885; &#49373;&#49457;&#51012; &#50948;&#54620; &#48324;&#46020; DSL&#51012; &#51228;&#44277;&#54620;&#45796;.
+      Scala DSL&#51008; &#44032;&#46021;&#49457;&#44284; &#44036;&#44208;&#54632;&#51012; &#54693;&#49345;&#49884;&#53412;&#44592; &#50948;&#54644;
+      &#50672;&#49328;&#51088; &#50724;&#48260;&#47196;&#46377;, &#54632;&#49688; &#54252;&#51064;&#53552;, &#51076;&#51032; &#51076;&#54252;&#53944; &#46321; &#50616;&#50612;&#51032; &#53945;&#51669;&#51012; &#54876;&#50857;&#54620;&#45796;.
+    </p><p>&#51452;&#50836; &#45824;&#52404; DSL&#51008; &#45796;&#51020;&#44284; &#44057;&#45796;.</p><pre class="programlisting">
+//Standard              Alternative
+
+expr isNotNull          expr is not(null)
+expr isNull             expr is null
+expr eq "Ben"           expr === "Ben"
+expr ne "Ben"           expr !== "Ben"
+expr append "X"         expr + "X"
+expr isEmpty            expr is empty
+expr isNotEmpoty        expr not empty
+
+// boolean
+left and right          left &amp;&amp; right
+left or right           left || right
+expr not                !expr
+
+// comparison
+expr lt 5               expr &lt; 5
+expr loe 5              expr &lt;= 5
+expr gt 5               expr &gt; 5
+expr goe 5              expr &gt;= 5
+expr notBetween(2,6)    expr not between (2,6)
+expr negate             -expr
+
+// numeric
+expr add 3              expr + 3
+expr subtract 3         expr - 3
+expr divide 3           expr / 3
+expr multiply 3         expr * 3
+expr mod 5              expr % 5
+
+// collection
+list.get(0)             list(0)
+map.get("X")            map("X")
+</pre></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1700"></a>2.8.2. &#54693;&#49345;&#46108; &#54532;&#47196;&#51229;&#49496;</h3></div></div></div><p>Querydsl Scala &#47784;&#46280;&#51008; Querydsl&#51032; &#53244;&#47532; &#54532;&#47196;&#51229;&#49496;&#51012; Scala&#50640; &#45908;&#50865; &#50508;&#47582;&#44172; &#47564;&#46308;&#44592; &#50948;&#54644;
+      &#47751;&#47751; &#51076;&#51032; &#48320;&#54872;&#51012; &#51228;&#44277;&#54620;&#45796;.
+    </p><p>
+      Querydsl &#53244;&#47532;&#50640;&#49436; Scala &#54532;&#47196;&#51229;&#49496;&#51012; &#54876;&#49457;&#54868;&#54616;&#47140;&#47732;
+      <code class="code">RichProjectable</code>&#50752; <code class="code">RichSimpleProjectable</code> &#47000;&#54140;&#47484; &#49324;&#50857;&#54644;&#50556; &#54620;&#45796;.
+      <code class="code">com.mysema.query.scala.Helpers</code>&#47484; &#51076;&#54252;&#53944; &#54632;&#51004;&#47196;&#50024; &#54596;&#50836;&#54620; &#51076;&#51032; &#48320;&#54872;&#51060; &#44032;&#45733;&#54644;&#51652;&#45796;.
+    </p><p>
+      &#50696;&#47484; &#46308;&#50612;, &#54364;&#51456; API&#47484; &#51060;&#50857;&#54620; &#45796;&#51020; &#53244;&#47532;&#45716; <code class="code">Object[]</code> &#53440;&#51077;&#51032;  <code class="code">java.util.List</code>&#47484; &#47532;&#53556;&#54620;&#45796;.
+    </p><pre class="programlisting">
+query.from(person).list(person.firstName, person.lastName, person.age)
+</pre><p>&#51076;&#51032; &#48320;&#54872;&#51012; &#52628;&#44032;&#54632;&#51004;&#47196;&#50024;, list&#45824;&#49888;&#50640; select&#47484; &#51060;&#50857;&#54644;&#49436; Scala List &#53440;&#51077; &#44208;&#44284;&#47484; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+      &#46608;&#54620;, uniqueResult&#45208; singleResult &#45824;&#49888;&#50640; unique&#50752; single&#47484; &#51060;&#50857;&#54644;&#49436; Option &#53440;&#51077;&#51004;&#47196; &#44208;&#44284;&#47484; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+    </p><p>&#51076;&#51032; &#48320;&#54872;&#51012; &#49324;&#50857;&#54616;&#47732; &#50526;&#49436; &#53244;&#47532;&#47484; &#45796;&#51020;&#44284; &#44057;&#51060; &#51089;&#49457;&#54624; &#49688; &#51080;&#45796;.
+    </p><pre class="programlisting">
+<span class="hl-keyword">import</span> com.mysema.query.scala.Helpers._
+
+query.from(person).select(person.firstName, person.lastName, person.age)
+</pre><p>&#51060; &#44221;&#50864; &#44208;&#44284; &#53440;&#51077;&#51008; List[(String,String,Integer)] &#51593;, Tuple3[String,String,Integer]&#51032; List&#44032; &#46108;&#45796;.
+    </p></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1734"></a>2.8.3. SQL&#51012; &#51060;&#50857;&#54620; &#53244;&#47532;</h3></div></div></div><p>
+      &#51088;&#48148;&#47484; &#50948;&#54620; Querydsl SQL&#44284; &#47560;&#52268;&#44032;&#51648;&#47196;, &#53244;&#47532;&#47484; &#47564;&#46308;&#47140;&#47732; &#53244;&#47532; &#53440;&#51077;&#51012; &#49373;&#49457;&#54644;&#50556; &#54620;&#45796;.
+      &#45796;&#51020;&#51008; &#53244;&#47532; &#53440;&#51077; &#49373;&#49457;&#51012; &#50948;&#54620; &#53076;&#46300; &#50696;&#51228;&#45796;.
+    </p><p>&#48712; &#53440;&#51077; &#50630;&#51060; &#49373;&#49457;&#54616;&#44592;:</p><pre class="programlisting">
+val directory = <span class="hl-keyword">new</span> java.io.File(<span class="hl-string">"target/jdbcgen1"</span>)
+val namingStrategy = <span class="hl-keyword">new</span> DefaultNamingStrategy()
+val exporter = <span class="hl-keyword">new</span> MetaDataExporter()
+exporter.setNamePrefix(<span class="hl-string">"Q"</span>)
+exporter.setPackageName(<span class="hl-string">"com.mysema"</span>)
+exporter.setSchemaPattern(<span class="hl-string">"PUBLIC"</span>)
+exporter.setTargetFolder(directory)
+exporter.setSerializerClass(classOf[ScalaMetaDataSerializer])
+exporter.setCreateScalaSources(true)
+exporter.setTypeMappings(ScalaTypeMappings.create)
+exporter.export(connection.getMetaData)
+</pre><p>&#48712; &#53440;&#51077;&#51012; &#51060;&#50857;&#54644;&#49436; &#49373;&#49457;&#54616;&#44592;:</p><pre class="programlisting">
+val directory = <span class="hl-keyword">new</span> java.io.File(<span class="hl-string">"target/jdbcgen2"</span>)
+val namingStrategy = <span class="hl-keyword">new</span> DefaultNamingStrategy()
+val exporter = <span class="hl-keyword">new</span> MetaDataExporter()
+exporter.setNamePrefix(<span class="hl-string">"Q"</span>)
+exporter.setPackageName(<span class="hl-string">"com.mysema"</span>)
+exporter.setSchemaPattern(<span class="hl-string">"PUBLIC"</span>)
+exporter.setTargetFolder(directory)
+exporter.setSerializerClass(classOf[ScalaMetaDataSerializer])
+exporter.setBeanSerializerClass(classOf[ScalaBeanSerializer])
+exporter.setCreateScalaSources(true)
+exporter.setTypeMappings(ScalaTypeMappings.create)
+exporter.export(connection.getMetaData)
+</pre><div class="sect3" lang="ko-KR"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1747"></a>2.8.3.1. &#52980;&#54057;&#53944; &#53244;&#47532;</h4></div></div></div><p>Querydsl Scala&#51008; Querydls SQL&#51012; &#50948;&#54620; &#52980;&#54057;&#53944; &#53244;&#47532;&#47484; &#51228;&#44277;&#54620;&#45796;.
+        &#51060; &#44396;&#47928;&#51008; Rogue &#54532;&#47112;&#51076;&#50892;&#53356;&#51032; &#46020;&#47700;&#51064; &#51648;&#54693; &#53244;&#47532; &#44396;&#47928;&#50640;&#49436; &#50689;&#44048;&#51012; &#50619;&#50632;&#45796;.
+      </p><p>
+        <code class="code">RelationalPath</code> &#51064;&#49828;&#53556;&#49828;&#47484; &#53244;&#47532;&#47196; &#51076;&#51032; &#48320;&#54872;&#54644;&#49436; &#46020;&#47700;&#51064; &#51648;&#54693; &#53244;&#47532;&#47484; &#44396;&#54788;&#54620;&#45796;.
+        &#49436;&#48708;&#49828;&#45208; DAO &#53364;&#47000;&#49828;&#44032; <code class="code">com.mysema.query.scala.sql.SQLHelpers</code> &#53944;&#47112;&#51079;&#51012; &#49345;&#49549;&#54616;&#47732;
+        &#51060; &#44592;&#45733;&#51012; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+      </p><p>&#52980;&#54057;&#53944; &#53244;&#47532;&#47484; &#49324;&#50857;&#54616;&#47732;, &#53244;&#47532;&#51032; &#49884;&#51089; &#51648;&#51216;&#51004;&#47196; &#47700;&#53440; &#47784;&#45944; &#53364;&#47000;&#49828;&#47484; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+      </p><p>&#45796;&#51020;&#51032; &#51068;&#48152; &#53244;&#47532;&#47484; &#49324;&#50857;&#54616;&#45716; &#45824;&#49888;&#50640;</p><pre class="programlisting">
+query().from(employee).select(employee.firstName, employee.lastName)
+</pre><p>&#45796;&#51020;&#44284; &#44057;&#51060; Employee &#46608;&#45716; QEmployee&#51032; companio &#44061;&#52404;&#47484; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.</p><pre class="programlisting">
+Employee.select(_.firstName, _.lastName)
+</pre><p>&#54364;&#54788;&#49885;&#50640; orderBy, where, select, single, unique&#47484; &#49324;&#50857;&#54616;&#45716; &#45824;&#49888;,
+        &#53244;&#47532;&#51032; &#47336;&#53944; &#54364;&#54788;&#49885;&#51012; &#54028;&#46972;&#48120;&#53552;&#47196; &#48155;&#44256; &#45796;&#47480; &#54364;&#54788;&#49885;&#51012; &#47532;&#53556;&#54616;&#45716; &#54632;&#49688;&#47484; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+        &#45796;&#51020;&#51008; &#50526; &#50696;&#51228;&#47484; &#54869;&#51109;&#54620; &#54805;&#49885;&#51060;&#45796;.
+      </p><pre class="programlisting">
+Employee.select({ e =&gt; e.firstName }, { e =&gt; e.lastName })
+</pre><p>
+        &#51088;&#49464;&#54620; &#45236;&#50857;&#51008; <code class="code">com.mysema.query.scala.sql.RichSimpleQuery</code>&#51032; &#49884;&#44536;&#45320;&#52376;&#47484; &#52280;&#44256;&#54616;&#44592; &#48148;&#46976;&#45796;.
+      </p></div><div class="sect3" lang="ko-KR"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1779"></a>2.8.3.2. &#53076;&#46300; &#49373;&#49457;</h4></div></div></div><p>querydsl-maven-plugin&#51012; &#51060;&#50857;&#54644;&#49436; SQL &#47700;&#53440;&#53440;&#51077;&#44284; &#54532;&#47196;&#51229;&#49496;&#51012; &#50948;&#54620; Scala &#49548;&#49828;&#47484; &#49373;&#49457;&#54620;&#45796;.
+        &#45796;&#51020;&#51008; &#49444;&#51221; &#50696;&#45796;.
+      </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+    <span class="hl-tag">&lt;plugins&gt;</span>
+      ...
+      <span class="hl-tag">&lt;plugin&gt;</span>
+        <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+        <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+        <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+        <span class="hl-tag">&lt;configuration&gt;</span>
+          <span class="hl-tag">&lt;jdbcDriver&gt;</span>com.mysql.jdbc.Driver<span class="hl-tag">&lt;/jdbcDriver&gt;</span>
+          <span class="hl-tag">&lt;jdbcUrl&gt;</span>jdbc:mysql://localhost:3306/test<span class="hl-tag">&lt;/jdbcUrl&gt;</span>
+          <span class="hl-tag">&lt;jdbcUser&gt;</span>matko<span class="hl-tag">&lt;/jdbcUser&gt;</span>
+          <span class="hl-tag">&lt;jdbcPassword&gt;</span>matko<span class="hl-tag">&lt;/jdbcPassword&gt;</span>
+          <span class="hl-tag">&lt;packageName&gt;</span>com.example.schema<span class="hl-tag">&lt;/packageName&gt;</span>
+          <span class="hl-tag">&lt;targetFolder&gt;</span>${project.basedir}/src/main/scala<span class="hl-tag">&lt;/targetFolder&gt;</span>
+          <span class="hl-tag">&lt;exportBeans&gt;</span>true<span class="hl-tag">&lt;/exportBeans&gt;</span>
+          <span class="hl-tag">&lt;createScalaSources&gt;</span>true<span class="hl-tag">&lt;/createScalaSources&gt;</span>
+        <span class="hl-tag">&lt;/configuration&gt;</span>
+        <span class="hl-tag">&lt;dependencies&gt;</span>
+          <span class="hl-tag">&lt;dependency&gt;</span>
+            <span class="hl-tag">&lt;groupId&gt;</span>mysql<span class="hl-tag">&lt;/groupId&gt;</span>
+            <span class="hl-tag">&lt;artifactId&gt;</span>mysql-connector-java<span class="hl-tag">&lt;/artifactId&gt;</span>
+            <span class="hl-tag">&lt;version&gt;</span>5.1.16<span class="hl-tag">&lt;/version&gt;</span>
+          <span class="hl-tag">&lt;/dependency&gt;</span>
+          <span class="hl-tag">&lt;dependency&gt;</span>
+            <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+            <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-scala<span class="hl-tag">&lt;/artifactId&gt;</span>
+            <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+          <span class="hl-tag">&lt;/dependency&gt;</span>
+          <span class="hl-tag">&lt;dependency&gt;</span>
+            <span class="hl-tag">&lt;groupId&gt;</span>org.scala-lang<span class="hl-tag">&lt;/groupId&gt;</span>
+            <span class="hl-tag">&lt;artifactId&gt;</span>scala-library<span class="hl-tag">&lt;/artifactId&gt;</span>
+            <span class="hl-tag">&lt;version&gt;</span>${scala.version}<span class="hl-tag">&lt;/version&gt;</span>
+          <span class="hl-tag">&lt;/dependency&gt;</span>
+        <span class="hl-tag">&lt;/dependencies&gt;</span>
+      <span class="hl-tag">&lt;/plugin&gt;</span>
+      ...
+    <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre><p>querydsl:export &#47700;&#51060;&#48656; &#44264;&#51012; &#49892;&#54665;&#54620;&#45796;.</p></div></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1788"></a>2.8.4. &#45796;&#47480; &#48177;&#50644;&#46300;&#50640; &#45824;&#54620; &#53244;&#47532;</h3></div></div></div><p>&#45796;&#47480; &#48177;&#50644;&#46300;&#50640; &#45824;&#54644; &#53244;&#47532;&#47484; &#54616;&#47140;&#47732;, Expression &#47784;&#45944;&#51012; &#49688;&#46041;&#51004;&#47196; &#47564;&#46308;&#44144;&#45208; &#48324;&#52845; &#54632;&#49688;&#47484; &#49324;&#50857;&#54644;&#50556; &#54620;&#45796;.
+    </p><p>&#45796;&#51020;&#51008; JPA&#47484; &#51060;&#50857;&#54624; &#46412;&#51032; &#50696;&#51228;&#45796;.</p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> User {
+  <span class="hl-annotation">@BeanProperty</span>
+  <span class="hl-annotation">@Id</span>
+  var id: Integer = _;
+  <span class="hl-annotation">@BeanProperty</span>
+  var userName: String = _;
+  <span class="hl-annotation">@BeanProperty</span>
+  <span class="hl-annotation">@ManyToOne</span>
+  var department: Department = _;
+}
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Department {
+  <span class="hl-annotation">@BeanProperty</span>
+  <span class="hl-annotation">@Id</span>
+  var id: Integer = _;
+  <span class="hl-annotation">@BeanProperty</span>
+  var name: String = _;
+}
+</pre><p>&#45796;&#51020;&#51008; &#47751; &#44032;&#51648; &#53244;&#47532; &#50696;&#51228;&#45796;.</p><p>List</p><pre class="programlisting">
+val person = Person as <span class="hl-string">"person"</span>
+
+query.from(person).where(person.firstName like <span class="hl-string">"Rob%"</span>).list(person)
+</pre><p>Unique result</p><pre class="programlisting">
+query.from(person).where(person.firstName like <span class="hl-string">"Rob%"</span>).unique(person)
+</pre><p>Long where</p><pre class="programlisting">
+query.from(person)
+  .where(person.firstName like <span class="hl-string">"Rob%"</span>, person.lastName like <span class="hl-string">"An%"</span>)
+  .list(person)
+</pre><p>Order</p><pre class="programlisting">
+query.from(person).orderBy(person.firstName asc).list(person)
+</pre><p>Not null</p><pre class="programlisting">
+query.from(person)
+  .where(person.firstName isEmpty, person.lastName isNotNull)
+  .list(person)
+</pre><p>&#53244;&#47532; &#49373;&#49457;&#51012; &#50948;&#54620; &#54057;&#53664;&#47532; &#47700;&#49436;&#46300;</p><pre class="programlisting">
+def query() = <span class="hl-keyword">new</span> JPAQuery(entityManager)
+</pre><p>&#50948; &#53244;&#47532;&#47484; &#49892;&#54665;&#54616;&#47140;&#47732; &#45796;&#51020;&#44284; &#44057;&#51060; &#48320;&#49688;&#47484; &#49373;&#49457;&#54644;&#50556; &#54620;&#45796;.</p><pre class="programlisting">
+val person = Person as <span class="hl-string">"person"</span>
+</pre><p>&#54616;&#51060;&#48260;&#45348;&#51060;&#53944;&#50640;&#49436; XML &#44592;&#48152; &#49444;&#51221;&#51012; &#49324;&#50857;&#54624; &#44221;&#50864;, &#50500;&#51649; Scala &#47784;&#46280;&#51012; &#49324;&#50857;&#54624; &#49688; &#50630;&#45796;.
+      HibernateDomainExporter&#45716; &#54788;&#51116; &#51088;&#48148; &#49548;&#49828; &#54028;&#51068; &#49373;&#49457;&#47564; &#51648;&#50896;&#54620;&#45796;.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s07.html">&#51060;&#51204;</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">&#50948;&#47196;</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03.html">&#45796;&#51020;</a></td></tr><tr><td width="40%" align="left" valign="top">2.7. &#53084;&#47113;&#49496; &#53244;&#47532;&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">&#52376;&#51020;&#51004;&#47196;</a></td><td width="40%" align="right" valign="top">&nbsp;3&#51109;. &#51068;&#48152; &#49324;&#50857;&#48277;</td></tr></table></div></body></html>

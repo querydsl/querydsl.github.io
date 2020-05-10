@@ -1,0 +1,132 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.5.&nbsp;Querying Lucene</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl Reference Guide"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s04.html" title="2.4.&nbsp;Querydsl Spatial"><link rel="next" href="ch02s06.html" title="2.6.&nbsp;Querying Hibernate Search"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.5.&nbsp;Querying Lucene</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s04.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s06.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="lucene_integration"></a>2.5.&nbsp;Querying Lucene</h2></div></div></div><p>This chapter describes the querying functionality of the Lucene module.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1554"></a>2.5.1.&nbsp;Maven integration</h3></div></div></div><p>
+      Querydsl Lucene can be used via the querydsl-lucene3 module for Lucene 3, querydsl-lucene4
+      for Lucene 4 and querydsl-lucene5 for Lucene 5
+    </p><p>Lucene 3:</p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-lucene3<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>org.slf4j<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>slf4j-log4j12<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>1.6.1<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+</pre><p>Lucene 4:</p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-lucene4<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>org.slf4j<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>slf4j-log4j12<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>1.6.1<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+</pre><p>Lucene 5:</p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-lucene5<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>org.slf4j<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>slf4j-log4j12<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>1.6.1<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1571"></a>2.5.2.&nbsp;Creating the query types</h3></div></div></div><p>With fields year and title a manually created query type could look something
+      like this:</p><pre class="programlisting">
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QDocument <span class="hl-keyword">extends</span> EntityPathBase&lt;Document&gt; {
+    <span class="hl-keyword">private</span> <span class="hl-keyword">static</span> <span class="hl-keyword">final</span> <span class="hl-keyword">long</span> serialVersionUID = -<span class="hl-value">4872833626508344081L</span>;
+
+    <span class="hl-keyword">public</span> QDocument(String var) {
+        <span class="hl-keyword">super</span>(Document.<span class="hl-keyword">class</span>, PathMetadataFactory.forVariable(var));
+    }
+
+    <span class="hl-keyword">public</span> <span class="hl-keyword">final</span> StringPath year = createString(<span class="hl-string">"year"</span>);
+
+    <span class="hl-keyword">public</span> <span class="hl-keyword">final</span> StringPath title = createString(<span class="hl-string">"title"</span>);
+}
+</pre><p>QDocument represents a Lucene document with the fields year and title.</p><p>Code generation is not available for Lucene, since no schema data is available.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1582"></a>2.5.3.&nbsp;Querying</h3></div></div></div><p>Querying with Querydsl Lucene is as simple as this:</p><pre class="programlisting">
+QDocument doc = <span class="hl-keyword">new</span> QDocument(<span class="hl-string">"doc"</span>);
+
+IndexSearcher searcher = <span class="hl-keyword">new</span> IndexSearcher(index);
+LuceneQuery query = <span class="hl-keyword">new</span> LuceneQuery(true, searcher);
+List&lt;Document&gt; documents = query
+    .where(doc.year.between(<span class="hl-string">"1800"</span>, <span class="hl-string">"2000"</span>).and(doc.title.startsWith(<span class="hl-string">"Huckle"</span>))
+    .fetch();
+</pre><p>which is transformed into the following Lucene query:</p><pre class="programlisting">
++year:[1800 TO 2000] +title:huckle*
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1593"></a>2.5.4.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the LuceneQuery class like this</p><p>
+      <span class="emphasis"><em>where:</em></span>
+      Add the query filters, either in varargs form separated via commas or
+      cascaded via the and-operator. Supported operations are operations performed on PStrings except
+      <span class="emphasis"><em>
+        matches
+      </em></span>
+      ,
+      <span class="emphasis"><em>indexOf</em></span>
+      ,
+      <span class="emphasis"><em>charAt</em></span>
+      . Currently
+      <span class="emphasis"><em>in</em></span>
+      is
+      not supported, but will be in the future.
+    </p><p>
+      <span class="emphasis"><em>orderBy:</em></span>
+      Add ordering of the result as an varargs array of order expressions.
+      Use asc() and desc() on numeric, string and other comparable expression to access the
+      OrderSpecifier instances.
+    </p><p>
+      <span class="emphasis"><em>limit, offset, restrict:</em></span>
+      Set the paging of the result. Limit for max results,
+      offset for skipping rows and restrict for defining both in one call.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1625"></a>2.5.5.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting">
+query
+    .where(doc.title.like(<span class="hl-string">"*"</span>))
+    .orderBy(doc.title.asc(), doc.year.desc())
+    .fetch();
+</pre><p>which is equivalent to the following Lucene query</p><pre class="programlisting">
+title:*
+</pre><p>The results are sorted ascending based on title and year.</p><p>Alternatively a sort method call can be used to declare the sort logic as a Sort
+      instance instead
+    </p><pre class="programlisting">
+Sort sort = ...;
+query
+    .where(doc.title.like(<span class="hl-string">"*"</span>))
+    .sort(sort)
+    .fetch();
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1642"></a>2.5.6.&nbsp;Limit</h3></div></div></div><p>The syntax for declaring a limit is </p><pre class="programlisting">
+query
+    .where(doc.title.like(<span class="hl-string">"*"</span>))
+    .limit(<span class="hl-value">10</span>)
+    .fetch();
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1649"></a>2.5.7.&nbsp;Offset</h3></div></div></div><p>The syntax for declaring an offset is </p><pre class="programlisting">
+query
+    .where(doc.title.like(<span class="hl-string">"*"</span>))
+    .offset(<span class="hl-value">3</span>)
+    .fetch();
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1656"></a>2.5.8.&nbsp;Fuzzy searches</h3></div></div></div><p>Fuzzy searches can be expressed via fuzzyLike methods in the
+      <code class="code">com.querydsl.lucene3.LuceneExpressions</code> class:
+    </p><pre class="programlisting">
+query
+    .where(LuceneExpressions.fuzzyLike(doc.title, <span class="hl-string">"Hello"</span>))
+    .fetch();
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1666"></a>2.5.9.&nbsp;Applying Lucene filters to queries</h3></div></div></div><p>It is possible to apply a single Lucene filter to the query like this:</p><pre class="programlisting">
+query
+    .where(doc.title.like(<span class="hl-string">"*"</span>))
+    .filter(filter)
+    .fetch();
+</pre><p>A shortcut for distinct filtering is provided via the distinct(Path) method:
+    </p><pre class="programlisting">
+query
+    .where(doc.title.like(<span class="hl-string">"*"</span>))
+    .distinct(doc.title)
+    .fetch();
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s04.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s06.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.4.&nbsp;Querydsl Spatial&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.6.&nbsp;Querying Hibernate Search</td></tr></table></div></body></html>

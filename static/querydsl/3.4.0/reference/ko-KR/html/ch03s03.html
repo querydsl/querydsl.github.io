@@ -1,0 +1,298 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.3. &#53076;&#46300; &#49373;&#49457;</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl - &#47112;&#54140;&#47088;&#49828; &#47928;&#49436;"><link rel="up" href="ch03.html" title="3&#51109;. &#51068;&#48152; &#49324;&#50857;&#48277;"><link rel="prev" href="ch03s02.html" title="3.2. &#44208;&#44284; &#52376;&#47532;"><link rel="next" href="ch03s04.html" title="3.4. &#48324;&#52845; &#49324;&#50857;&#48277;"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.3. &#53076;&#46300; &#49373;&#49457;</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">&#51060;&#51204;</a>&nbsp;</td><th width="60%" align="center">3&#51109;. &#51068;&#48152; &#49324;&#50857;&#48277;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">&#45796;&#51020;</a></td></tr></table><hr></div><div class="sect1" lang="ko-KR"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="codegen"></a>3.3. &#53076;&#46300; &#49373;&#49457;</h2></div></div></div><p>Querydsl&#51008; JPA, JDO, Mongodb &#47784;&#46280;&#50640;&#49436; &#53076;&#46300; &#49373;&#49457;&#51012; &#50948;&#54644; &#51088;&#48148;6&#51032; APT &#50612;&#45432;&#53580;&#51060;&#49496; &#52376;&#47532; &#44592;&#45733;&#51012; &#49324;&#50857;&#54620;&#45796;.
+&#51060; &#51208;&#50640;&#49436;&#45716; &#53076;&#46300; &#49373;&#49457;&#51012; &#50948;&#54620; &#45796;&#50577;&#54620; &#49444;&#51221; &#50741;&#49496;&#44284; APT&#50640; &#45824;&#54620; &#45824;&#50504;&#51012; &#49444;&#47749;&#54620;&#45796;.
+  </p><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2063"></a>3.3.1. &#44221;&#47196; &#52488;&#44592;&#54868;</h3></div></div></div><p>
+      &#44592;&#48376;&#51201;&#51004;&#47196; Querydsl&#51008; &#52376;&#51020; 2&#47112;&#48296;&#51032; &#47112;&#54140;&#47088;&#49828; &#54532;&#47196;&#54140;&#54000;&#47564; &#52488;&#44592;&#54868;&#54620;&#45796;. &#45908; &#44618;&#51008; &#44221;&#47196;&#47196; &#52488;&#44592;&#54868;&#54644;&#50556; &#54620;&#45796;&#47732;,
+      <code class="code">com.mysema.query.annotations.QueryInit</code> &#50528;&#45432;&#53580;&#51060;&#49496;&#51012; &#46020;&#47700;&#51064; &#53440;&#51077;&#50640; &#51201;&#50857;&#54644;&#50556; &#54620;&#45796;.
+      &#45908; &#44618;&#51008; &#47112;&#48296;&#47196; &#52488;&#44592;&#54868;&#44032; &#54596;&#50836;&#54620; &#54532;&#47196;&#54140;&#54000;&#50640; QueryInit &#50612;&#45432;&#53580;&#51060;&#49496;&#51012; &#51201;&#50857;&#54620;&#45796;. &#45796;&#51020;&#51008; &#51201;&#50857; &#50696;&#47484; &#48372;&#50668;&#51452;&#44256; &#51080;&#45796;.
+    </p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>      
+<span class="hl-keyword">class</span> Event {
+    <span class="hl-annotation">@QueryInit("customer.address")</span>
+    Account account;
+}      
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Account{
+    Customer customer;    
+}
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Customer{
+    String name;
+    Address address;
+    <span class="hl-comment">// ...</span>
+}
+</pre><p>
+      &#51060; &#50696;&#51228;&#45716; Event &#44221;&#47196;&#44032; &#47336;&#53944; &#44221;&#47196;&#51064; /&#47196; &#52488;&#44592;&#54868;&#46112; &#46412;, account.customer &#44221;&#47196;&#51032; &#52488;&#44592;&#54868;&#47484; &#49892;&#54665;&#54620;&#45796;.
+      &#44221;&#47196; &#52488;&#44592;&#54868; &#54252;&#47607;&#51008; &#50752;&#51068;&#46300;&#52852;&#46300; &#47928;&#51088;(customer.* &#46608;&#45716; &#44536;&#45285; * &#46321;)&#47484; &#51648;&#50896;&#54620;&#45796;.
+    </p><p>
+      &#51088;&#46041; &#44221;&#47196; &#52488;&#44592;&#54868;&#45716; &#49688;&#46041; &#52488;&#44592;&#54868;&#47484; &#45824;&#49888;&#54616;&#47728;, &#50644;&#54000;&#54000; &#54596;&#46300;&#44032; final&#51060;&#50612;&#49440; &#50504; &#46108;&#45796;.
+      &#49440;&#50616;&#51201; &#54252;&#47607;&#51008; &#53244;&#47532; &#53440;&#51077;&#51032; &#47784;&#46304; &#52572;&#49345;&#50948; &#47112;&#48296; &#51064;&#49828;&#53556;&#49828;&#50640; &#51201;&#50857;&#54624; &#49688; &#51080;&#44256;
+      final &#50644;&#54000;&#54000; &#54596;&#46300;&#51032; &#49324;&#50857;&#51012; &#44032;&#45733;&#54616;&#44172; &#54644;&#51452;&#45716; &#51060;&#51216;&#51060; &#51080;&#45796;.
+    </p><p>
+      &#49440;&#54840;&#54616;&#45716; &#52488;&#44592;&#54868; &#48169;&#49885;&#51008; &#51088;&#46041; &#44221;&#47196; &#52488;&#44592;&#54868;&#51648;&#47564;, &#45796;&#51020;&#50640; &#49444;&#47749;&#54624; Config &#50612;&#45432;&#53580;&#51060;&#49496;&#51012; &#51060;&#50857;&#54644;&#49436;
+      &#49688;&#46041; &#52488;&#44592;&#54868;&#47484; &#54876;&#49457;&#54868;&#49884;&#53420; &#49688; &#51080;&#45796;.
+    </p></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2079"></a>3.3.2. &#52964;&#49828;&#53552;&#47560;&#51060;&#51669;</h3></div></div></div><p>
+      &#54056;&#53412;&#51648;&#45208; &#53440;&#51077;&#50640; Config &#50612;&#45432;&#53580;&#51060;&#49496;&#51012; &#49324;&#50857;&#54644;&#49436; Querydsl&#51032; &#51649;&#47148;&#54868;&#47484; &#52964;&#49828;&#53552;&#47560;&#51060;&#51669;&#54624; &#49688; &#51080;&#45796;.
+      Querydsl&#51008; &#50612;&#45432;&#53580;&#51060;&#49496;&#51060; &#51201;&#50857;&#46108; &#54056;&#53412;&#51648;&#50752; &#53440;&#51077;&#51032; &#51649;&#47148;&#54868; &#48169;&#49885;&#51012; &#48320;&#44221;&#54620;&#45796;.
+    </p><p>
+      &#51649;&#47148;&#54868; &#50741;&#49496;&#51008; &#45796;&#51020;&#44284; &#44057;&#45796;.
+    </p><div class="table"><a name="d0e2086"></a><p class="title"><b>&#54364; 3.1. Config &#50741;&#49496;</b></p><div class="table-contents"><table summary="Config &#50741;&#49496;" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col align="left"><col align="left"></colgroup><thead><tr><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">&#51060;&#47492;</th><th style="border-bottom: 0.5pt solid ; " align="left">&#49444;&#47749;</th></tr></thead><tbody><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">entityAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">public final &#54596;&#46300; &#45824;&#49888; &#50644;&#54000;&#54000; &#44221;&#47196;&#47196; &#49324;&#50857;&#54624; &#51217;&#44540; &#47700;&#49436;&#46300; (&#44592;&#48376;&#44050;: false)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">listAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">listProperty(int index) &#54805;&#49885;&#51032; &#47700;&#49436;&#46300; (&#44592;&#48376;&#44050;: false)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">mapAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">mapProperty(Key key) &#54805;&#49885;&#51032; &#51217;&#44540; &#47700;&#49436;&#46300; (&#44592;&#48376;&#44050;: false)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">createDefaultVariable</td><td style="border-bottom: 0.5pt solid ; " align="left">&#44592;&#48376; &#48320;&#49688; &#49373;&#49457; (&#44592;&#48376;&#44050;: true)</td></tr><tr><td style="border-right: 0.5pt solid ; " align="left">defaultVariableName</td><td style="" align="left">&#44592;&#48376; &#48320;&#49688;&#51032; &#51060;&#47492;</td></tr></tbody></table></div></div><br class="table-break"><p>&#45796;&#51020;&#51008; &#47751; &#44032;&#51648; &#50696;&#51060;&#45796;.</p><p>&#50644;&#54000;&#54000; &#53440;&#51077; &#51649;&#47148;&#54868; &#52964;&#49828;&#53552;&#47560;&#51060;&#51669;::</p><pre class="programlisting">
+<span class="hl-annotation">@Config(entityAccessors=true)</span>
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> User&nbsp;{
+    <span class="hl-comment">//...</span>
+}     
+</pre><p>&#50644;&#54000;&#54000; &#53440;&#51077; &#51649;&#47148;&#54868; &#52964;&#49828;&#53552;&#47560;&#51060;&#51669;::</p><pre class="programlisting">
+<span class="hl-annotation">@Config(listAccessors=true)</span>
+<span class="hl-keyword">package</span> com.mysema.query.domain.rel;
+
+<span class="hl-keyword">import</span> com.mysema.query.annotations.Config;
+</pre><p>
+      &#47564;&#50557; &#51649;&#47148;&#54868; &#49444;&#51221;&#51012; &#44544;&#47196;&#48268;&#54616;&#44172; &#48320;&#44221;&#54616;&#44256; &#49910;&#45796;&#47732;, &#45796;&#51020;&#51032; APT &#50741;&#49509;&#51012; &#49324;&#50857;&#54616;&#47732; &#46108;&#45796;.
+    </p><div class="table"><a name="d0e2137"></a><p class="title"><b>&#54364; 3.2. APT &#50741;&#49496;</b></p><div class="table-contents"><table summary="APT &#50741;&#49496;" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col align="left"><col align="left"></colgroup><thead><tr><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">&#51060;&#47492;</th><th style="border-bottom: 0.5pt solid ; " align="left">&#49444;&#47749;</th></tr></thead><tbody><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.entityAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">&#47112;&#54140;&#47088;&#49828; &#54596;&#46300; &#51217;&#44540; &#54876;&#49457;&#54868;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.listAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">&#51064;&#45937;&#49828; &#51060;&#50857;&#54620; &#47532;&#49828;&#53944; &#51649;&#51217; &#44161;&#44540; &#54876;&#49457;&#54868;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.mapAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">&#53412; &#44592;&#48152; &#47605; &#51649;&#51217; &#51217;&#44540; &#54876;&#49457;&#54868;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.prefix</td><td style="border-bottom: 0.5pt solid ; " align="left">&#53244;&#47532; &#53440;&#51077;&#51012; &#50948;&#54620; &#51217;&#46160;&#50612; (&#44592;&#48376;&#44050;: Q)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.suffix</td><td style="border-bottom: 0.5pt solid ; " align="left">&#53244;&#47532; &#53440;&#51077;&#51012; &#50948;&#54620; &#51217;&#48120;&#49324;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.packageSuffix</td><td style="border-bottom: 0.5pt solid ; " align="left">&#53244;&#47532; &#53440;&#51077; &#54056;&#53412;&#51648;&#47484; &#50948;&#54620; &#51217;&#48120;&#49324;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.createDefaultVariable</td><td style="border-bottom: 0.5pt solid ; " align="left">&#44592;&#48376; &#48320;&#49688; &#47564;&#46308;&#51648; &#50668;&#48512;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.unknownAsEmbeddable</td><td style="border-bottom: 0.5pt solid ; " align="left">&#50528;&#45432;&#53580;&#51060;&#49496; &#48708;&#51201;&#50857; &#53364;&#47000;&#49828;&#47484; embeddable&#47196; &#52376;&#47532;&#54624;&#51648; &#50668;&#48512; (&#44592;&#48376;&#44050;: false)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.includedPackages</td><td style="border-bottom: 0.5pt solid ; " align="left">&#53076;&#46300; &#49373;&#49457;&#50640; &#54252;&#54632;&#46112; &#54056;&#53412;&#51648; &#47785;&#47197; (&#53092;&#47560;&#47196; &#44396;&#48516;) (default: all)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.includedClasses</td><td style="border-bottom: 0.5pt solid ; " align="left">&#53076;&#46300; &#49373;&#49457;&#50640; &#54252;&#54632;&#46112; &#53364;&#47000;&#49828; &#51060;&#47492; &#47785;&#47197; (&#53092;&#47560;&#47196; &#44396;&#48516;) (default: all)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.excludedPackages</td><td style="border-bottom: 0.5pt solid ; " align="left">&#53076;&#46300; &#49373;&#49457;&#50640;&#49436; &#51228;&#50808;&#54624; &#54056;&#53412;&#51648; &#51060;&#47492; (&#53092;&#47560;&#47196; &#44396;&#48516;) (default: none)</td></tr><tr><td style="border-right: 0.5pt solid ; " align="left">querydsl.excludedClasses</td><td style="" align="left">&#53076;&#46300; &#49373;&#49457;&#50640;&#49436; &#51228;&#50808;&#54624; &#53364;&#47000;&#49828; &#51060;&#47492; (&#53092;&#47560;&#47196; &#44396;&#48516;) (default: none)</td></tr></tbody></table></div></div><br class="table-break"><p>&#45796;&#51020;&#51008; &#47700;&#51060;&#48656; APT &#54540;&#47084;&#44536;&#51064; &#50741;&#49496; &#49324;&#50857; &#50696;&#45796;.
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+  <span class="hl-tag">&lt;plugins&gt;</span>
+    ...
+    <span class="hl-tag">&lt;plugin&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>apt-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>1.0.9<span class="hl-tag">&lt;/version&gt;</span>
+      <span class="hl-tag">&lt;executions&gt;</span>
+        <span class="hl-tag">&lt;execution&gt;</span>
+          <span class="hl-tag">&lt;goals&gt;</span>
+            <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+          <span class="hl-tag">&lt;/goals&gt;</span>
+          <span class="hl-tag">&lt;configuration&gt;</span>
+            <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+            <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.jpa.JPAAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+            <span class="hl-tag">&lt;options&gt;</span>
+              <span class="hl-tag">&lt;querydsl.entityAccessors&gt;</span>true<span class="hl-tag">&lt;/querydsl.entityAccessors&gt;</span>
+            <span class="hl-tag">&lt;/options&gt;</span>          
+          <span class="hl-tag">&lt;/configuration&gt;</span>
+        <span class="hl-tag">&lt;/execution&gt;</span>
+      <span class="hl-tag">&lt;/executions&gt;</span>
+    <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+  <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="custom_types"></a>3.3.3. &#52964;&#49828;&#53568; &#53440;&#51077; &#47588;&#54609;</h3></div></div></div><p>
+      &#44221;&#47196; &#53440;&#51077;&#51012; &#48148;&#44984;&#44256; &#49910;&#51004;&#47732; &#52964;&#49828;&#53568; &#53440;&#51077; &#47588;&#54609;&#51012; &#49324;&#50857;&#54616;&#47732; &#46108;&#45796;. &#53945;&#51221; String &#44221;&#47196;&#50640; &#45824;&#54644; &#48708;&#44368;&#45208; 
+      String &#50672;&#49328;&#51012; &#47561;&#50500;&#50556; &#54616;&#44144;&#45208; &#52964;&#49828;&#53568; &#53440;&#51077;&#51012; &#50948;&#54644; Date/Time &#51648;&#50896;&#51060; &#52628;&#44032;&#46104;&#50612;&#50556; &#54616;&#45716; &#44221;&#50864;&#50640; 
+      &#52964;&#49828;&#53568; &#53440;&#51077; &#47588;&#54609;&#51012; &#50976;&#50857;&#54616;&#44172; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;. Joda time API&#50752; JDK(java.util.Date, Calendar &#44536;&#47532;&#44256; &#54616;&#50948; &#53440;&#51077;)&#51032;
+      &#49884;&#44036; &#53440;&#51077;&#51008; &#44592;&#48376;&#51004;&#47196; &#51648;&#50896;&#54616;&#47728;, &#45796;&#47480; API&#44032; &#54596;&#50836;&#54624; &#44221;&#50864; &#51060; &#44592;&#45733;&#51012; &#49324;&#50857;&#54616;&#47732; &#46108;&#45796;.
+    </p><p>&#45796;&#51020;&#51008; &#50696;&#49884;&#45796;.</p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>      
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> MyEntity{      
+    <span class="hl-annotation">@QueryType(PropertyType.SIMPLE)</span>
+    <span class="hl-keyword">public</span> String stringAsSimple;
+        
+    <span class="hl-annotation">@QueryType(PropertyType.COMPARABLE)</span>
+    <span class="hl-keyword">public</span> String stringAsComparable;
+        
+    <span class="hl-annotation">@QueryType(PropertyType.NONE)</span>
+    <span class="hl-keyword">public</span> String stringNotInQuerydsl;    
+}        
+</pre><p><code class="code">PropertyType.NONE</code>&#51008; &#53244;&#47532; &#53440;&#51077; &#49373;&#49457;&#49884; &#54532;&#47196;&#54140;&#54000;&#47484; &#49373;&#47029;&#54624; &#46412; &#49324;&#50857;&#46108;&#45796;.
+    @Transient&#45208; @QueryTransient &#50612;&#45432;&#53580;&#51060;&#49496;&#51060; &#51201;&#50857;&#46108; &#54532;&#47196;&#54140;&#54000;&#44032; &#50689;&#49549; &#45824;&#49345;&#50640;&#49436; &#48736;&#51648;&#45716; &#44163;&#44284; &#52264;&#51060;&#44032; &#45212;&#45796;.
+    PropertyType.NONE&#51008; &#45800;&#51648; Querydsl &#53244;&#47532; &#53440;&#51077;&#50640;&#49436; &#54644;&#45817; &#54532;&#47196;&#54140;&#54000;&#47484; &#51228;&#50808;&#54620;&#45796;.
+    </p></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2227"></a>3.3.4. &#50948;&#51076; &#47700;&#49436;&#46300;(Delegate methods)</h3></div></div></div><p>&#51221;&#51201; &#47700;&#49436;&#46300;&#47484; &#50948;&#51076; &#47700;&#49436;&#46300;&#47196; &#49440;&#50616;&#54616;&#47140;&#47732;, &#54644;&#45817;&#54616;&#45716; &#46020;&#47700;&#51064; &#53440;&#51077;&#51012; &#44050;&#51004;&#47196; &#44054;&#45716; 
+      QueryDelegate &#50612;&#45432;&#53580;&#51060;&#49496;&#51012; &#51221;&#51201; &#47700;&#49436;&#46300;&#50640; &#51201;&#50857;&#54616;&#44256;, &#51221;&#51201; &#47700;&#49436;&#46300;&#51032; &#52395; &#48264;&#51704; &#54028;&#46972;&#48120;&#53552;&#47196;
+      &#54644;&#45817;&#54616;&#45716; Querydsl &#53244;&#47532; &#53440;&#51077;&#51012; &#51228;&#44277;&#54620;&#45796;.
+    </p><p>&#45796;&#51020;&#51008; &#50696;&#51228;&#45796;. </p><pre class="programlisting">   
+<span class="hl-annotation">@QueryEntity</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">static</span> <span class="hl-keyword">class</span> User{
+       
+    String name;
+       
+    User manager;
+       
+}
+</pre><pre class="programlisting">   
+<span class="hl-annotation">@QueryDelegate(User.class)</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">static</span> BooleanPath isManagedBy(QUser user, User other){
+    <span class="hl-keyword">return</span> user.manager.eq(other);
+}   
+</pre><p>QUser &#53244;&#47532; &#53440;&#51077;&#51032; &#49373;&#49457;&#46108; &#47700;&#49436;&#46300;&#45716; &#45796;&#51020;&#44284; &#44057;&#45796;.</p><pre class="programlisting">   
+<span class="hl-keyword">public</span> BooleanPath isManagedBy(QUser other) {
+    <span class="hl-keyword">return</span> com.mysema.query.domain.DelegateTest.isManagedBy(<span class="hl-keyword">this</span>, other);
+}
+    
+</pre><p>&#45236;&#51109; &#53440;&#51077;&#51012; &#54869;&#51109;&#54616;&#45716;&#45936; &#50948;&#51076; &#47700;&#49436;&#46300;&#47484; &#49324;&#50857;&#54624; &#49688;&#46020; &#51080;&#45796;. &#45796;&#51020;&#51008; &#47751; &#44032;&#51648; &#50696;&#51228;&#45796;.
+    </p><pre class="programlisting">       
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QueryExtensions {
+
+    <span class="hl-annotation">@QueryDelegate(Date.class)</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">static</span> BooleanExpression inPeriod(DatePath&lt;Date&gt; date, Pair&lt;Date,Date&gt; period){
+        <span class="hl-keyword">return</span> date.goe(period.getFirst()).and(date.loe(period.getSecond()));
+    }
+
+    <span class="hl-annotation">@QueryDelegate(Timestamp.class)</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">static</span> BooleanExpression inDatePeriod(DateTimePath&lt;Timestamp&gt; timestamp, Pair&lt;Date,Date&gt; period){
+        Timestamp first = <span class="hl-keyword">new</span> Timestamp(DateUtils.truncate(period.getFirst(), Calendar.DAY_OF_MONTH).getTime());
+        Calendar second = Calendar.getInstance();
+        second.setTime(DateUtils.truncate(period.getSecond(), Calendar.DAY_OF_MONTH));
+        second.add(<span class="hl-value">1</span>, Calendar.DAY_OF_MONTH);
+        <span class="hl-keyword">return</span> timestamp.goe(first).and(timestamp.lt(<span class="hl-keyword">new</span> Timestamp(second.getTimeInMillis())));
+    }
+    
+}    
+</pre><p>&#45236;&#51109; &#53440;&#51077;&#51012; &#50948;&#54620; &#50948;&#51076; &#47700;&#49436;&#46300;&#47484; &#49440;&#50616;&#54616;&#47732;, &#50948;&#51076; &#47700;&#49436;&#46300;&#47484; &#50508;&#47582;&#44172; &#49324;&#50857;&#54616;&#45716; &#54616;&#50948; &#53364;&#47000;&#49828;&#44032; &#47564;&#46308;&#50612;&#51652;&#45796;.
+    </p><pre class="programlisting">      
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QDate <span class="hl-keyword">extends</span> DatePath&lt;java.sql.Date&gt; {
+
+    <span class="hl-keyword">public</span> QDate(BeanPath&lt;? <span class="hl-keyword">extends</span> java.sql.Date&gt; entity) {
+        <span class="hl-keyword">super</span>(entity.getType(), entity.getMetadata());
+    }
+
+    <span class="hl-keyword">public</span> QDate(PathMetadata&lt;?&gt; metadata) {
+        <span class="hl-keyword">super</span>(java.sql.Date.<span class="hl-keyword">class</span>, metadata);
+    }
+
+    <span class="hl-keyword">public</span> BooleanExpression inPeriod(com.mysema.commons.lang.Pair&lt;java.sql.Date, java.sql.Date&gt; period) {
+        <span class="hl-keyword">return</span> QueryExtensions.inPeriod(<span class="hl-keyword">this</span>, period);
+    }
+
+}
+
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QTimestamp <span class="hl-keyword">extends</span> DateTimePath&lt;java.sql.Timestamp&gt; {
+
+    <span class="hl-keyword">public</span> QTimestamp(BeanPath&lt;? <span class="hl-keyword">extends</span> java.sql.Timestamp&gt; entity) {
+        <span class="hl-keyword">super</span>(entity.getType(), entity.getMetadata());
+    }
+
+    <span class="hl-keyword">public</span> QTimestamp(PathMetadata&lt;?&gt; metadata) {
+        <span class="hl-keyword">super</span>(java.sql.Timestamp.<span class="hl-keyword">class</span>, metadata);
+    }
+
+    <span class="hl-keyword">public</span> BooleanExpression inDatePeriod(com.mysema.commons.lang.Pair&lt;java.sql.Date, java.sql.Date&gt; period) {
+        <span class="hl-keyword">return</span> QueryExtensions.inDatePeriod(<span class="hl-keyword">this</span>, period);
+    }
+
+}
+</pre></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2250"></a>3.3.5. &#50528;&#45432;&#53580;&#51060;&#49496; &#48708;&#51201;&#50857; &#53440;&#51077;</h3></div></div></div><p>
+      @QueryEntities &#50528;&#45432;&#53580;&#51060;&#49496;&#51012; &#47564;&#46308;&#47732;, &#50528;&#45432;&#53580;&#51060;&#49496;&#51060; &#51201;&#50857;&#46104;&#51648; &#50506;&#51008; &#53440;&#51077;&#50640; &#45824;&#54644;&#49436;&#46020;
+      Querydsl &#53244;&#47532; &#53440;&#51077;&#51012; &#49373;&#49457;&#54616;&#45716; &#44163;&#51060; &#44032;&#45733;&#54616;&#45796;. QueryEntities &#50528;&#45432;&#53580;&#51060;&#49496;&#51012; &#49440;&#53469;&#54620;
+      &#54056;&#53412;&#51648;&#50640; &#45347;&#44256;, value &#49549;&#49457;&#50640; &#48373;&#51228;&#54624; &#53364;&#47000;&#49828;&#47484; &#44050;&#51004;&#47196; &#51648;&#51221;&#54620;&#45796;.
+    </p><p>
+      &#49892;&#51228;&#47196; &#53440;&#51077;&#51012; &#49373;&#49457;&#54616;&#47140;&#47732; <code class="code">com.mysema.query.apt.QuerydslAnnotationProcessor</code>&#47484; &#49324;&#50857;&#54620;&#45796;.
+      &#47700;&#51060;&#48656; &#49444;&#51221; &#48169;&#48277;&#51008; &#45796;&#51020;&#44284; &#44057;&#45796;.
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+  <span class="hl-tag">&lt;plugins&gt;</span>
+    ...
+    <span class="hl-tag">&lt;plugin&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>apt-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>1.0.9<span class="hl-tag">&lt;/version&gt;</span>
+      <span class="hl-tag">&lt;executions&gt;</span>
+        <span class="hl-tag">&lt;execution&gt;</span>
+          <span class="hl-tag">&lt;goals&gt;</span>
+            <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+          <span class="hl-tag">&lt;/goals&gt;</span>
+          <span class="hl-tag">&lt;configuration&gt;</span>
+            <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+            <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.QuerydslAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+          <span class="hl-tag">&lt;/configuration&gt;</span>
+        <span class="hl-tag">&lt;/execution&gt;</span>
+      <span class="hl-tag">&lt;/executions&gt;</span>
+    <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+  <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2262"></a>3.3.6. &#53364;&#47000;&#49828;&#54056;&#49828; &#44592;&#48152; &#53076;&#46300; &#49373;&#49457;</h3></div></div></div><p>&#50612;&#45432;&#53580;&#51060;&#49496;&#51060; &#51201;&#50857;&#46108; &#51088;&#48148; &#49548;&#49828;&#47484; &#49324;&#50857;&#54624; &#49688; &#50630;&#45716; &#44221;&#50864;(&#50696;&#47484; &#46308;&#50612;, Scala&#45208; Groovy&#50752; &#44057;&#51008;
+      &#45796;&#47480; JVM &#50616;&#50612;&#47484; &#49324;&#50857;&#54664;&#44144;&#45208;, &#48148;&#51060;&#53944;&#53076;&#46300; &#51312;&#51089;&#51012; &#51060;&#50857;&#54644;&#49436; &#50612;&#45432;&#53580;&#51060;&#49496;&#51012; &#52628;&#44032;&#54620; &#44221;&#50864; &#46321;),
+      <code class="code">GenericExporter</code> &#53364;&#47000;&#49828;&#47484; &#49324;&#50857;&#54644;&#49436; &#53364;&#47000;&#49828;&#54056;&#49828;&#50640;&#49436; &#50612;&#45432;&#53580;&#51060;&#49496;&#51060; &#51201;&#50857;&#46108; &#53364;&#47000;&#49828;&#47484;
+      &#49828;&#52884;&#54616;&#44256; &#44160;&#49353;&#46108; &#53364;&#47000;&#49828;&#47484; &#50948;&#54620; &#53244;&#47532; &#53440;&#51077;&#51012; &#49373;&#49457;&#54624; &#49688; &#51080;&#45796;.
+    </p><p>
+      GenericExporter&#47484; &#49324;&#50857;&#54616;&#47140;&#47732; querydsl-codegen &#47784;&#46280;&#51012; &#51032;&#51316;&#50640; &#52628;&#44032;&#54644;&#51452;&#50612;&#50556; &#54620;&#45796;.
+      (&#45908; &#51221;&#54869;&#54616;&#44172;&#45716; <code class="code">com.mysema.querydsl:querydsl-codegen:${querydsl.version}</code> &#47784;&#46280;)
+    </p><p>&#45796;&#51020;&#51008; JPA&#47484; &#50948;&#54620; &#50696;&#51228;&#45796;.</p><pre class="programlisting">    		
+GenericExporter exporter = <span class="hl-keyword">new</span> GenericExporter();
+exporter.setKeywords(Keywords.JPA);
+exporter.setEntityAnnotation(Entity.<span class="hl-keyword">class</span>);
+exporter.setEmbeddableAnnotation(Embeddable.<span class="hl-keyword">class</span>);
+exporter.setEmbeddedAnnotation(Embedded.<span class="hl-keyword">class</span>);        
+exporter.setSupertypeAnnotation(MappedSuperclass.<span class="hl-keyword">class</span>);
+exporter.setSkipAnnotation(Transient.<span class="hl-keyword">class</span>);
+exporter.setTargetFolder(<span class="hl-keyword">new</span> File(<span class="hl-string">"target/generated-sources/java"</span>));
+exporter.export(DomainClass.<span class="hl-keyword">class</span>.getPackage());    	
+</pre><p>&#51060; &#53076;&#46300;&#45716; DomainClass&#51032; &#54056;&#53412;&#51648; &#48143; &#44536; &#54616;&#50948;&#54056;&#53412;&#51648;&#50640; &#50948;&#52824;&#54620; &#47784;&#46304; JPA &#50528;&#45432;&#53580;&#51060;&#49496; &#51201;&#50857; &#53364;&#47000;&#49828;&#47484;
+    &#52286;&#50500; target/generated-sources/java &#46356;&#47113;&#53664;&#47532;&#50640; &#53244;&#47532; &#53440;&#51077;&#51012; &#49373;&#49457;&#54620;&#45796;.
+    </p><div class="sect3" lang="ko-KR"><div class="titlepage"><div><div><h4 class="title"><a name="d0e2281"></a>3.3.6.1. &#47700;&#51060;&#48656; &#49324;&#50857;&#48277;</h4></div></div></div><p>querydsl-maven-plugin&#51032; generic-export, jpa-export&#12641;jdo-export &#44264;&#51012; &#53685;&#54644;
+       GenericExporter&#47484; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+      </p><p>
+      &#44033; &#44264;&#51008; Querydsl, JPA, JDO &#50612;&#45432;&#53580;&#51060;&#49496;&#50640; &#47588;&#54609;&#46108;&#45796;.
+      </p><p>&#49444;&#51221; &#50648;&#47532;&#47676;&#53944;&#45716; &#45796;&#51020;&#44284; &#44057;&#45796;.</p><div class="table"><a name="d0e2290"></a><p class="title"><b>&#54364; 3.3. &#47700;&#51060;&#48656; &#49444;&#51221;</b></p><div class="table-contents"><table summary="&#47700;&#51060;&#48656; &#49444;&#51221;" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col align="left"><col align="left"><col align="left"></colgroup><thead><tr><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">&#53440;&#51077;</th><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">&#50648;&#47532;&#47676;&#53944;</th><th style="border-bottom: 0.5pt solid ; " align="left">&#49444;&#47749;</th></tr></thead><tbody><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">File</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">targetFolder</td><td style="border-bottom: 0.5pt solid ; " align="left">&#49373;&#49457;&#46108; &#49548;&#49828;&#44032; &#50948;&#52824;&#54624; &#45824;&#49345; &#54260;&#45908;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">boolean</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">scala</td><td style="border-bottom: 0.5pt solid ; " align="left">Scala &#49548;&#49828;&#47484; &#49373;&#49457;&#54616;&#47140;&#47732; true (&#44592;&#48376;&#44050;: false)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">String[]</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">packages</td><td style="border-bottom: 0.5pt solid ; " align="left">&#50644;&#54000;&#54000; &#53364;&#47000;&#49828;&#47484; &#44160;&#49353;&#54624; &#54056;&#53412;&#51648;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">boolean</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">handleFields</td><td style="border-bottom: 0.5pt solid ; " align="left">&#54596;&#46300;&#47484; &#54532;&#47196;&#54140;&#54000;&#47196; &#52376;&#47532;&#54624; &#44221;&#50864; true (&#44592;&#48376;&#44050;: true)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">boolean</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">handleMethods</td><td style="border-bottom: 0.5pt solid ; " align="left">getter&#47484; &#54532;&#47196;&#54140;&#54000;&#47196; &#52376;&#47532;&#54624; &#44221;&#50864; true (&#44592;&#48376;&#44050;: true)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">String</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">sourceEncoding</td><td style="border-bottom: 0.5pt solid ; " align="left">&#49373;&#49457;&#54624; &#49548;&#49828; &#54028;&#51068;&#51032; &#52880;&#47533;&#53552; &#51064;&#53076;&#46377;</td></tr><tr><td style="border-right: 0.5pt solid ; " align="left">boolean</td><td style="border-right: 0.5pt solid ; " align="left">testClasspath</td><td style="" align="left">&#53580;&#49828;&#53944; &#53364;&#47000;&#49828;&#54056;&#49828;&#47484; &#49324;&#50857;&#54616;&#47140;&#47732; true</td></tr></tbody></table></div></div><br class="table-break"><p>&#45796;&#51020;&#51008; JPA &#50612;&#45432;&#53580;&#51060;&#49496;&#51060; &#51201;&#50857;&#46108; &#53364;&#47000;&#49828;&#47484; &#50948;&#54620; &#50696;&#45796;.</p><pre class="programlisting">            
+<span class="hl-tag">&lt;plugin&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>  
+  <span class="hl-tag">&lt;executions&gt;</span>
+    <span class="hl-tag">&lt;execution&gt;</span>    
+      <span class="hl-tag">&lt;phase&gt;</span>process-classes<span class="hl-tag">&lt;/phase&gt;</span>
+      <span class="hl-tag">&lt;goals&gt;</span>
+        <span class="hl-tag">&lt;goal&gt;</span>jpa-export<span class="hl-tag">&lt;/goal&gt;</span>
+      <span class="hl-tag">&lt;/goals&gt;</span>
+      <span class="hl-tag">&lt;configuration&gt;</span>
+        <span class="hl-tag">&lt;targetFolder&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/targetFolder&gt;</span>
+        <span class="hl-tag">&lt;packages&gt;</span>
+          <span class="hl-tag">&lt;package&gt;</span>com.example.domain<span class="hl-tag">&lt;/package&gt;</span>
+        <span class="hl-tag">&lt;/packages&gt;</span>
+      <span class="hl-tag">&lt;/configuration&gt;</span>      
+    <span class="hl-tag">&lt;/execution&gt;</span>
+  <span class="hl-tag">&lt;/executions&gt;</span>
+<span class="hl-tag">&lt;/plugin&gt;</span>           
+</pre><p>
+        &#50948; &#47700;&#51060;&#48656; &#49444;&#51221;&#51008; <code class="code">com.example.domain</code> &#48143; &#44536; &#54616;&#50948; &#54056;&#53412;&#51648;&#51032;
+        JPA &#50528;&#45432;&#53580;&#51060;&#49496; &#51201;&#50857; &#53364;&#47000;&#49828;&#47484; &#52286;&#50500; target/generated-sources/java &#46356;&#47113;&#53664;&#47532;&#50640; &#53076;&#46300;&#47484; &#49373;&#49457;&#54620;&#45796;.
+      </p><p>&#49373;&#49457; &#54980;&#50640;, &#51649;&#51217; &#49373;&#49457;&#46108; &#49548;&#49828;&#47484; &#52980;&#54028;&#51068;&#54616;&#47140;&#47732; &#44536; &#49548;&#49828; &#54260;&#45908;&#47484; &#50948;&#54620; <code class="code">compile</code> &#44264;&#51012; &#49324;&#50857;&#54616;&#47732; &#46108;&#45796;.</p><pre class="programlisting">                        
+<span class="hl-tag">&lt;execution&gt;</span>
+  <span class="hl-tag">&lt;goals&gt;</span>
+    <span class="hl-tag">&lt;goal&gt;</span>compile<span class="hl-tag">&lt;/goal&gt;</span>
+  <span class="hl-tag">&lt;/goals&gt;</span>
+  <span class="hl-tag">&lt;configuration&gt;</span>
+    <span class="hl-tag">&lt;sourceFolder&gt;</span>target/generated-sources/scala<span class="hl-tag">&lt;/targetFolder&gt;</span>
+  <span class="hl-tag">&lt;/configuration&gt;</span>
+<span class="hl-tag">&lt;/execution&gt;</span>         
+</pre><p><code class="code">compile</code> &#44264;&#51008; &#45796;&#51020; &#49444;&#51221; &#50648;&#47532;&#47676;&#53944;&#47484; &#44054;&#45716;&#45796;.</p><div class="table"><a name="d0e2375"></a><p class="title"><b>&#54364; 3.4. &#47700;&#51060;&#48656; &#49444;&#51221;</b></p><div class="table-contents"><table summary="&#47700;&#51060;&#48656; &#49444;&#51221;" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col align="left"><col align="left"><col align="left"></colgroup><thead><tr><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">&#53440;&#51077;</th><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">&#50648;&#47532;&#47676;&#53944;</th><th style="border-bottom: 0.5pt solid ; " align="left">&#49444;&#47749;</th></tr></thead><tbody><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">File</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">sourceFolder</td><td style="border-bottom: 0.5pt solid ; " align="left">&#49548;&#49828;&#47484; &#49373;&#49457;&#54624; &#49548;&#49828; &#54260;&#45908;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">String</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">sourceEncoding</td><td style="border-bottom: 0.5pt solid ; " align="left">&#49548;&#49828;&#51032; &#52880;&#47533;&#53552; &#51064;&#53076;&#46377;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">String</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">source</td><td style="border-bottom: 0.5pt solid ; " align="left">&#52980;&#54028;&#51068;&#47084;&#51032; -source &#50741;&#49496;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">String</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">target</td><td style="border-bottom: 0.5pt solid ; " align="left">&#52980;&#54028;&#51068;&#47084;&#51032; -target &#50741;&#49496;</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">boolean</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">testClasspath</td><td style="border-bottom: 0.5pt solid ; " align="left">&#53580;&#49828;&#53944; &#53364;&#47000;&#49828;&#54056;&#49828;&#47484; &#49324;&#50857;&#54624; &#44221;&#50864; true</td></tr><tr><td style="border-right: 0.5pt solid ; " align="left">Map</td><td style="border-right: 0.5pt solid ; " align="left">compilerOptions</td><td style="" align="left">&#52980;&#54028;&#51068;&#47084; &#50741;&#49496;</td></tr></tbody></table></div></div><br class="table-break"><p><code class="code">sourceFolder</code>&#47484; &#51228;&#50808;&#54620; &#47784;&#46304; &#50741;&#49496;&#51008; &#49440;&#53469;&#49324;&#54637;&#51060;&#45796;.</p></div><div class="sect3" lang="ko-KR"><div class="titlepage"><div><div><h4 class="title"><a name="d0e2437"></a>3.3.6.2. Scala &#51648;&#50896;</h4></div></div></div><p>Scala &#52636;&#47141;&#51012; &#50896;&#54616;&#47732;, &#45796;&#51020; &#49444;&#51221;&#51012; &#49324;&#50857;&#54616;&#51088;.
+      </p><pre class="programlisting">                        
+<span class="hl-tag">&lt;plugin&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>  
+  <span class="hl-tag">&lt;dependencies&gt;</span>
+    <span class="hl-tag">&lt;dependency&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-scala<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>${project.version}<span class="hl-tag">&lt;/version&gt;</span>
+    <span class="hl-tag">&lt;/dependency&gt;</span>
+    <span class="hl-tag">&lt;dependency&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>org.scala-lang<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>scala-library<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>${scala.version}<span class="hl-tag">&lt;/version&gt;</span>
+    <span class="hl-tag">&lt;/dependency&gt;</span>
+  <span class="hl-tag">&lt;/dependencies&gt;</span>
+  <span class="hl-tag">&lt;executions&gt;</span>
+    <span class="hl-tag">&lt;execution&gt;</span>
+      <span class="hl-tag">&lt;goals&gt;</span>
+        <span class="hl-tag">&lt;goal&gt;</span>jpa-export<span class="hl-tag">&lt;/goal&gt;</span>
+      <span class="hl-tag">&lt;/goals&gt;</span>
+      <span class="hl-tag">&lt;configuration&gt;</span>
+        <span class="hl-tag">&lt;targetFolder&gt;</span>target/generated-sources/scala<span class="hl-tag">&lt;/targetFolder&gt;</span>
+        <span class="hl-tag">&lt;scala&gt;</span>true<span class="hl-tag">&lt;/scala&gt;</span>
+        <span class="hl-tag">&lt;packages&gt;</span>
+          <span class="hl-tag">&lt;package&gt;</span>com.example.domain<span class="hl-tag">&lt;/package&gt;</span>
+        <span class="hl-tag">&lt;/packages&gt;</span>       
+      <span class="hl-tag">&lt;/configuration&gt;</span>
+    <span class="hl-tag">&lt;/execution&gt;</span>
+  <span class="hl-tag">&lt;/executions&gt;</span>
+<span class="hl-tag">&lt;/plugin&gt;</span>               
+</pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s02.html">&#51060;&#51204;</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">&#50948;&#47196;</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">&#45796;&#51020;</a></td></tr><tr><td width="40%" align="left" valign="top">3.2. &#44208;&#44284; &#52376;&#47532;&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">&#52376;&#51020;&#51004;&#47196;</a></td><td width="40%" align="right" valign="top">&nbsp;3.4. &#48324;&#52845; &#49324;&#50857;&#48277;</td></tr></table></div></body></html>

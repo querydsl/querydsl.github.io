@@ -1,0 +1,126 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.6.&nbsp;Querying Mongodb</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl - Reference Documentation"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s05.html" title="2.5.&nbsp;Querying Hibernate Search"><link rel="next" href="ch02s07.html" title="2.7.&nbsp;Querying Collections"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.6.&nbsp;Querying Mongodb</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s05.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s07.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mongodb_integration"></a>2.6.&nbsp;Querying Mongodb</h2></div></div></div><p>This chapter describes the querying functionality of the Mongodb module.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1377"></a>2.6.1.&nbsp;Maven integration</h3></div></div></div><p>
+      Add the following dependencies to your Maven project:
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-apt<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+  <span class="hl-tag">&lt;scope&gt;</span>provided<span class="hl-tag">&lt;/scope&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>    
+        
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-mongodb<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>org.slf4j<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>slf4j-log4j12<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>1.6.1<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>    
+</pre><p>
+      And now, configure the Maven APT plugin which generates the query types
+      used by Querydsl:
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+    <span class="hl-tag">&lt;plugins&gt;</span>
+      ...
+      <span class="hl-tag">&lt;plugin&gt;</span>
+        <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+        <span class="hl-tag">&lt;artifactId&gt;</span>apt-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+        <span class="hl-tag">&lt;version&gt;</span>1.0.9<span class="hl-tag">&lt;/version&gt;</span>
+        <span class="hl-tag">&lt;executions&gt;</span>
+          <span class="hl-tag">&lt;execution&gt;</span>
+            <span class="hl-tag">&lt;goals&gt;</span>
+              <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+            <span class="hl-tag">&lt;/goals&gt;</span>
+            <span class="hl-tag">&lt;configuration&gt;</span>
+              <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+              <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.morphia.MorphiaAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+            <span class="hl-tag">&lt;/configuration&gt;</span>
+          <span class="hl-tag">&lt;/execution&gt;</span>
+        <span class="hl-tag">&lt;/executions&gt;</span>
+      <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+    <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre><p>
+      The MorphiaAnnotationProcessor finds domain types annotated with the
+      <code class="code">com.google.code.morphia.annotations.Entity</code>
+      annotation and generates Querydsl query types for them.
+    </p><p>
+      Run clean install and you will get your Query types generated into
+      target/generated-sources/java.
+    </p><p>
+      If you use Eclipse, run mvn eclipse:eclipse to update your Eclipse project to
+      include target/generated-sources/java as a source folder.
+    </p><p>
+      Now you are able to construct Mongodb queries and instances of the
+      query domain model.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1399"></a>2.6.2.&nbsp;Querying</h3></div></div></div><p>Querying with Querydsl Mongodb with Morphia is as simple as this:
+    </p><pre class="programlisting">
+Morphia morphia;
+Datastore datastore;
+<span class="hl-comment">// ...	</span>
+QUser user = <span class="hl-keyword">new</span> QUser(<span class="hl-string">"user"</span>);
+MorphiaQuery&lt;User&gt; query = <span class="hl-keyword">new</span> MorphiaQuery&lt;User&gt;(morphia, datastore, user);
+List&lt;User&gt; list = query
+	.where(user.firstName.eq(<span class="hl-string">"Bob"</span>))
+	.list();
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1406"></a>2.6.3.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the MongodbQuery class like this</p><p>
+      <span class="emphasis"><em>where:</em></span>
+      Add the query filters, either in varargs form separated via commas or
+      cascaded via the and-operator. Supported operations are operations performed on PStrings except
+      <span class="emphasis"><em>
+        matches
+      </em></span>
+      ,
+      <span class="emphasis"><em>indexOf</em></span>
+      ,
+      <span class="emphasis"><em>charAt</em></span>
+      . Currently
+      <span class="emphasis"><em>in</em></span>
+      is
+      not supported, but will be in the future.
+    </p><p>
+      <span class="emphasis"><em>orderBy:</em></span>
+      Add ordering of the result as an varargs array of order expressions.
+      Use asc() and desc() on numeric, string and other comparable expression to access the
+      OrderSpecifier instances.
+    </p><p>
+      <span class="emphasis"><em>limit, offset, restrict:</em></span>
+      Set the paging of the result. Limit for max results,
+      offset for skipping rows and restrict for defining both in one call.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1438"></a>2.6.4.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting"> 
+query
+    .where(doc.title.like(<span class="hl-string">"*"</span>))
+    .orderBy(doc.title.asc(), doc.year.desc())
+    .list();
+</pre><p>The results are sorted ascending based on title and year.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1447"></a>2.6.5.&nbsp;Limit</h3></div></div></div><p>The syntax for declaring a limit is </p><pre class="programlisting"> 
+query
+    .where(doc.title.like(<span class="hl-string">"*"</span>))
+    .limit(<span class="hl-value">10</span>)
+    .list();
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1454"></a>2.6.6.&nbsp;Offset</h3></div></div></div><p>The syntax for declaring an offset is </p><pre class="programlisting"> 
+query
+    .where(doc.title.like(<span class="hl-string">"*"</span>))
+    .offset(<span class="hl-value">3</span>)
+    .list();
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1461"></a>2.6.7.&nbsp;Geospatial queries</h3></div></div></div><p>Support for geospatial queries is available for Double typed arrays (Double[])
+      via the near-method:
+    </p><pre class="programlisting"> 
+query
+    .where(geoEntity.location.near(<span class="hl-value">50.0</span>, <span class="hl-value">50.0</span>))
+    .list();
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1468"></a>2.6.8.&nbsp;Select only relevant fields</h3></div></div></div><p>To select only relevant fields you can use the overloaded projection methods
+      list, iterate, uniqueResult and singleResult methods like this
+    </p><pre class="programlisting"> 
+query
+    .where(doc.title.like(<span class="hl-string">"*"</span>))
+    .list(doc.title, doc.path);
+</pre><p>This query will load only the title and path fields of the documents.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s05.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.5.&nbsp;Querying Hibernate Search&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.7.&nbsp;Querying Collections</td></tr></table></div></body></html>

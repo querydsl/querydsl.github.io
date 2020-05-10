@@ -1,0 +1,23 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.&nbsp;General usage</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="index.html" title="Querydsl"><link rel="prev" href="ch02s06.html" title="2.6.&nbsp;Querying Hibernate Search sources"><link rel="next" href="ch03s02.html" title="3.2.&nbsp;Special expressions"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.&nbsp;General usage</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s06.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s02.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en-US"><div class="titlepage"><div><div><h2 class="title"><a name="general"></a>3.&nbsp;General usage</h2></div></div></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e822"></a>3.1.&nbsp;Best practices</h2></div></div></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e825"></a>3.1.1.&nbsp;Use default variable of the Query types</h3></div></div></div><p>Use the default variables of the query types as much as possible. The default variables
+    are available as static final fields in the query types. The name is always the decapitalized version
+    of the simple type name. For the type Account this would be account :</p><pre class="programlisting">     
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QAccount <span class="hl-keyword">extends</span> PEntity&lt;Account&gt;{
+      
+    <span class="hl-keyword">public</span> <span class="hl-keyword">static</span> <span class="hl-keyword">final</span> QAccount account = <span class="hl-keyword">new</span> QAccount(<span class="hl-string">"account"</span>);
+    
+}
+</pre><p>
+  Querydsl query types are safe to re-use, and by using Querydsl default variables you save initialization time
+  and memory.
+  </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e834"></a>3.1.2.&nbsp;Interface based usage</h3></div></div></div><p>Whenever possible, use interface based query references : e.g. JDOQLQuery for JDO and HQLQuery for HQL</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e839"></a>3.1.3.&nbsp;Custom query extensions</h3></div></div></div><p>TODO</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="dao_integration"></a>3.1.4.&nbsp;DAO integration</h3></div></div></div><p>A practice which we have found to be very easy to use is to provide factory methods for 
+  Query instances in DAO implementations in the following form.</p><p>For HQL usage :</p><pre class="programlisting"> 
+<span class="hl-keyword">protected</span> HQLQuery from(PEntity&lt;?&gt;... o) {
+    <span class="hl-keyword">return</span> <span class="hl-keyword">new</span> HqlQueryImpl(session).from(o);
+} 
+</pre><p>For JDO usage : </p><pre class="programlisting">
+<span class="hl-keyword">protected</span> JDOQLQuery from(PEntity&lt;?&gt;... o) {
+    <span class="hl-keyword">return</span> <span class="hl-keyword">new</span> JDOQLQueryImpl(persistenceManager).from(o);
+}        
+</pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s06.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.6.&nbsp;Querying Hibernate Search sources&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.2.&nbsp;Special expressions</td></tr></table></div></body></html>

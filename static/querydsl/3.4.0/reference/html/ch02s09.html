@@ -1,0 +1,199 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.9.&nbsp;Querying in Scala</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl - Reference Documentation"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s08.html" title="2.8.&nbsp;Querying Collections"><link rel="next" href="ch03.html" title="3.&nbsp;General usage"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.9.&nbsp;Querying in Scala</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s08.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scala"></a>2.9.&nbsp;Querying in Scala</h2></div></div></div><p>Generic support for Querydsl usage in Scala is available via querydsl-scala
+    module. To add it to your Maven build, use the following snippet :
+  </p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-scala<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+</pre><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1791"></a>2.9.1.&nbsp;DSL expressions for Scala</h3></div></div></div><p>Querydsl for Scala provides an alternative DSL for expression construction. The
+      Scala DSL utilizes language features such as operator overloading,
+      function pointers and implicit imports for enhanced readability and conciseness.
+    </p><p>Here is an overview of the main alternatives :</p><pre class="programlisting">
+//Standard              Alternative
+
+expr isNotNull          expr is not(null)
+expr isNull             expr is null
+expr eq "Ben"           expr === "Ben"
+expr ne "Ben"           expr !== "Ben"
+expr append "X"         expr + "X"
+expr isEmpty            expr is empty
+expr isNotEmpoty        expr not empty
+
+// boolean
+left and right          left &amp;&amp; right
+left or right           left || right
+expr not                !expr
+
+// comparison
+expr lt 5               expr &lt; 5
+expr loe 5              expr &lt;= 5
+expr gt 5               expr &gt; 5
+expr goe 5              expr &gt;= 5
+expr notBetween(2,6)    expr not between (2,6)
+expr negate             -expr
+ 
+// numeric
+expr add 3              expr + 3
+expr subtract 3         expr - 3
+expr divide 3           expr / 3
+expr multiply 3         expr * 3
+expr mod 5              expr % 5
+
+// collection
+list.get(0)             list(0)
+map.get("X")            map("X")
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1801"></a>2.9.2.&nbsp;Improved projections</h3></div></div></div><p>The Querydsl Scala module offers a few implicit conversion to make Querydsl
+      query projections more Scala compatible.
+    </p><p>
+      The <code class="code">RichProjectable</code> and <code class="code">RichSimpleProjectable</code> wrappers should be used to enable
+      Scala projections for Querydsl queries.
+      By importing the contents of <code class="code">com.mysema.query.scala.Helpers</code>
+      the needed implicit conversions become available.
+    </p><p>
+      For example the following query with the standard API would return a <code class="code">java.util.List</code> of
+      type <code class="code">Object[]</code>.
+    </p><pre class="programlisting">  
+query.from(person).list(person.firstName, person.lastName, person.age)
+</pre><p>With the added conversions you can use select instead of list for Scala list
+      typed results, unique instead of uniqueResult for
+      Option typed results and single instead of singleResult for Option typed results.
+    </p><p>The previous query could be expressed like this with the implicit conversions:
+    </p><pre class="programlisting">
+<span class="hl-keyword">import</span> com.mysema.query.scala.Helpers._
+  
+query.from(person).select(person.firstName, person.lastName, person.age)
+</pre><p>In this case the result type would be List[(String,String,Integer)] or in other
+      words List of Tuple3[String,String,Integer].
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1835"></a>2.9.3.&nbsp;Querying with SQL</h3></div></div></div><p>
+      Like with Querydsl SQL for Java you need to generate Query types to be able to construct
+      your queries. The following code examples show how this is done :
+    </p><p>Generation without Bean types :</p><pre class="programlisting">  
+val directory = <span class="hl-keyword">new</span> java.io.File(<span class="hl-string">"target/jdbcgen1"</span>)
+val namingStrategy = <span class="hl-keyword">new</span> DefaultNamingStrategy()
+val exporter = <span class="hl-keyword">new</span> MetaDataExporter()
+exporter.setNamePrefix(<span class="hl-string">"Q"</span>)
+exporter.setPackageName(<span class="hl-string">"com.mysema"</span>)
+exporter.setSchemaPattern(<span class="hl-string">"PUBLIC"</span>)
+exporter.setTargetFolder(directory)
+exporter.setSerializerClass(classOf[ScalaMetaDataSerializer])
+exporter.setCreateScalaSources(true)
+exporter.setTypeMappings(ScalaTypeMappings.create)
+exporter.export(connection.getMetaData)
+</pre><p>Generation with Bean types :</p><pre class="programlisting">    
+val directory = <span class="hl-keyword">new</span> java.io.File(<span class="hl-string">"target/jdbcgen2"</span>)
+val namingStrategy = <span class="hl-keyword">new</span> DefaultNamingStrategy()
+val exporter = <span class="hl-keyword">new</span> MetaDataExporter()
+exporter.setNamePrefix(<span class="hl-string">"Q"</span>)
+exporter.setPackageName(<span class="hl-string">"com.mysema"</span>)
+exporter.setSchemaPattern(<span class="hl-string">"PUBLIC"</span>)
+exporter.setTargetFolder(directory)
+exporter.setSerializerClass(classOf[ScalaMetaDataSerializer])
+exporter.setBeanSerializerClass(classOf[ScalaBeanSerializer])
+exporter.setCreateScalaSources(true)
+exporter.setTypeMappings(ScalaTypeMappings.create)
+exporter.export(connection.getMetaData)        
+</pre><div class="sect3" lang="en-US"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1848"></a>2.9.3.1.&nbsp;Compact queries</h4></div></div></div><p>Querydsl Scala provides a compact query syntax for Querydsl SQL. The syntax is
+        inspired by domain oriented query syntaxes like that from the Rogue framework.
+      </p><p>
+        The domain oriented queries are implemented as implicit conversions from
+        <code class="code">RelationalPath</code> instances into queries. This functionality
+        can be made available by implementing the
+        <code class="code">com.mysema.query.scala.sql.SQLHelpers</code>
+        trait in your service or DAO classes.
+      </p><p>Using this compact syntax you can use your meta model classes as a starting
+        point for queries.
+      </p><p>Instead of the following normal syntax</p><pre class="programlisting">    
+query().from(employee).select(employee.firstName, employee.lastName)        
+</pre><p>you could use the companion object of Employee or QEmployee and write it like
+        this </p><pre class="programlisting">    
+Employee.select(_.firstName, _.lastName)        
+</pre><p>Instead of giving expressions to orderBy, where, select, single and unique you
+        can give functions which take the root expression of
+        the query and return another expression. The expanded form of the previous example would be
+      </p><pre class="programlisting">    
+Employee.select({ e =&gt; e.firstName }, { e =&gt; e.lastName })        
+</pre><p>
+        See the signature of the <code class="code">com.mysema.query.scala.sql.RichSimpleQuery</code>
+        class for details.
+      </p></div><div class="sect3" lang="en-US"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1880"></a>2.9.3.2.&nbsp;Code generation</h4></div></div></div><p>Scala sources for SQL metatypes and projections can be generated with
+        querydsl-maven-plugin. Here is an example configuration
+      </p><pre class="programlisting">      
+<span class="hl-tag">&lt;plugin&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+  <span class="hl-tag">&lt;configuration&gt;</span>
+    <span class="hl-tag">&lt;jdbcDriver&gt;</span>com.mysql.jdbc.Driver<span class="hl-tag">&lt;/jdbcDriver&gt;</span>
+    <span class="hl-tag">&lt;jdbcUrl&gt;</span>jdbc:mysql://localhost:3306/test<span class="hl-tag">&lt;/jdbcUrl&gt;</span>
+    <span class="hl-tag">&lt;jdbcUser&gt;</span>matko<span class="hl-tag">&lt;/jdbcUser&gt;</span>
+    <span class="hl-tag">&lt;jdbcPassword&gt;</span>matko<span class="hl-tag">&lt;/jdbcPassword&gt;</span>			
+    <span class="hl-tag">&lt;packageName&gt;</span>com.example.schema<span class="hl-tag">&lt;/packageName&gt;</span>
+    <span class="hl-tag">&lt;targetFolder&gt;</span>${project.basedir}/src/main/scala<span class="hl-tag">&lt;/targetFolder&gt;</span>
+    <span class="hl-tag">&lt;exportBeans&gt;</span>true<span class="hl-tag">&lt;/exportBeans&gt;</span>
+    <span class="hl-tag">&lt;createScalaSources&gt;</span>true<span class="hl-tag">&lt;/createScalaSources&gt;</span>    		    
+  <span class="hl-tag">&lt;/configuration&gt;</span>
+  <span class="hl-tag">&lt;dependencies&gt;</span>
+    <span class="hl-tag">&lt;dependency&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>mysql<span class="hl-tag">&lt;/groupId&gt;</span>
+	  <span class="hl-tag">&lt;artifactId&gt;</span>mysql-connector-java<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>5.1.16<span class="hl-tag">&lt;/version&gt;</span>
+	<span class="hl-tag">&lt;/dependency&gt;</span>
+	  <span class="hl-tag">&lt;dependency&gt;</span>
+    	<span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+    	<span class="hl-tag">&lt;artifactId&gt;</span>querydsl-scala<span class="hl-tag">&lt;/artifactId&gt;</span>
+    	<span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+  	  <span class="hl-tag">&lt;/dependency&gt;</span>
+  	  <span class="hl-tag">&lt;dependency&gt;</span>
+    	<span class="hl-tag">&lt;groupId&gt;</span>org.scala-lang<span class="hl-tag">&lt;/groupId&gt;</span>
+    	<span class="hl-tag">&lt;artifactId&gt;</span>scala-library<span class="hl-tag">&lt;/artifactId&gt;</span>
+    	<span class="hl-tag">&lt;version&gt;</span>${scala.version}<span class="hl-tag">&lt;/version&gt;</span>
+  	  <span class="hl-tag">&lt;/dependency&gt;</span>
+  <span class="hl-tag">&lt;/dependencies&gt;</span>
+<span class="hl-tag">&lt;/plugin&gt;</span>     
+</pre><p>The maven goal to execute is querydsl:export.</p></div></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1889"></a>2.9.4.&nbsp;Querying with other backends</h3></div></div></div><p>When querying with other backends the Expression model has to be created
+      manually or alternatively the alias functionality can be used.
+    </p><p>Here is a minimal example with JPA :</p><pre class="programlisting">  
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> User {
+  <span class="hl-annotation">@BeanProperty</span>
+  <span class="hl-annotation">@Id</span>
+  var id: Integer = _;
+  <span class="hl-annotation">@BeanProperty</span>
+  var userName: String = _;
+  <span class="hl-annotation">@BeanProperty</span>
+  <span class="hl-annotation">@ManyToOne</span>
+  var department: Department = _;
+}
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Department {
+  <span class="hl-annotation">@BeanProperty</span>
+  <span class="hl-annotation">@Id</span>
+  var id: Integer = _;
+  <span class="hl-annotation">@BeanProperty</span>
+  var name: String = _;
+}
+</pre><p>And here are some query examples</p><p>List</p><pre class="programlisting">
+val person = Person as <span class="hl-string">"person"</span>
+
+query.from(person).where(person.firstName like <span class="hl-string">"Rob%"</span>).list(person)
+</pre><p>Unique result</p><pre class="programlisting">
+query.from(person).where(person.firstName like <span class="hl-string">"Rob%"</span>).unique(person)
+</pre><p>Long where</p><pre class="programlisting">
+query.from(person) 
+  .where(person.firstName like <span class="hl-string">"Rob%"</span>, person.lastName like <span class="hl-string">"An%"</span>) 
+  .list(person)
+</pre><p>Order</p><pre class="programlisting">
+query.from(person).orderBy(person.firstName asc).list(person)
+</pre><p>Not null</p><pre class="programlisting">
+query.from(person) 
+  .where(person.firstName isEmpty, person.lastName isNotNull) 
+  .list(person)
+</pre><p>The factory method for query creation is</p><pre class="programlisting">
+def query() = <span class="hl-keyword">new</span> JPAQuery(entityManager)
+</pre><p>In addition to queries you need variables which can be created like this</p><pre class="programlisting">
+val person = Person as <span class="hl-string">"person"</span>
+</pre><p>Note: the Scala support is not yet available if you use Hibernate with an XML based configuration. HibernateDomainExporter currently only outputs Java source files.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s08.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.8.&nbsp;Querying Collections&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.&nbsp;General usage</td></tr></table></div></body></html>

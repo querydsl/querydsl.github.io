@@ -1,0 +1,31 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4.&nbsp;Troubleshooting</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="index.html" title="Querydsl"><link rel="prev" href="ch03s04.html" title="3.4.&nbsp;Alias usage"><link rel="next" href="ch04s02.html" title="4.2.&nbsp;JDK5 usage"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.&nbsp;Troubleshooting</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s04.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04s02.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en-US"><div class="titlepage"><div><div><h2 class="title"><a name="troubleshooting"></a>4.&nbsp;Troubleshooting</h2></div></div></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1328"></a>4.1.&nbsp;Insufficient type arguments</h2></div></div></div><p>
+    Querydsl needs properly encoded List Set, Collection and Map properties in all code generation scenarios.
+    </p><p>When using improperly encoded fields or getters you might the following stacktrace :</p><pre class="programlisting">    
+java.lang.RuntimeException: Caught exception for field com.mysema.query.jdoql.testdomain.Store#products
+  at com.mysema.query.apt.Processor$2.visitType(Processor.java:117)
+  at com.mysema.query.apt.Processor$2.visitType(Processor.java:80)
+  at com.sun.tools.javac.code.Symbol$ClassSymbol.accept(Symbol.java:827)
+  at com.mysema.query.apt.Processor.getClassModel(Processor.java:154)
+  at com.mysema.query.apt.Processor.process(Processor.java:191)
+  ...
+Caused by: java.lang.IllegalArgumentException: Insufficient type arguments for List
+  at com.mysema.query.apt.APTTypeModel.visitDeclared(APTTypeModel.java:112)
+  at com.mysema.query.apt.APTTypeModel.visitDeclared(APTTypeModel.java:40)
+  at com.sun.tools.javac.code.Type$ClassType.accept(Type.java:696)
+  at com.mysema.query.apt.APTTypeModel.&lt;init&gt;(APTTypeModel.java:55)
+  at com.mysema.query.apt.APTTypeModel.get(APTTypeModel.java:48)
+  at com.mysema.query.apt.Processor$2.visitType(Processor.java:114)
+  ... 35 more
+</pre><p>
+    Examples of problematic field declarations and their corrections :
+    </p><pre class="programlisting">
+    <span class="hl-keyword">private</span> Collection names; <span class="hl-comment">// WRONG</span>
+    
+    <span class="hl-keyword">private</span> Collection&lt;String&gt; names; <span class="hl-comment">// RIGHT</span>
+    
+    <span class="hl-keyword">private</span> Map employeesByName; <span class="hl-comment">// WRONG</span>
+    
+    <span class="hl-keyword">private</span> Map&lt;String,Employee&gt; employeesByName; <span class="hl-comment">// RIGHT</span>
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s04.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.4.&nbsp;Alias usage&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;4.2.&nbsp;JDK5 usage</td></tr></table></div></body></html>

@@ -1,0 +1,31 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4&#51109;. &#47928;&#51228;&#54644;&#44208;</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl - &#47112;&#54140;&#47088;&#49828; &#47928;&#49436;"><link rel="up" href="index.html" title="Querydsl - &#47112;&#54140;&#47088;&#49828; &#47928;&#49436;"><link rel="prev" href="ch03s04.html" title="3.4. &#48324;&#52845; &#49324;&#50857;&#48277;"><link rel="next" href="ch04s02.html" title="4.2. &#47680;&#54000;&#50416;&#47112;&#46300; &#54872;&#44221;&#50640;&#49436; Querydsl Q&#53440;&#51077;&#51032; &#52488;&#44592;&#54868;"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4&#51109;. &#47928;&#51228;&#54644;&#44208;</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s04.html">&#51060;&#51204;</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04s02.html">&#45796;&#51020;</a></td></tr></table><hr></div><div class="chapter" lang="ko-KR"><div class="titlepage"><div><div><h2 class="title"><a name="troubleshooting"></a>4&#51109;. &#47928;&#51228;&#54644;&#44208;</h2></div></div></div><div class="sect1" lang="ko-KR"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e2510"></a>4.1. &#48520;&#52649;&#48516;&#54620; &#53440;&#51077; &#51064;&#51088;</h2></div></div></div><p>
+      Querydsl&#51060; &#53076;&#46300; &#49373;&#49457;&#51012; &#54616;&#47140;&#47732; List, Set, Collection, Map &#54532;&#47196;&#54140;&#54000;&#44032; &#50732;&#48148;&#47476;&#44172; &#51064;&#53076;&#46377; &#46104;&#50612; &#51080;&#50612;&#50556; &#54620;&#45796;.
+    </p><p>&#50732;&#48148;&#47476;&#44172; &#51064;&#53076;&#46377;&#46104;&#51648; &#50506;&#51008; &#54596;&#46300;&#45208; getter&#47484; &#49324;&#50857;&#54624; &#44221;&#50864;, &#45796;&#51020;&#44284; &#44057;&#51008; &#50640;&#47084;&#44032; &#48156;&#49373;&#54620;&#45796;.</p><pre class="programlisting">
+java.lang.RuntimeException: Caught exception for field com.mysema.query.jdoql.testdomain.Store#products
+  at com.mysema.query.apt.Processor$2.visitType(Processor.java:117)
+  at com.mysema.query.apt.Processor$2.visitType(Processor.java:80)
+  at com.sun.tools.javac.code.Symbol$ClassSymbol.accept(Symbol.java:827)
+  at com.mysema.query.apt.Processor.getClassModel(Processor.java:154)
+  at com.mysema.query.apt.Processor.process(Processor.java:191)
+  ...
+Caused by: java.lang.IllegalArgumentException: Insufficient type arguments for List
+  at com.mysema.query.apt.APTTypeModel.visitDeclared(APTTypeModel.java:112)
+  at com.mysema.query.apt.APTTypeModel.visitDeclared(APTTypeModel.java:40)
+  at com.sun.tools.javac.code.Type$ClassType.accept(Type.java:696)
+  at com.mysema.query.apt.APTTypeModel.&lt;init&gt;(APTTypeModel.java:55)
+  at com.mysema.query.apt.APTTypeModel.get(APTTypeModel.java:48)
+  at com.mysema.query.apt.Processor$2.visitType(Processor.java:114)
+  ... 35 more
+</pre><p>
+      &#45796;&#51020;&#51008; &#47928;&#51228;&#44032; &#46104;&#45716; &#54596;&#46300; &#49440;&#50616;&#44284; &#50732;&#48148;&#47480; &#49440;&#50616;&#51032; &#50696;&#47484; &#48372;&#50668;&#51452;&#44256; &#51080;&#45796;.
+    </p><pre class="programlisting">
+    <span class="hl-keyword">private</span> Collection names; <span class="hl-comment">// WRONG</span>
+
+    <span class="hl-keyword">private</span> Collection&lt;String&gt; names; <span class="hl-comment">// RIGHT</span>
+
+    <span class="hl-keyword">private</span> Map employeesByName; <span class="hl-comment">// WRONG</span>
+
+    <span class="hl-keyword">private</span> Map&lt;String,Employee&gt; employeesByName; <span class="hl-comment">// RIGHT</span>
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s04.html">&#51060;&#51204;</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04s02.html">&#45796;&#51020;</a></td></tr><tr><td width="40%" align="left" valign="top">3.4. &#48324;&#52845; &#49324;&#50857;&#48277;&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">&#52376;&#51020;&#51004;&#47196;</a></td><td width="40%" align="right" valign="top">&nbsp;4.2. &#47680;&#54000;&#50416;&#47112;&#46300; &#54872;&#44221;&#50640;&#49436; Querydsl Q&#53440;&#51077;&#51032; &#52488;&#44592;&#54868;</td></tr></table></div></body></html>

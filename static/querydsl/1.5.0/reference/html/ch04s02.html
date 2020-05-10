@@ -1,0 +1,39 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>4.2.&nbsp;JDK5 usage</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch04.html" title="4.&nbsp;Troubleshooting"><link rel="prev" href="ch04.html" title="4.&nbsp;Troubleshooting"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4.2.&nbsp;JDK5 usage</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;</td><th width="60%" align="center">4.&nbsp;Troubleshooting</th><td width="20%" align="right">&nbsp;</td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1050"></a>4.2.&nbsp;JDK5 usage</h2></div></div></div><p>
+When compiling your project with JDK 5, you might get the following compilation failure:
+  </p><pre class="programlisting">
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Compilation failure
+...
+class file has wrong version 50.0, should be 49.0
+</pre><p>
+The class file version 50.0 is used by Java 6.0, and 49.0 is used by Java 5.0.
+</p><p>
+Querydsl is tested against JDK 6.0 only, as we use APT extensively, which is available only since JDK 6.0.
+</p><p>
+If you want to use it with JDK 5.0 you might want to try to compile Querydsl yourself.
+</p><p>
+To use Querydsl with JDK 5.0 you also need to exclude querydsl-hql-apt and include querydsl-apt-jdk5 like this :
+</p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+ <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+ <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-hql<span class="hl-tag">&lt;/artifactId&gt;</span>
+ <span class="hl-tag">&lt;version&gt;</span>0.4.4<span class="hl-tag">&lt;/version&gt;</span>
+  <span class="hl-tag">&lt;exclusions&gt;</span>
+    <span class="hl-tag">&lt;exclusion&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-hql-apt<span class="hl-tag">&lt;/artifactId&gt;</span>
+    <span class="hl-tag">&lt;/exclusion&gt;</span>
+  <span class="hl-tag">&lt;/exclusions&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+
+<span class="hl-tag">&lt;dependency&gt;</span>
+ <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+ <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-apt-jdk5<span class="hl-tag">&lt;/artifactId&gt;</span>
+ <span class="hl-tag">&lt;version&gt;</span>0.4.4<span class="hl-tag">&lt;/version&gt;</span>
+ <span class="hl-tag">&lt;scope&gt;</span>provided<span class="hl-tag">&lt;/scope&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+</pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right">&nbsp;</td></tr><tr><td width="40%" align="left" valign="top">4.&nbsp;Troubleshooting&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;</td></tr></table></div></body></html>

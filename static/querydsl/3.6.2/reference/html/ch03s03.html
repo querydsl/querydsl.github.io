@@ -1,0 +1,329 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.3.&nbsp;Code generation</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl - Reference Documentation"><link rel="up" href="ch03.html" title="3.&nbsp;General usage"><link rel="prev" href="ch03s02.html" title="3.2.&nbsp;Result handling"><link rel="next" href="ch03s04.html" title="3.4.&nbsp;Alias usage"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.3.&nbsp;Code generation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">3.&nbsp;General usage</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="codegen"></a>3.3.&nbsp;Code generation</h2></div></div></div><p>The Java 6 APT annotation processing functionality is used in Querydsl for code
+    generation in the JPA, JDO and Mongodb modules. This section describes various configuration
+    options for the code generation and an alternative to APT usage.
+  </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2217"></a>3.3.1.&nbsp;Path initialization</h3></div></div></div><p>
+      By default Querydsl initializes only reference properties of the first two levels. In cases where
+      longer initialization paths are required, these have to be annotated in the domain
+      types via
+       <code class="code">com.mysema.query.annotations.QueryInit</code>
+      annotations. QueryInit is used on properties where deep initializations are
+      needed. The following example demonstrates the usage.
+    </p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Event {
+    <span class="hl-annotation">@QueryInit("customer.address")</span>
+    Account account;
+}
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Account {
+    Customer customer;
+}
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Customer {
+    String name;
+    Address address;
+    <span class="hl-comment">// ...</span>
+}
+</pre><p>
+      This example enforces the initialization of the account.customer path, when an
+      Event path is initialized as a root path / variable. The path initialization
+      format supports wildcards as well, e.g. "customer.*" or just "*".
+    </p><p>
+      The automatic path initialization replaces the manual one, which
+      required the entity fields to be non-final. The declarative format has the benefit
+      to be applied to all top level instances of a Query type and to enable the usage
+      of final entity fields.
+    </p><p>
+      Automatic path initialization is the preferred initialization strategy, but
+      manual initialization can be activated via the Config annotation, which is
+      described below.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2233"></a>3.3.2.&nbsp;Customization</h3></div></div></div><p>
+      The serialization of Querydsl can be customized via Config annotations on
+      packages and types. They customize the serialization of the annotated package or type.
+    </p><p>
+      The serialization options are
+    </p><div class="table"><a name="d0e2240"></a><p class="title"><b>Table&nbsp;3.1.&nbsp;Config options</b></p><div class="table-contents"><table summary="Config options" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col align="left"><col align="left"></colgroup><thead><tr><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">Name</th><th style="border-bottom: 0.5pt solid ; " align="left">Description</th></tr></thead><tbody><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">entityAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">accessor methods for entity paths instead of public final fields (default: false)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">listAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">listProperty(int index) style methods (default: false)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">mapAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">mapProperty(Key key) style accessor methods (default: false)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">createDefaultVariable</td><td style="border-bottom: 0.5pt solid ; " align="left">generate the default variable (default: true)</td></tr><tr><td style="border-right: 0.5pt solid ; " align="left">defaultVariableName</td><td style="" align="left">name of the default variable</td></tr></tbody></table></div></div><br class="table-break"><p>Below are some examples.</p><p>Customization of Entity type serialization:</p><pre class="programlisting">
+<span class="hl-annotation">@Config(entityAccessors=true)</span>
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> User {
+    <span class="hl-comment">//...</span>
+}
+</pre><p>Customization of package content:</p><pre class="programlisting">
+<span class="hl-annotation">@Config(listAccessors=true)</span>
+<span class="hl-keyword">package</span> com.mysema.query.domain.rel;
+
+<span class="hl-keyword">import</span> com.mysema.query.annotations.Config;
+</pre><p>
+      If you want to customize the serializer configuration globally,
+      you can do this via the following APT options
+    </p><div class="table"><a name="d0e2291"></a><p class="title"><b>Table&nbsp;3.2.&nbsp;APT options</b></p><div class="table-contents"><table summary="APT options" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col align="left"><col align="left"></colgroup><thead><tr><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">Name</th><th style="border-bottom: 0.5pt solid ; " align="left">Description</th></tr></thead><tbody><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.entityAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">enable reference field accessors</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.listAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">enable accessors for direct indexed list access</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.mapAccessors</td><td style="border-bottom: 0.5pt solid ; " align="left">enable accessors for direct key based map access</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.prefix</td><td style="border-bottom: 0.5pt solid ; " align="left">override the prefix for query types(default: Q)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.suffix</td><td style="border-bottom: 0.5pt solid ; " align="left">set a suffix for query types</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.packageSuffix</td><td style="border-bottom: 0.5pt solid ; " align="left">set a suffix for query type packages</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.createDefaultVariable</td><td style="border-bottom: 0.5pt solid ; " align="left">set whether default variables are created</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.unknownAsEmbeddable</td><td style="border-bottom: 0.5pt solid ; " align="left">set where unknown non-annotated classes should be treated as embeddable (default: false)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.includedPackages</td><td style="border-bottom: 0.5pt solid ; " align="left">comma separated list of packages to be included into code generation (default: all)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.includedClasses</td><td style="border-bottom: 0.5pt solid ; " align="left">comma separated list of class names to be included into code generation (default: all)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">querydsl.excludedPackages</td><td style="border-bottom: 0.5pt solid ; " align="left">comma separated list of packages to be excluded from code generation (default: none)</td></tr><tr><td style="border-right: 0.5pt solid ; " align="left">querydsl.excludedClasses</td><td style="" align="left">comma separated list of class names to be excluded from code generation (default: none)</td></tr></tbody></table></div></div><br class="table-break"><p>Using the Maven APT plugin this works for example like this:
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+  <span class="hl-tag">&lt;plugins&gt;</span>
+    ...
+    <span class="hl-tag">&lt;plugin&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>apt-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>1.1.3<span class="hl-tag">&lt;/version&gt;</span>
+      <span class="hl-tag">&lt;executions&gt;</span>
+        <span class="hl-tag">&lt;execution&gt;</span>
+          <span class="hl-tag">&lt;goals&gt;</span>
+            <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+          <span class="hl-tag">&lt;/goals&gt;</span>
+          <span class="hl-tag">&lt;configuration&gt;</span>
+            <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+            <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.jpa.JPAAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+            <span class="hl-tag">&lt;options&gt;</span>
+              <span class="hl-tag">&lt;querydsl.entityAccessors&gt;</span>true<span class="hl-tag">&lt;/querydsl.entityAccessors&gt;</span>
+            <span class="hl-tag">&lt;/options&gt;</span>
+          <span class="hl-tag">&lt;/configuration&gt;</span>
+        <span class="hl-tag">&lt;/execution&gt;</span>
+      <span class="hl-tag">&lt;/executions&gt;</span>
+    <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+  <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="custom_types"></a>3.3.3.&nbsp;Custom type mappings</h3></div></div></div><p>
+      Custom type mappings can be used on properties to override the derived Path
+      type. This can be useful for example in cases where comparison and String operations should
+      be blocked on certain String paths or Date / Time support for
+      custom types needs to be added. Support for Date / Time types of the Joda time API
+      and JDK (java.util.Date, Calendar and subtypes) is built in, but other APIs might need
+      to be supported using this feature.
+    </p><p>The following example demonstrates the usage:</p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> MyEntity {
+    <span class="hl-annotation">@QueryType(PropertyType.SIMPLE)</span>
+    <span class="hl-keyword">public</span> String stringAsSimple;
+
+    <span class="hl-annotation">@QueryType(PropertyType.COMPARABLE)</span>
+    <span class="hl-keyword">public</span> String stringAsComparable;
+
+    <span class="hl-annotation">@QueryType(PropertyType.NONE)</span>
+    <span class="hl-keyword">public</span> String stringNotInQuerydsl;
+}
+</pre><p>The value <code class="code">PropertyType.NONE</code> can be used to skip a property in the
+      query type generation. This case is different from @Transient or @QueryTransient
+      annotated properties, where properties are not persisted. PropertyType.NONE just
+      omits the property from the Querydsl query type.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2382"></a>3.3.4.&nbsp;Delegate methods</h3></div></div></div><p>To declare a static method as a delegate method add the QueryDelegate
+      annotation with the corresponding domain type as a value and provide a method
+      signature that takes the corresponding Querydsl query type as the first argument.
+    </p><p>Here is a simple example from a unit test: </p><pre class="programlisting">
+<span class="hl-annotation">@QueryEntity</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">static</span> <span class="hl-keyword">class</span> User {
+
+    String name;
+
+    User manager;
+
+}
+</pre><pre class="programlisting">
+<span class="hl-annotation">@QueryDelegate(User.class)</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">static</span> BooleanPath isManagedBy(QUser user, User other) {
+    <span class="hl-keyword">return</span> user.manager.eq(other);
+}
+</pre><p>And the generated methods in the QUser query type:</p><pre class="programlisting">
+<span class="hl-keyword">public</span> BooleanPath isManagedBy(QUser other) {
+    <span class="hl-keyword">return</span> com.mysema.query.domain.DelegateTest.isManagedBy(<span class="hl-keyword">this</span>, other);
+}
+
+</pre><p>Delegate methods can also be used to extend built-in types.
+      Here are some examples
+    </p><pre class="programlisting">
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QueryExtensions {
+
+    <span class="hl-annotation">@QueryDelegate(Date.class)</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">static</span> BooleanExpression inPeriod(DatePath&lt;Date&gt; date, Pair&lt;Date,Date&gt; period) {
+        <span class="hl-keyword">return</span> date.goe(period.getFirst()).and(date.loe(period.getSecond()));
+    }
+
+    <span class="hl-annotation">@QueryDelegate(Timestamp.class)</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">static</span> BooleanExpression inDatePeriod(DateTimePath&lt;Timestamp&gt; timestamp, Pair&lt;Date,Date&gt; period) {
+        Timestamp first = <span class="hl-keyword">new</span> Timestamp(DateUtils.truncate(period.getFirst(), Calendar.DAY_OF_MONTH).getTime());
+        Calendar second = Calendar.getInstance();
+        second.setTime(DateUtils.truncate(period.getSecond(), Calendar.DAY_OF_MONTH));
+        second.add(<span class="hl-value">1</span>, Calendar.DAY_OF_MONTH);
+        <span class="hl-keyword">return</span> timestamp.goe(first).and(timestamp.lt(<span class="hl-keyword">new</span> Timestamp(second.getTimeInMillis())));
+    }
+
+}
+</pre><p>When delegate methods are declared for builtin types then subclasses with the
+        proper delegate method usages are created:
+    </p><pre class="programlisting">
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QDate <span class="hl-keyword">extends</span> DatePath&lt;java.sql.Date&gt; {
+
+    <span class="hl-keyword">public</span> QDate(BeanPath&lt;? <span class="hl-keyword">extends</span> java.sql.Date&gt; entity) {
+        <span class="hl-keyword">super</span>(entity.getType(), entity.getMetadata());
+    }
+
+    <span class="hl-keyword">public</span> QDate(PathMetadata&lt;?&gt; metadata) {
+        <span class="hl-keyword">super</span>(java.sql.Date.<span class="hl-keyword">class</span>, metadata);
+    }
+
+    <span class="hl-keyword">public</span> BooleanExpression inPeriod(com.mysema.commons.lang.Pair&lt;java.sql.Date, java.sql.Date&gt; period) {
+        <span class="hl-keyword">return</span> QueryExtensions.inPeriod(<span class="hl-keyword">this</span>, period);
+    }
+
+}
+
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QTimestamp <span class="hl-keyword">extends</span> DateTimePath&lt;java.sql.Timestamp&gt; {
+
+    <span class="hl-keyword">public</span> QTimestamp(BeanPath&lt;? <span class="hl-keyword">extends</span> java.sql.Timestamp&gt; entity) {
+        <span class="hl-keyword">super</span>(entity.getType(), entity.getMetadata());
+    }
+
+    <span class="hl-keyword">public</span> QTimestamp(PathMetadata&lt;?&gt; metadata) {
+        <span class="hl-keyword">super</span>(java.sql.Timestamp.<span class="hl-keyword">class</span>, metadata);
+    }
+
+    <span class="hl-keyword">public</span> BooleanExpression inDatePeriod(com.mysema.commons.lang.Pair&lt;java.sql.Date, java.sql.Date&gt; period) {
+        <span class="hl-keyword">return</span> QueryExtensions.inDatePeriod(<span class="hl-keyword">this</span>, period);
+    }
+
+}
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2405"></a>3.3.5.&nbsp;Non-annotated types</h3></div></div></div><p>
+      It is possible to create Querydsl query types for non annotated types by
+      creating <code class="code">@QueryEntities</code> annotations. Just place a QueryEntities annotation into a
+      package of your choice and the classes to mirrored in the value attribute.
+    </p><p>
+      To actually create the types use the <code class="code">com.mysema.query.apt.QuerydslAnnotationProcessor</code>.
+      In Maven you do it like this:
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+  <span class="hl-tag">&lt;plugins&gt;</span>
+    ...
+    <span class="hl-tag">&lt;plugin&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>apt-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>1.1.3<span class="hl-tag">&lt;/version&gt;</span>
+      <span class="hl-tag">&lt;executions&gt;</span>
+        <span class="hl-tag">&lt;execution&gt;</span>
+          <span class="hl-tag">&lt;goals&gt;</span>
+            <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+          <span class="hl-tag">&lt;/goals&gt;</span>
+          <span class="hl-tag">&lt;configuration&gt;</span>
+            <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+            <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.QuerydslAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+          <span class="hl-tag">&lt;/configuration&gt;</span>
+        <span class="hl-tag">&lt;/execution&gt;</span>
+      <span class="hl-tag">&lt;/executions&gt;</span>
+    <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+  <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2420"></a>3.3.6.&nbsp;Classpath based code generation</h3></div></div></div><p>For cases where annotated Java sources
+    are not available, such as the usage of a different JVM
+    language such as Scala or Groovy or annotation addition via bytecode manipulation the
+    <code class="code">GenericExporter</code> class can be used to scan the classpath for annotated classes and
+    generate query types for them.
+    </p><p>To make GenericExporter available add a dependency to the querydsl-codegen
+      module to your project, or to be more precise
+      <code class="code">com.mysema.querydsl:querydsl-codegen:${querydsl.version}</code>.
+    </p><p>Below is an example for JPA</p><pre class="programlisting">
+GenericExporter exporter = <span class="hl-keyword">new</span> GenericExporter();
+exporter.setKeywords(Keywords.JPA);
+exporter.setEntityAnnotation(Entity.<span class="hl-keyword">class</span>);
+exporter.setEmbeddableAnnotation(Embeddable.<span class="hl-keyword">class</span>);
+exporter.setEmbeddedAnnotation(Embedded.<span class="hl-keyword">class</span>);
+exporter.setSupertypeAnnotation(MappedSuperclass.<span class="hl-keyword">class</span>);
+exporter.setSkipAnnotation(Transient.<span class="hl-keyword">class</span>);
+exporter.setTargetFolder(<span class="hl-keyword">new</span> File(<span class="hl-string">"target/generated-sources/java"</span>));
+exporter.export(DomainClass.<span class="hl-keyword">class</span>.getPackage());
+</pre><p>This will export all the JPA annotated classes in the package of the DomainClass
+      class and subpackages to the target/generated-sources/java directory.
+    </p><div class="sect3" lang="en-US"><div class="titlepage"><div><div><h4 class="title"><a name="d0e2439"></a>3.3.6.1.&nbsp;Usage via Maven</h4></div></div></div><p>The goals generic-export, jpa-export and jdo-export of the querydsl-maven-plugin
+        can be used for GenericExporter usage via Maven.
+      </p><p>
+      The different goals are mapped to the Querydsl, JPA and JDO annotations.
+      </p><p>The configuration elements are</p><div class="table"><a name="d0e2448"></a><p class="title"><b>Table&nbsp;3.3.&nbsp;Maven configuration</b></p><div class="table-contents"><table summary="Maven configuration" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col align="left"><col align="left"><col align="left"></colgroup><thead><tr><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">Type</th><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">Element</th><th style="border-bottom: 0.5pt solid ; " align="left">Description</th></tr></thead><tbody><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">File</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">targetFolder</td><td style="border-bottom: 0.5pt solid ; " align="left">target folder for generated sources</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">boolean</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">scala</td><td style="border-bottom: 0.5pt solid ; " align="left">true, if Scala sources should be generated instead (default: false)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">String[]</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">packages</td><td style="border-bottom: 0.5pt solid ; " align="left">packages to be introspected for entity classes</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">boolean</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">handleFields</td><td style="border-bottom: 0.5pt solid ; " align="left">true, if fields should be treated as properties (default: true)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">boolean</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">handleMethods</td><td style="border-bottom: 0.5pt solid ; " align="left">true, if getters should be treated as properties (default: true)</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">String</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">sourceEncoding</td><td style="border-bottom: 0.5pt solid ; " align="left">charset encoding for the generated source files</td></tr><tr><td style="border-right: 0.5pt solid ; " align="left">boolean</td><td style="border-right: 0.5pt solid ; " align="left">testClasspath</td><td style="" align="left">true, if the test classpath should be used instead</td></tr></tbody></table></div></div><br class="table-break"><p>Here is an example for JPA annotated classes</p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+    <span class="hl-tag">&lt;plugins&gt;</span>
+      ...
+      <span class="hl-tag">&lt;plugin&gt;</span>
+        <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+        <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+        <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+        <span class="hl-tag">&lt;executions&gt;</span>
+          <span class="hl-tag">&lt;execution&gt;</span>
+            <span class="hl-tag">&lt;phase&gt;</span>process-classes<span class="hl-tag">&lt;/phase&gt;</span>
+            <span class="hl-tag">&lt;goals&gt;</span>
+              <span class="hl-tag">&lt;goal&gt;</span>jpa-export<span class="hl-tag">&lt;/goal&gt;</span>
+            <span class="hl-tag">&lt;/goals&gt;</span>
+            <span class="hl-tag">&lt;configuration&gt;</span>
+              <span class="hl-tag">&lt;targetFolder&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/targetFolder&gt;</span>
+              <span class="hl-tag">&lt;packages&gt;</span>
+                <span class="hl-tag">&lt;package&gt;</span>com.example.domain<span class="hl-tag">&lt;/package&gt;</span>
+              <span class="hl-tag">&lt;/packages&gt;</span>
+            <span class="hl-tag">&lt;/configuration&gt;</span>
+          <span class="hl-tag">&lt;/execution&gt;</span>
+        <span class="hl-tag">&lt;/executions&gt;</span>
+      <span class="hl-tag">&lt;/plugin&gt;</span>
+      ...
+    <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre><p>This will export the JPA annotated classes of the <code class="code">com.example.domain</code> package and
+      subpackages to the target/generated-sources/java directory.
+      </p><p>If you need to compile the generated sources directly after that, then you can use
+      the <code class="code">compile</code> goal for that.</p><pre class="programlisting">
+<span class="hl-tag">&lt;execution&gt;</span>
+  <span class="hl-tag">&lt;goals&gt;</span>
+    <span class="hl-tag">&lt;goal&gt;</span>compile<span class="hl-tag">&lt;/goal&gt;</span>
+  <span class="hl-tag">&lt;/goals&gt;</span>
+  <span class="hl-tag">&lt;configuration&gt;</span>
+    <span class="hl-tag">&lt;sourceFolder&gt;</span>target/generated-sources/scala<span class="hl-tag">&lt;/targetFolder&gt;</span>
+  <span class="hl-tag">&lt;/configuration&gt;</span>
+<span class="hl-tag">&lt;/execution&gt;</span>
+</pre><p>The <code class="code">compile</code> goal has the following configuration elements</p><div class="table"><a name="d0e2534"></a><p class="title"><b>Table&nbsp;3.4.&nbsp;Maven configuration</b></p><div class="table-contents"><table summary="Maven configuration" style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; border-left: 0.5pt solid ; border-right: 0.5pt solid ; "><colgroup><col align="left"><col align="left"><col align="left"></colgroup><thead><tr><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">Type</th><th style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">Element</th><th style="border-bottom: 0.5pt solid ; " align="left">Description</th></tr></thead><tbody><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">File</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">sourceFolder</td><td style="border-bottom: 0.5pt solid ; " align="left">source folder with generated sources</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">String</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">sourceEncoding</td><td style="border-bottom: 0.5pt solid ; " align="left">charset encoding of sources</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">String</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">source</td><td style="border-bottom: 0.5pt solid ; " align="left">-source option for the compiler</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">String</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">target</td><td style="border-bottom: 0.5pt solid ; " align="left">-target option for the compiler</td></tr><tr><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">boolean</td><td style="border-right: 0.5pt solid ; border-bottom: 0.5pt solid ; " align="left">testClasspath</td><td style="border-bottom: 0.5pt solid ; " align="left">true, if the test classpath should be used instead</td></tr><tr><td style="border-right: 0.5pt solid ; " align="left">Map</td><td style="border-right: 0.5pt solid ; " align="left">compilerOptions</td><td style="" align="left">options for the compiler</td></tr></tbody></table></div></div><br class="table-break"><p>All options except <code class="code">sourceFolder</code> are optional.</p></div><div class="sect3" lang="en-US"><div class="titlepage"><div><div><h4 class="title"><a name="d0e2597"></a>3.3.6.2.&nbsp;Scala support</h4></div></div></div><p>If you need Scala output of the classes, use a variant of the following
+      configuration
+      </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+    <span class="hl-tag">&lt;plugins&gt;</span>
+      ...
+      <span class="hl-tag">&lt;plugin&gt;</span>
+        <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+        <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+        <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+        <span class="hl-tag">&lt;dependencies&gt;</span>
+          <span class="hl-tag">&lt;dependency&gt;</span>
+            <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+            <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-scala<span class="hl-tag">&lt;/artifactId&gt;</span>
+            <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+          <span class="hl-tag">&lt;/dependency&gt;</span>
+          <span class="hl-tag">&lt;dependency&gt;</span>
+            <span class="hl-tag">&lt;groupId&gt;</span>org.scala-lang<span class="hl-tag">&lt;/groupId&gt;</span>
+            <span class="hl-tag">&lt;artifactId&gt;</span>scala-library<span class="hl-tag">&lt;/artifactId&gt;</span>
+            <span class="hl-tag">&lt;version&gt;</span>${scala.version}<span class="hl-tag">&lt;/version&gt;</span>
+          <span class="hl-tag">&lt;/dependency&gt;</span>
+        <span class="hl-tag">&lt;/dependencies&gt;</span>
+        <span class="hl-tag">&lt;executions&gt;</span>
+          <span class="hl-tag">&lt;execution&gt;</span>
+            <span class="hl-tag">&lt;goals&gt;</span>
+              <span class="hl-tag">&lt;goal&gt;</span>jpa-export<span class="hl-tag">&lt;/goal&gt;</span>
+            <span class="hl-tag">&lt;/goals&gt;</span>
+            <span class="hl-tag">&lt;configuration&gt;</span>
+              <span class="hl-tag">&lt;targetFolder&gt;</span>target/generated-sources/scala<span class="hl-tag">&lt;/targetFolder&gt;</span>
+              <span class="hl-tag">&lt;scala&gt;</span>true<span class="hl-tag">&lt;/scala&gt;</span>
+              <span class="hl-tag">&lt;packages&gt;</span>
+                <span class="hl-tag">&lt;package&gt;</span>com.example.domain<span class="hl-tag">&lt;/package&gt;</span>
+              <span class="hl-tag">&lt;/packages&gt;</span>
+            <span class="hl-tag">&lt;/configuration&gt;</span>
+          <span class="hl-tag">&lt;/execution&gt;</span>
+        <span class="hl-tag">&lt;/executions&gt;</span>
+      <span class="hl-tag">&lt;/plugin&gt;</span>
+      ...
+    <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.2.&nbsp;Result handling&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.4.&nbsp;Alias usage</td></tr></table></div></body></html>

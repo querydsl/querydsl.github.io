@@ -1,0 +1,110 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.&nbsp;General usage</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="index.html" title="Querydsl"><link rel="prev" href="ch02s07.html" title="2.7.&nbsp;Querying Mongodb"><link rel="next" href="ch03s02.html" title="3.2.&nbsp;Configuration"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.&nbsp;General usage</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s07.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s02.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en-US"><div class="titlepage"><div><div><h2 class="title"><a name="general"></a>3.&nbsp;General usage</h2></div></div></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1062"></a>3.1.&nbsp;Expressions</h2></div></div></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1065"></a>3.1.1.&nbsp;Inheritance in Querydsl types</h3></div></div></div><p>
+      To avoid a generic signature in Querydsl query types the type hierarchies are flattened. The result is that
+      all generated query types are direct subclasses of com.mysema.query.types.path.EntityPathBase or com.mysema.query.types.path.BeanPath
+	   and cannot be directly cast to their Querydsl supertypes.
+      </p><p>
+      Instead of a direct Java cast, the supertype reference is accessible via the _super field. A _super-field is available
+      in all query types with a single supertype :
+      </p><pre class="programlisting">
+<span class="hl-comment">// from Account</span>
+QAccount <span class="hl-keyword">extends</span> EntityPathBase&lt;Account&gt;{
+    <span class="hl-comment">// ...</span>
+}
+
+<span class="hl-comment">// from BankAccount extends Account</span>
+QBankAccount <span class="hl-keyword">extends</span> EntityPathBase&lt;BankAccount&gt;{
+
+    <span class="hl-keyword">public</span> <span class="hl-keyword">final</span> QAccount _super = <span class="hl-keyword">new</span> QAccount(<span class="hl-keyword">this</span>);
+    
+    <span class="hl-comment">// ...</span>
+}            
+</pre><p>To cast from a supertype to a subtype you can use the as-method of the EntityPathBase class :</p><pre class="programlisting">
+QAccount account = <span class="hl-keyword">new</span> QAccount(<span class="hl-string">"account"</span>);
+QBankAccount bankAccount = account.as(QBankAccount.<span class="hl-keyword">class</span>);    
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1078"></a>3.1.2.&nbsp;Parameters</h3></div></div></div><p>TODO</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1083"></a>3.1.3.&nbsp;Constructor projections</h3></div></div></div><p>
+      Querydsl provides the possibility to use constructor invocations in projections.
+      To use a constructor in a query projection, you need to annotate it with the QueryProjection
+      annotation :
+      </p><pre class="programlisting">
+<span class="hl-keyword">class</span> CustomerDTO {
+
+  <span class="hl-annotation">@QueryProjection</span>
+  <span class="hl-keyword">public</span> CustomerDTO(<span class="hl-keyword">long</span> id, String name){
+     ...
+  }
+
+}
+</pre><p>And then you can use it like this in the query</p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+JPQLQuery query = <span class="hl-keyword">new</span> HibernateQuery(session);
+List&lt;CustomerDTO&gt; dtos = qry.from(customer).list(<span class="hl-keyword">new</span> QCustomerDTO(customer.id, customer.name));     
+</pre><p>While the example is Hibernate specific, this feature is present in all modules.</p><p>If the type with the QueryProjection annotation is not an annotated entity type, you can
+      use the constructor projection like in the example, but if the annotated type would be an entity type, then
+      the constructor projection would need to be created via a call to the static create method of the query type :
+      </p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Customer {
+
+  <span class="hl-annotation">@QueryProjection</span>
+  <span class="hl-keyword">public</span> Customer(<span class="hl-keyword">long</span> id, String name){
+     ...
+  }
+
+}
+</pre><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+JPQLQuery query = <span class="hl-keyword">new</span> HibernateQuery(session);
+List&lt;Customer&gt; dtos = qry.from(customer).list(<span class="hl-keyword">new</span> QCustomer.create(customer.id, customer.name));   
+</pre><p>Alternatively, if code generation is not an option, you can create a constructor projection like this :</p><pre class="programlisting">
+List&lt;Customer&gt; dtos = qry.from(customer)
+    .list(EConstructor.create(Customer.<span class="hl-keyword">class</span>, customer.id, customer.name));   
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1106"></a>3.1.4.&nbsp;Complex boolean expressions</h3></div></div></div><p>
+    To construct complex boolean expressions, use the BooleanBuilder class. 
+    It extends EBoolean and can be used in cascaded form : 
+    </p><pre class="programlisting">
+<span class="hl-keyword">public</span> List&lt;Customer&gt; getCustomer(String... names){
+    QCustomer customer = QCustomer.customer;    
+    HibernateQuery qry = <span class="hl-keyword">new</span> HibernateQuery(session).from(customer);    
+    BooleanBuilder builder = <span class="hl-keyword">new</span> BoolenBuilder();
+    <span class="hl-keyword">for</span> (String name : names){
+        builder.or(customer.name.eq(name));
+    }
+    qry.where(builder); <span class="hl-comment">// customer.name eq name1 OR customer.name eq name2 OR ...  </span>
+    <span class="hl-keyword">return</span> qry.list(customer);
+}
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1113"></a>3.1.5.&nbsp;Case expressions</h3></div></div></div><p>To construct case-when-then-else expressions use the CaseBuilder class like this : </p><pre class="programlisting">    
+QCustomer customer = QCustomer.customer;    
+Expression&lt;String&gt; cases = <span class="hl-keyword">new</span> CaseBuilder()
+    .when(customer.annualSpending.gt(<span class="hl-value">10000</span>)).then(<span class="hl-string">"Premier"</span>)
+    .when(customer.annualSpending.gt(<span class="hl-value">5000</span>)).then(<span class="hl-string">"Gold"</span>)
+    .when(customer.annualSpending.gt(<span class="hl-value">2000</span>)).then(<span class="hl-string">"Silver"</span>)
+    .otherwise(<span class="hl-string">"Bronze"</span>);
+<span class="hl-comment">// The cases expression can now be used in a projection or condition        </span>
+</pre><p>For case expressions with equals-operations use the following simpler form instead :</p><pre class="programlisting">    
+QCustomer customer = QCustomer.customer;    
+Expression&lt;String&gt; cases = customer.annualSpending
+    .when(<span class="hl-value">10000</span>).then(<span class="hl-string">"Premier"</span>)
+    .when(<span class="hl-value">5000</span>).then(<span class="hl-string">"Gold"</span>)
+    .when(<span class="hl-value">2000</span>).then(<span class="hl-string">"Silver"</span>)
+    .otherwise(<span class="hl-string">"Bronze"</span>);
+<span class="hl-comment">// The cases expression can now be used in a projection or condition        </span>
+</pre><p>Case expressions are not yet supported in JDOQL.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1126"></a>3.1.6.&nbsp;Dynamic path usage</h3></div></div></div><p>
+    For dynamic path generation the PathBuilder class can be used. It extends EntityPathBase and can be used
+    as an alternative to class generation and alias-usage for path generation. 
+    </p><p>String property :</p><pre class="programlisting">
+PathBuilder&lt;User&gt; entityPath = <span class="hl-keyword">new</span> PathBuilder&lt;User&gt;(User.<span class="hl-keyword">class</span>, <span class="hl-string">"entity"</span>);
+<span class="hl-comment">// fully generic access</span>
+entityPath.get(<span class="hl-string">"userName"</span>);
+<span class="hl-comment">// .. or with supplied type</span>
+entityPath.get(<span class="hl-string">"userName"</span>, String.<span class="hl-keyword">class</span>);
+<span class="hl-comment">// .. and correct signature</span>
+entityPath.getString(<span class="hl-string">"userName"</span>).lower();
+</pre><p>List property : </p><pre class="programlisting">
+entityPath.getList(<span class="hl-string">"list"</span>, String.<span class="hl-keyword">class</span>, PString.<span class="hl-keyword">class</span>).get(<span class="hl-value">0</span>).lower();
+entityPath.getList(<span class="hl-string">"list"</span>, String.<span class="hl-keyword">class</span>).get(<span class="hl-value">0</span>);
+</pre><p>Map property : </p><pre class="programlisting">
+entityPath.getMap(<span class="hl-string">"map"</span>, String.<span class="hl-keyword">class</span>, String.<span class="hl-keyword">class</span>, PString.<span class="hl-keyword">class</span>).get(<span class="hl-string">"key"</span>).lower();
+entityPath.getMap(<span class="hl-string">"map"</span>, String.<span class="hl-keyword">class</span>, String.<span class="hl-keyword">class</span>).get(<span class="hl-string">"key"</span>);
+</pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s07.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.7.&nbsp;Querying Mongodb&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.2.&nbsp;Configuration</td></tr></table></div></body></html>

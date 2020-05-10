@@ -1,0 +1,17 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.2.&nbsp;Result post-processing</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch03.html" title="3.&nbsp;General usage"><link rel="prev" href="ch03.html" title="3.&nbsp;General usage"><link rel="next" href="ch03s03.html" title="3.3.&nbsp;Alternative code generation"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.2.&nbsp;Result post-processing</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;</td><th width="60%" align="center">3.&nbsp;General usage</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s03.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1626"></a>3.2.&nbsp;Result post-processing</h2></div></div></div><p>Querydsl contains result post-processing functionality in form of the 
+    <code class="code">com.mysema.query.ResultTransformer</code> interface.</p><p>Currently this interface has only been used for result aggregation via the GroupBy class.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1636"></a>3.2.1.&nbsp;GroupBy processing</h3></div></div></div><p>The <code class="code">com.mysema.query.group.GroupBy</code> class provides aggregation functionality
+   which can be used to aggregate query results in memory. Below are some usage examples.</p><p>
+     Aggregating parent child relations
+   </p><pre class="programlisting">
+<span class="hl-keyword">import</span> <span class="hl-keyword">static</span> com.mysema.query.group.GroupBy.*;
+   
+Map&lt;Integer, List&lt;Comment&gt;&gt; results = query.from(post, comment)
+    .where(comment.post.id.eq(post.id))
+    .transform(groupBy(post.id).as(list(comment)));
+</pre><p>This will return a map of post ids to related comments.</p><p>Multiple result columns</p><pre class="programlisting">    
+Map&lt;Integer, Group&gt; results = query.from(post, comment)
+    .where(comment.post.id.eq(post.id))
+    .transform(groupBy(post.id).as(post.name, set(comment.id)));
+</pre><p>This will return a map of post ids to Group instances with access to post name and comment ids.</p><p>Group is the GroupBy equivalent to the Tuple interface.</p><p>More examples can be found <a xmlns:xlink="http://www.w3.org/1999/xlink" href="https://github.com/mysema/querydsl/blob/master/querydsl-collections/src/test/java/com/mysema/query/collections/GroupByTest.java" target="_top">here</a>.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.&nbsp;General usage&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.3.&nbsp;Alternative code generation</td></tr></table></div></body></html>

@@ -1,0 +1,132 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.4.&nbsp;Querying SQL/JDBC sources</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch02.html" title="2.&nbsp;Getting started with Querydsl"><link rel="prev" href="ch02s03.html" title="2.3.&nbsp;Querying Collections"><link rel="next" href="ch02s05.html" title="2.5.&nbsp;Querying Lucene sources"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.4.&nbsp;Querying SQL/JDBC sources</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Getting started with Querydsl</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s05.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sql_integration"></a>2.4.&nbsp;Querying SQL/JDBC sources</h2></div></div></div><p>This chapter describes the query type generation and querying functionality of the SQL module.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e600"></a>2.4.1.&nbsp;Creating the Querydsl query types</h3></div></div></div><p>To get started export your schema into Querydsl query types like this :</p><pre class="programlisting">  
+java.sql.Connection conn; <span class="hl-comment">// connection of database containing the schema to use</span>
+<span class="hl-comment">// obtain Connection etc.</span>
+
+NamingStrategy namingStrategy = <span class="hl-keyword">new</span> DefaultNamingStrategy();
+MetaDataSerializer serializer = <span class="hl-keyword">new</span> MetaDataSerializer(<span class="hl-string">"Q"</span>,namingStrategy);            
+MetaDataExporter exporter = <span class="hl-keyword">new</span> MetaDataExporter(
+    <span class="hl-string">"Q"</span>,                       <span class="hl-comment">// namePrefix </span>
+    <span class="hl-string">"com.myproject.mydomain"</span>,  <span class="hl-comment">// target package  </span>
+    <span class="hl-keyword">new</span> File(<span class="hl-string">"src/main/java"</span>), <span class="hl-comment">// target source folder</span>
+    namingStrategy,            <span class="hl-comment">// naming strategy</span>
+    serializer);               <span class="hl-comment">// serializer</span>
+exporter.export(conn.getMetaData());  
+</pre><p>This declares that the database schema is to be mirrored into the com.myproject.domain package in the src/main/java folder.</p><p>
+  The generated types have the table name transformed to mixed case as the class name and a similar mixed case transformation
+  applied to the columns which are available as property paths in the query type.
+  </p><p>
+  In addition to this primary key and foreign key constraints are provided as fields which can be used for compact join declarations ... TODO 
+  </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e613"></a>2.4.2.&nbsp;Maven integration</h3></div></div></div><p>This functionality is also available as a Maven plugin. The presented example can be declared like this in the POM :</p><pre class="programlisting">   
+<span class="hl-tag">&lt;plugin&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+  <span class="hl-tag">&lt;executions&gt;</span>
+    <span class="hl-tag">&lt;execution&gt;</span>
+      <span class="hl-tag">&lt;goals&gt;</span>
+        <span class="hl-tag">&lt;goal&gt;</span>export<span class="hl-tag">&lt;/goal&gt;</span>
+      <span class="hl-tag">&lt;/goals&gt;</span>
+    <span class="hl-tag">&lt;/execution&gt;</span>            
+  <span class="hl-tag">&lt;/executions&gt;</span>
+  <span class="hl-tag">&lt;configuration&gt;</span>
+    <span class="hl-tag">&lt;jdbcDriver&gt;</span>org.apache.derby.jdbc.EmbeddedDriver<span class="hl-tag">&lt;/jdbcDriver&gt;</span>
+    <span class="hl-tag">&lt;jdbcUrl&gt;</span>jdbc:derby:target/demoDB;create=true<span class="hl-tag">&lt;/jdbcUrl&gt;</span>
+    <span class="hl-comment">&lt;!--
+      optional elements :
+      * namePrefix
+      * jdbcUser
+      * jdbcPassword
+      * schemaPattern
+      * tableNamePattern    
+    --&gt;</span>    
+    <span class="hl-tag">&lt;packageName&gt;</span>com.myproject.domain<span class="hl-tag">&lt;/packageName&gt;</span>
+    <span class="hl-tag">&lt;targetFolder&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/targetFolder&gt;</span>
+  <span class="hl-tag">&lt;/configuration&gt;</span>
+  <span class="hl-tag">&lt;dependencies&gt;</span>
+    <span class="hl-tag">&lt;dependency&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>org.apache.derby<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>derby<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>${derby.version}<span class="hl-tag">&lt;/version&gt;</span>
+    <span class="hl-tag">&lt;/dependency&gt;</span>
+  <span class="hl-tag">&lt;/dependencies&gt;</span>
+<span class="hl-tag">&lt;/plugin&gt;</span>  
+</pre><p>Use the goal <span class="emphasis"><em>test-export</em></span> to add the targetFolder as a test compile source root
+  instead of a compile source root.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e625"></a>2.4.3.&nbsp;Querying</h3></div></div></div><p>Querying with Querydsl SQL is as simple as this :</p><pre class="programlisting"> 
+QCustomer customer = <span class="hl-keyword">new</span> QCustomer(<span class="hl-string">"c"</span>);
+
+SQLTemplates dialect = <span class="hl-keyword">new</span> HSQLDBTemplates(); <span class="hl-comment">// SQL-dialect</span>
+SQLQuery query = <span class="hl-keyword">new</span> SQLQueryImpl(connection, dialect); 
+List&lt;String&gt; lastNames = query.from(customer)
+    .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>))
+    .list(customer.lastName);
+</pre><p>which is transformed into the following sql query, assuming that the related table name is 
+    <span class="emphasis"><em>customer</em></span> and the columns <span class="emphasis"><em>first_name</em></span> and 
+    <span class="emphasis"><em>last_name</em></span> :</p><pre class="programlisting">     
+SELECT c.last_name 
+FROM customer c 
+WHERE c.first_name = 'Bob'
+</pre><p>Internally Querydsl SQL uses PreparedStatements, though.</p><p>Querydsl uses SQL dialects to customize the SQL serialization needed for different relational databases. The
+    available dialects are :</p><div class="itemizedlist"><ul type="disc"><li><p>com.mysema.query.sql.DerbyTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with version 10.5.3</p></li></ul></div></li><li><p>com.mysema.query.sql.HSQLDBTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with version 1.8.0.7</p></li></ul></div></li><li><p>com.mysema.query.sql.H2Templates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with H2 1.2.133</p></li></ul></div></li><li><p>com.mysema.query.sql.MySQLTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with MySQL CE 5.1</p></li></ul></div></li><li><p>com.mysema.query.sql.OracleTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with Oracle 10g XE</p></li></ul></div></li><li><p>com.mysema.query.sql.PostgresTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with Postgres 8.4</p></li></ul></div></li><li><p>com.mysema.query.sql.SQLServerTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with SQL Server 2008</p></li></ul></div></li></ul></div></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e699"></a>2.4.4.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the SQLQuery interface like this</p><p><span class="emphasis"><em>from :</em></span> Define the query sources here.</p><p><span class="emphasis"><em>innerJoin, join, leftJoin, fullJoin, on</em></span> : Define join elements using these constructs. 
+  For the join methods the first argument is the join source and the second the target (alias).</p><p><span class="emphasis"><em>where :</em></span> Define the query filters, either in varargs form separated via commas or 
+  cascaded via the and-operator.</p><p><span class="emphasis"><em>groupBy :</em></span> Define the group by arguments in varargs form.</p><p><span class="emphasis"><em>having :</em></span> Define the having filter of the "group by" grouping as an varags array of 
+  EBoolean expressions.</p><p><span class="emphasis"><em>orderBy :</em></span> Define the ordering of the result as an varargs array of order expressions. 
+  Use asc() and desc() on numeric, string and other comparable expression to access the OrderSpecifier instances. </p><p><span class="emphasis"><em>limit, offset, restrict :</em></span> Define the paging of the result. Limit for max results, 
+  offset for skipping rows and restrict for defining both in one call.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e732"></a>2.4.5.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting"> 
+query.from(customer)
+    .orderBy(customer.lastName.asc(), customer.firstName.asc())
+    .list(customer.firstName, customer.lastName);
+</pre><p>which is equivalent to the following native SQL</p><pre class="programlisting">  
+SELECT c.first_name, c.last_name
+FROM customer c 
+ORDER BY c.last_name ASC, c.first_name ASC
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e743"></a>2.4.6.&nbsp;Grouping</h3></div></div></div><p>Grouping can be done in the following form</p><pre class="programlisting"> 
+query.from(customer)
+    .groupBy(customer.lastName)
+    .list(customer.lastName);
+</pre><p>which is equivalent to the following native SQL</p><pre class="programlisting">  
+SELECT c.last_name 
+FROM customer c 
+GROUP BY c.last_name
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e754"></a>2.4.7.&nbsp;Union queries</h3></div></div></div><p>TODO</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e759"></a>2.4.8.&nbsp;Query extension support</h3></div></div></div><p>TODO</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e764"></a>2.4.9.&nbsp;Using DDL commands</h3></div></div></div><p>TODO</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e769"></a>2.4.10.&nbsp;Using Data manipulation commands</h3></div></div></div><p>Insert examples :</p><pre class="programlisting">    
+<span class="hl-comment">// with columns</span>
+<span class="hl-keyword">new</span> SQLInsertClause(conn, dialect, survey)
+    .columns(survey.id, survey.name)
+    .values(<span class="hl-value">3</span>, <span class="hl-string">"Hello"</span>).execute();
+
+<span class="hl-comment">// without columns</span>
+<span class="hl-keyword">new</span> SQLInsertClause(conn, dialect, survey)
+    .values(<span class="hl-value">4</span>, <span class="hl-string">"Hello"</span>).execute();
+
+<span class="hl-comment">// with subquery</span>
+<span class="hl-keyword">new</span> SQLInsertClause(conn, dialect, survey)
+    .columns(survey.id, survey.name)
+    .select(<span class="hl-keyword">new</span> SQLSubQuery().from(survey2).list(survey2.id.add(<span class="hl-value">1</span>), survey2.name))
+    .execute();
+
+<span class="hl-comment">// with subquery, without columns</span>
+<span class="hl-keyword">new</span> SQLInsertClause(conn, dialect, survey)
+    .select(<span class="hl-keyword">new</span> SQLSubQuery().from(survey2).list(survey2.id.add(<span class="hl-value">10</span>), survey2.name))
+    .execute();
+</pre><p>Update examples :</p><pre class="programlisting">  
+<span class="hl-comment">// update with where</span>
+<span class="hl-keyword">new</span> SQLUpdateClause(conn, dialect, survey)
+    .where(survey.name.eq(<span class="hl-string">"XXX"</span>))
+    .set(survey.name, <span class="hl-string">"S"</span>)
+    .execute();
+  
+<span class="hl-comment">// update without where</span>
+<span class="hl-keyword">new</span> SQLUpdateClause(conn, dialect, survey)
+    .set(survey.name, <span class="hl-string">"S"</span>)
+    .execute()  
+</pre><p>Delete examples :</p><pre class="programlisting">    
+<span class="hl-comment">// delete with where</span>
+<span class="hl-keyword">new</span> SQLDelecteClause(conn, dialect, survey)
+    .where(survey.name.eq(<span class="hl-string">"XXX"</span>))
+    .execute();
+  
+<span class="hl-comment">// delete without where</span>
+<span class="hl-keyword">new</span> SQLDelecteClause(conn, dialect, survey)
+    .execute()  
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e784"></a>2.4.11.&nbsp;User types</h3></div></div></div><p>TODO</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.3.&nbsp;Querying Collections&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.5.&nbsp;Querying Lucene sources</td></tr></table></div></body></html>

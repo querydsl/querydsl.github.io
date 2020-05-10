@@ -1,0 +1,22 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.4.&nbsp;Custom type mappings</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch03.html" title="3.&nbsp;Advanced usage"><link rel="prev" href="ch03s03.html" title="3.3.&nbsp;Path initialization"><link rel="next" href="ch03s05.html" title="3.5.&nbsp;Inheritance in Querydsl types"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.4.&nbsp;Custom type mappings</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">3.&nbsp;Advanced usage</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s05.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="custom_types"></a>3.4.&nbsp;Custom type mappings</h2></div></div></div><p>
+      Custom type mappings can be used on properties to override the derived Path type. This can be useful in cases where
+      comparison and String operations should be blocked on certain String paths or Date / Time support for custom
+      types needs to be added. Support for Date / Time types of the Joda time API and JDK (java.util.Date, Calendar and subtypes) 
+      is built in, but other APIs might need to be supported using this feature.
+      </p><p>The following example demonstrates the usage :</p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>      
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> MyEntity{      
+    <span class="hl-annotation">@QueryType(PropertyType.SIMPLE)</span>
+    <span class="hl-keyword">public</span> String stringAsSimple;
+        
+    <span class="hl-annotation">@QueryType(PropertyType.COMPARABLE)</span>
+    <span class="hl-keyword">public</span> String stringAsComparable;
+        
+    <span class="hl-annotation">@QueryType(PropertyType.NONE)</span>
+    <span class="hl-keyword">public</span> String stringNotInQuerydsl;    
+}        
+</pre><p>The value PropertyType.NONE can be used to skip a property in the Querydsl query type generation. This case is different
+      from @Transient or @QueryTransient annotated properties, where properties are not persisted. PropertyType.NONE just omits the
+      property from the Querydsl query type.</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.3.&nbsp;Path initialization&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.5.&nbsp;Inheritance in Querydsl types</td></tr></table></div></body></html>

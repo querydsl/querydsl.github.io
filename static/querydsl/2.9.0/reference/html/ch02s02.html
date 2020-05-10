@@ -1,0 +1,278 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.2.&nbsp;Querying JDO</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="next" href="ch02s03.html" title="2.3.&nbsp;Querying SQL"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.2.&nbsp;Querying JDO</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s03.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jdo_integration"></a>2.2.&nbsp;Querying JDO</h2></div></div></div><p>
+    Querydsl defines a general statically typed syntax for querying on top of
+    persisted domain model data. JDO and JPA are the primary integration
+    technologies for Querydsl. This guide describes how to use Querydsl
+    in combination with JDO. 
+    </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e385"></a>2.2.1.&nbsp;Maven integration</h3></div></div></div><p>
+      Add the following dependencies to your Maven project :
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-apt<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+  <span class="hl-tag">&lt;scope&gt;</span>provided<span class="hl-tag">&lt;/scope&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>        
+    
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-jdo<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>org.slf4j<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>slf4j-log4j12<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>1.6.1<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>    
+</pre><p>
+      And now, configure the Maven APT plugin which generates the query types
+      used by Querydsl :
+  </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+    <span class="hl-tag">&lt;plugins&gt;</span>
+      ...
+      <span class="hl-tag">&lt;plugin&gt;</span>
+        <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+        <span class="hl-tag">&lt;artifactId&gt;</span>apt-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+        <span class="hl-tag">&lt;version&gt;</span>1.0.6<span class="hl-tag">&lt;/version&gt;</span>
+        <span class="hl-tag">&lt;executions&gt;</span>
+          <span class="hl-tag">&lt;execution&gt;</span>
+            <span class="hl-tag">&lt;goals&gt;</span>
+              <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+            <span class="hl-tag">&lt;/goals&gt;</span>
+            <span class="hl-tag">&lt;configuration&gt;</span>
+              <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+              <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.jdo.JDOAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+            <span class="hl-tag">&lt;/configuration&gt;</span>
+          <span class="hl-tag">&lt;/execution&gt;</span>
+        <span class="hl-tag">&lt;/executions&gt;</span>
+      <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+    <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre><p>
+      The JDOAnnotationProcessor finds domain types annotated with the
+      javax.jdo.annotations.PersistenceCapable annotation and generates
+      Querydsl query types for them.
+    </p><p>
+      Run clean install and you will get your Query
+      types generated into target/generated-sources/java.
+    </p><p>
+      If you use Eclipse, run mvn eclipse:eclipse to update your Eclipse project to include 
+      target/generated-sources/java
+      as a source folder. 
+    </p><p>
+      Now you are able to construct JDOQL query instances and instances of the
+      query domain model.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e404"></a>2.2.2.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the following 
+    tasks for Querydsl code generation :</p><pre class="programlisting">
+    <span class="hl-comment">&lt;!-- APT based code generation --&gt;</span>
+    <span class="hl-tag">&lt;javac</span> <span class="hl-attribute">srcdir</span>=<span class="hl-value">"${src}"</span> <span class="hl-attribute">classpathref</span>=<span class="hl-value">"cp"</span><span class="hl-tag">&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"-proc:only"</span><span class="hl-tag">/&gt;</span>      
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"-processor"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"com.mysema.query.apt.jdo.JDOAnnotationProcessor"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"-s"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"${generated}"</span><span class="hl-tag">/&gt;</span>
+    <span class="hl-tag">&lt;/javac&gt;</span>
+    
+    <span class="hl-comment">&lt;!-- compilation --&gt;</span>
+    <span class="hl-tag">&lt;javac</span> <span class="hl-attribute">classpathref</span>=<span class="hl-value">"cp"</span> <span class="hl-attribute">destdir</span>=<span class="hl-value">"${build}"</span><span class="hl-tag">&gt;</span>      
+      <span class="hl-tag">&lt;src</span> <span class="hl-attribute">path</span>=<span class="hl-value">"${src}"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;src</span> <span class="hl-attribute">path</span>=<span class="hl-value">"${generated}"</span><span class="hl-tag">/&gt;</span>
+    <span class="hl-tag">&lt;/javac&gt;</span>    
+</pre><p>Replace <span class="emphasis"><em>src</em></span> with your main source folder, 
+    <span class="emphasis"><em>generated</em></span> with your folder for generated sources 
+    and <span class="emphasis"><em>build</em></span> with your target folder.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e422"></a>2.2.3.&nbsp;Using query types</h3></div></div></div><p>
+      To create queries with Querydsl you need to instantiate variables and
+      Query implementations. We will start with the variables.
+    </p><p>
+      Let's assume that your project has the following domain type :
+    </p><pre class="programlisting">
+<span class="hl-annotation">@PersistenceCapable</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> Customer {
+  <span class="hl-keyword">private</span> String firstName;
+  <span class="hl-keyword">private</span> String lastName;
+  
+  <span class="hl-keyword">public</span> String getFirstName(){
+    <span class="hl-keyword">return</span> firstName;
+  }
+  
+  <span class="hl-keyword">public</span> String getLastName(){
+    <span class="hl-keyword">return</span> lastName;
+  }
+  
+  <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> setFirstName(String fn){
+    firstName = fn;
+  }
+  
+  <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> setLastName(String ln)[
+    lastName = ln;
+  }
+}
+</pre><p>
+      Querydsl will generate a query type with the simple name QCustomer into the
+      same package as Customer. QCustomer can be used as a statically
+      typed variable in Querydsl as a representative for the
+      Customer type.
+  </p><p>
+      QCustomer has a default instance variable which can be accessed as a static
+      field :
+  </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+</pre><p>
+      Alternatively you can define your own Customer variables like this :
+  </p><pre class="programlisting">
+QCustomer customer = <span class="hl-keyword">new</span> QCustomer(<span class="hl-string">"myCustomer"</span>);
+</pre><p>
+      QCustomer reflects all the properties of the original type Customer as public
+      fields. The firstName field can be accessed like this
+  </p><pre class="programlisting">
+customer.firstName;
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e445"></a>2.2.4.&nbsp;Querying with JDOQL</h3></div></div></div><p>
+      For the JDOQL-module JDOQLQueryImpl is the main Query implementation. It
+      is instantiated like this :
+    </p><pre class="programlisting">
+PersistenceManager pm = ...;
+JDOQLQuery query = <span class="hl-keyword">new</span> JDOQLQueryImpl (pm);
+</pre><p>
+      To retrieve the customer with the first name Bob you would construct a
+      query like this :
+  </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+JDOQLQuery query = <span class="hl-keyword">new</span> JDOQLQueryImpl (pm);
+Customer bob = query.from(customer)
+  .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>))
+  .uniqueResult(customer);
+query.close();
+</pre><p>
+      The from call defines the query source, the where part defines the
+      filter and uniqueResult defines the projection and tells Querydsl
+      to return a single element. Easy, right?
+  </p><p>
+    To create a query with multiple sources you just use the JDOQLQuery interface like this :
+  </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+QCompany company = QCompany.company;
+query.from(customer, company);    
+</pre><p>
+   And to use multiple filters use it like this
+   </p><pre class="programlisting">
+query.from(customer)
+    .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>), customer.lastName.eq(<span class="hl-string">"Wilson"</span>));   
+</pre><p>Or like this</p><pre class="programlisting">
+query.from(customer)
+    .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>).and(customer.lastName.eq(<span class="hl-string">"Wilson"</span>)));
+</pre><p>If you want to combine the filters via "or" then use the following pattern</p><pre class="programlisting">
+query.from(customer)
+    .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>).or(customer.lastName.eq(<span class="hl-string">"Wilson"</span>)));
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e474"></a>2.2.5.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the JDOQLQuery interface like this</p><p><span class="emphasis"><em>from :</em></span> Define the query sources here, the first argument becomes the main source 
+  and the others are treated as variables.</p><p><span class="emphasis"><em>where :</em></span> Define the query filters, either in varargs form separated via commas or 
+  cascaded via the and-operator.</p><p><span class="emphasis"><em>groupBy :</em></span> Define the group by arguments in varargs form.</p><p><span class="emphasis"><em>having :</em></span> Define the having filter of the "group by" grouping as an varargs array of 
+  Predicate expressions.</p><p><span class="emphasis"><em>orderBy :</em></span> Define the ordering of the result as an varargs array of order expressions. 
+  Use asc() and desc() on numeric, string and other comparable expression to access the OrderSpecifier instances. </p><p><span class="emphasis"><em>limit, offset, restrict :</em></span> Define the paging of the result. Limit for max results, 
+  offset for skipping rows and restrict for defining both in one call.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e503"></a>2.2.6.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting"> 
+QCustomer customer = QCustomer.customer;
+query.from(customer)
+    .orderBy(customer.lastName.asc(), customer.firstName.desc())
+    .list(customer);
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e510"></a>2.2.7.&nbsp;Grouping</h3></div></div></div><p>Grouping can be done in the following form</p><pre class="programlisting"> 
+query.from(customer)
+    .groupBy(customer.lastName)
+    .list(customer.lastName);
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e517"></a>2.2.8.&nbsp;Delete clauses</h3></div></div></div><p>Delete clauses in Querydsl JDOQL follow a simple delete-where-execute form. Here are some 
+  examples :</p><pre class="programlisting">   
+QCustomer customer = QCustomer.customer;
+<span class="hl-comment">// delete all customers</span>
+<span class="hl-keyword">new</span> JDOQLDeleteClause(pm, customer).execute();
+<span class="hl-comment">// delete all customers with a level less than 3</span>
+<span class="hl-keyword">new</span> JDOQLDeleteClause(pm, customer).where(customer.level.lt(<span class="hl-value">3</span>)).execute();  
+</pre><p>The second parameter of the JDOQLDeleteClause constructor is the entity to be deleted.
+  The where call is optional and the execute call performs the deletion and returns the amount of 
+  deleted entities.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e526"></a>2.2.9.&nbsp;Subqueries</h3></div></div></div><p>To create
+  a subquery you create a JDOQLSubQuery instance, define the query parameters via from, where 
+  etc and use unique or list to create a subquery, which is just a type-safe Querydsl expression 
+  for the query. unique is used for a unique result and list for a list result.</p><pre class="programlisting">
+QDepartment department = QDepartment.department;
+QDepartment d = <span class="hl-keyword">new</span> QDepartment(<span class="hl-string">"d"</span>);
+query.from(department)
+    .where(department.employees.size().eq(
+        <span class="hl-keyword">new</span> JDOQLSubQuery().from(d).unique(AggregationFunctions.max(d.employees.size()))
+     )).list(department);  
+</pre><p>represents the following native JDOQL query</p><pre class="programlisting">
+SELECT this FROM com.mysema.query.jdoql.models.company.Department
+WHERE this.employees.size() == 
+(SELECT max(d.employees.size()) FROM com.mysema.query.jdoql.models.company.Department d)
+</pre><p>Another example</p><pre class="programlisting">
+QEmployee employee = QEmployee.employee;
+QEmployee e = <span class="hl-keyword">new</span> QEmployee(<span class="hl-string">"e"</span>);
+query.from(employee)
+    .where(employee.weeklyhours.gt(
+        <span class="hl-keyword">new</span> JDOQLSubQuery().from(employee.department.employees, e)
+        .where(e.manager.eq(employee.manager))
+        .unique(AggregationFunctions.avg(e.weeklyhours))
+    )).list(employee);
+</pre><p>which represents the following native JDOQL query</p><pre class="programlisting">
+SELECT this FROM com.mysema.query.jdoql.models.company.Employee 
+WHERE this.weeklyhours &gt; 
+(SELECT avg(e.weeklyhours) FROM this.department.employees e WHERE e.manager == this.manager)
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e545"></a>2.2.10.&nbsp;Using Native SQL</h3></div></div></div><p>Querydsl supports Native SQL in JDO via the JDOSQLQuery class.</p><p>To use it, you must generate Querydsl query types for your SQL schema. This can be done 
+    for example
+    with the following Maven configuration : </p><pre class="programlisting">
+<span class="hl-tag">&lt;plugin&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${project.version}<span class="hl-tag">&lt;/version&gt;</span>
+  <span class="hl-tag">&lt;executions&gt;</span>
+    <span class="hl-tag">&lt;execution&gt;</span>
+      <span class="hl-tag">&lt;goals&gt;</span>
+        <span class="hl-tag">&lt;goal&gt;</span>export<span class="hl-tag">&lt;/goal&gt;</span>
+      <span class="hl-tag">&lt;/goals&gt;</span>
+    <span class="hl-tag">&lt;/execution&gt;</span>            
+  <span class="hl-tag">&lt;/executions&gt;</span>
+  <span class="hl-tag">&lt;configuration&gt;</span>
+    <span class="hl-tag">&lt;jdbcDriver&gt;</span>org.apache.derby.jdbc.EmbeddedDriver<span class="hl-tag">&lt;/jdbcDriver&gt;</span>
+    <span class="hl-tag">&lt;jdbcUrl&gt;</span>jdbc:derby:target/demoDB;create=true<span class="hl-tag">&lt;/jdbcUrl&gt;</span>
+    <span class="hl-tag">&lt;packageName&gt;</span>com.mycompany.mydomain<span class="hl-tag">&lt;/packageName&gt;</span>
+    <span class="hl-tag">&lt;targetFolder&gt;</span>${project.basedir}/target/generated-sources/java<span class="hl-tag">&lt;/targetFolder&gt;</span> 
+  <span class="hl-tag">&lt;/configuration&gt;</span>
+  <span class="hl-tag">&lt;dependencies&gt;</span>
+    <span class="hl-tag">&lt;dependency&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>org.apache.derby<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>derby<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>${derby.version}<span class="hl-tag">&lt;/version&gt;</span>
+    <span class="hl-tag">&lt;/dependency&gt;</span>
+  <span class="hl-tag">&lt;/dependencies&gt;</span>
+<span class="hl-tag">&lt;/plugin&gt;</span>
+</pre><p>When the query types have successfully been generated into the location of your choice, 
+  you can use them in your
+  queries.
+  </p><p>Single column query :</p><pre class="programlisting">
+<span class="hl-comment">// serialization templates</span>
+SQLTemplates templates = <span class="hl-keyword">new</span> DerbyTemplates(); 
+<span class="hl-comment">// query types (S* for SQL, Q* for domain types)</span>
+SAnimal cat = <span class="hl-keyword">new</span> SAnimal(<span class="hl-string">"cat"</span>);   
+SAnimal mate = <span class="hl-keyword">new</span> SAnimal(<span class="hl-string">"mate"</span>); 
+ 
+JDOSQLQuery query = <span class="hl-keyword">new</span> JDOSQLQuery(pm, templates);
+List&lt;String&gt; names = query.from(cat).list(cat.name);
+</pre><p>Query multiple columns :</p><pre class="programlisting">
+query = <span class="hl-keyword">new</span> JDOSQLQuery(pm, templates);
+List&lt;Object[]&gt; rows = query.from(cat).list(cat.id, cat.name);
+</pre><p>Query all columns :</p><pre class="programlisting">
+List&lt;Object[]&gt; rows = query.from(cat).list(cat.all());
+ </pre><p>Query with joins : </p><pre class="programlisting">
+query = <span class="hl-keyword">new</span> JDOSQLQuery(pm, templates);
+cats = query.from(cat)
+    .innerJoin(mate).on(cat.mateId.eq(mate.id))
+    .where(cat.dtype.eq(<span class="hl-string">"Cat"</span>), mate.dtype.eq(<span class="hl-string">"Cat"</span>))
+    .list(catEntity);
+</pre><p>Query and project into DTO : </p><pre class="programlisting">
+query = <span class="hl-keyword">new</span> JDOSQLQuery(pm, templates);
+List&lt;CatDTO&gt; catDTOs = query.from(cat)
+    .orderBy(cat.name.asc())
+    .list(ConstructorExpression.create(CatDTO.<span class="hl-keyword">class</span>, cat.id, cat.name));
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.&nbsp;Tutorials&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.3.&nbsp;Querying SQL</td></tr></table></div></body></html>

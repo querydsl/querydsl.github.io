@@ -1,0 +1,366 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.4.&nbsp;Querying SQL/JDBC sources</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s03.html" title="2.3.&nbsp;Querying Collections"><link rel="next" href="ch02s05.html" title="2.5.&nbsp;Querying Lucene sources"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.4.&nbsp;Querying SQL/JDBC sources</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s05.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="sql_integration"></a>2.4.&nbsp;Querying SQL/JDBC sources</h2></div></div></div><p>This chapter describes the query type generation and querying functionality of the SQL module.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e662"></a>2.4.1.&nbsp;Creating the Querydsl query types</h3></div></div></div><p>To get started export your schema into Querydsl query types like this :</p><pre class="programlisting">  
+java.sql.Connection conn = ...;
+MetaDataExporter exporter = <span class="hl-keyword">new</span> MetaDataExporter();
+exporter.setPackageName(<span class="hl-string">"com.myproject.mydomain"</span>);
+exporter.setTargetFolder(<span class="hl-keyword">new</span> File(<span class="hl-string">"src/main/java"</span>));
+exporter.export(conn.getMetaData());  
+</pre><p>This declares that the database schema is to be mirrored into the com.myproject.domain package in the src/main/java folder.</p><p>
+  The generated types have the table name transformed to mixed case as the class name and a similar mixed case transformation
+  applied to the columns which are available as property paths in the query type.
+  </p><p>
+  In addition to this primary key and foreign key constraints are provided as fields which can be used for compact join declarations. 
+  </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e675"></a>2.4.2.&nbsp;Maven integration</h3></div></div></div><p>This functionality is also available as a Maven plugin. The presented example can be declared like this in the POM :</p><pre class="programlisting">   
+<span class="hl-tag">&lt;plugin&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+  <span class="hl-tag">&lt;executions&gt;</span>
+    <span class="hl-tag">&lt;execution&gt;</span>
+      <span class="hl-tag">&lt;goals&gt;</span>
+        <span class="hl-tag">&lt;goal&gt;</span>export<span class="hl-tag">&lt;/goal&gt;</span>
+      <span class="hl-tag">&lt;/goals&gt;</span>
+    <span class="hl-tag">&lt;/execution&gt;</span>            
+  <span class="hl-tag">&lt;/executions&gt;</span>
+  <span class="hl-tag">&lt;configuration&gt;</span>
+    <span class="hl-tag">&lt;jdbcDriver&gt;</span>org.apache.derby.jdbc.EmbeddedDriver<span class="hl-tag">&lt;/jdbcDriver&gt;</span>
+    <span class="hl-tag">&lt;jdbcUrl&gt;</span>jdbc:derby:target/demoDB;create=true<span class="hl-tag">&lt;/jdbcUrl&gt;</span>
+    <span class="hl-tag">&lt;packageName&gt;</span>com.myproject.domain<span class="hl-tag">&lt;/packageName&gt;</span>
+    <span class="hl-tag">&lt;targetFolder&gt;</span>${project.basedir}/target/generated-sources/java<span class="hl-tag">&lt;/targetFolder&gt;</span>
+	<span class="hl-comment">&lt;!--
+      optional elements :      
+      * jdbcUser = connection user
+      * jdbcPassword = connection password
+      * namePrefix = name prefix for generated query classes (default: Q)
+      * schemaPattern = ant style pattern to restrict code generation to certain schemas (default: null)
+      * tableNamePattern = ant style pattern to restrict code generation to certain tables (default: null)
+      * exportBeans = set to true to generate beans as well, see section 2.14.13 (default: false)
+      * innerClassesForKeys = set to true to generate inner classes for keys (default: false)
+      * validationAnnotations = set to false to disable serialization of validation annotations (default: true)
+    --&gt;</span>     
+  <span class="hl-tag">&lt;/configuration&gt;</span>
+  <span class="hl-tag">&lt;dependencies&gt;</span>
+    <span class="hl-tag">&lt;dependency&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>org.apache.derby<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>derby<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>${derby.version}<span class="hl-tag">&lt;/version&gt;</span>
+    <span class="hl-tag">&lt;/dependency&gt;</span>
+  <span class="hl-tag">&lt;/dependencies&gt;</span>
+<span class="hl-tag">&lt;/plugin&gt;</span>  
+</pre><p>Use the goal <span class="emphasis"><em>test-export</em></span> to add the targetFolder as a test compile source root
+  instead of a compile source root.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e687"></a>2.4.3.&nbsp;ANT integration</h3></div></div></div><p>
+		The ANT task com.mysema.query.sql.ant.AntMetaDataExporter of the querydsl-sql module provides the same functionality as an ANT task.
+		The configuration parameters of the task are jdbcDriverClass, dbUrl, dbUserName, dbPassword, namePrefix, targetPackage, targetSourceFolder,
+		schemaPattern, tableNamePattern, exportBeans, innerClassesForKeys and validationAnnotations.
+	</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e692"></a>2.4.4.&nbsp;Querying</h3></div></div></div><p>Querying with Querydsl SQL is as simple as this :</p><pre class="programlisting"> 
+QCustomer customer = <span class="hl-keyword">new</span> QCustomer(<span class="hl-string">"c"</span>);
+
+SQLTemplates dialect = <span class="hl-keyword">new</span> HSQLDBTemplates(); <span class="hl-comment">// SQL-dialect</span>
+SQLQuery query = <span class="hl-keyword">new</span> SQLQueryImpl(connection, dialect); 
+List&lt;String&gt; lastNames = query.from(customer)
+    .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>))
+    .list(customer.lastName);
+</pre><p>which is transformed into the following sql query, assuming that the related table name is 
+    <span class="emphasis"><em>customer</em></span> and the columns <span class="emphasis"><em>first_name</em></span> and 
+    <span class="emphasis"><em>last_name</em></span> :</p><pre class="programlisting">     
+SELECT c.last_name 
+FROM customer c 
+WHERE c.first_name = 'Bob'
+</pre><p>Querydsl uses SQL dialects to customize the SQL serialization needed for different relational databases. The
+    available dialects are :</p><div class="itemizedlist"><ul type="disc"><li><p>DerbyTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with version 10.5.3</p></li></ul></div></li><li><p>HSQLDBTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with version 1.8.0.7</p></li></ul></div></li><li><p>H2Templates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with H2 1.2.133</p></li></ul></div></li><li><p>MySQLTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with MySQL CE 5.1</p></li></ul></div></li><li><p>OracleTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with Oracle 10g XE</p></li></ul></div></li><li><p>PostgresTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with Postgres 8.4</p></li></ul></div></li><li><p>SQLServerTemplates</p><div class="itemizedlist"><ul type="circle"><li><p>tested with SQL Server 2008</p></li></ul></div></li></ul></div></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e764"></a>2.4.5.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the SQLQuery interface like this</p><p><span class="emphasis"><em>from :</em></span> Define the query sources here.</p><p><span class="emphasis"><em>innerJoin, join, leftJoin, fullJoin, on</em></span> : Define join elements using these constructs. 
+  For the join methods the first argument is the join source and the second the target (alias).</p><p><span class="emphasis"><em>where :</em></span> Define the query filters, either in varargs form separated via commas or 
+  cascaded via the and-operator.</p><p><span class="emphasis"><em>groupBy :</em></span> Define the group by arguments in varargs form.</p><p><span class="emphasis"><em>having :</em></span> Define the having filter of the "group by" grouping as an varags array of 
+  Predicate expressions.</p><p><span class="emphasis"><em>orderBy :</em></span> Define the ordering of the result as an varargs array of order expressions. 
+  Use asc() and desc() on numeric, string and other comparable expression to access the OrderSpecifier instances. </p><p><span class="emphasis"><em>limit, offset, restrict :</em></span> Define the paging of the result. Limit for max results, 
+  offset for skipping rows and restrict for defining both in one call.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e797"></a>2.4.6.&nbsp;Joins</h3></div></div></div><p>Joins are constructed using the following syntax :</p><pre class="programlisting"> 
+query.from(customer)
+    .innerJoin(customer.company, company)
+    .list(customer.firstName, customer.lastName, company.name);
+</pre><p>and for a left join :</p><pre class="programlisting"> 
+query.from(customer)
+    .leftJoin(customer.company, company)
+    .list(customer.firstName, customer.lastName, company.name);
+</pre><p>Alternatively the join condition can also be written out  :</p><pre class="programlisting"> 
+query.from(customer)
+    .leftJoin(company).on(customer.company.eq(company.id))
+    .list(customer.firstName, customer.lastName, company.name);
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e812"></a>2.4.7.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting"> 
+query.from(customer)
+    .orderBy(customer.lastName.asc(), customer.firstName.asc())
+    .list(customer.firstName, customer.lastName);
+</pre><p>which is equivalent to the following native SQL</p><pre class="programlisting">  
+SELECT c.first_name, c.last_name
+FROM customer c 
+ORDER BY c.last_name ASC, c.first_name ASC
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e823"></a>2.4.8.&nbsp;Grouping</h3></div></div></div><p>Grouping can be done in the following form</p><pre class="programlisting"> 
+query.from(customer)
+    .groupBy(customer.lastName)
+    .list(customer.lastName);
+</pre><p>which is equivalent to the following native SQL</p><pre class="programlisting">  
+SELECT c.last_name 
+FROM customer c 
+GROUP BY c.last_name
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e835"></a>2.4.9.&nbsp;Using Subqueries</h3></div></div></div><p>  
+		To create a subquery you create a SQLSubQuery instance, define the query parameters via from, where etc and use unique or list to create a subquery, which is just a type-safe Querydsl expression for the query. unique is used for a unique (single) result and list for a list result.
+	</p><pre class="programlisting"> 
+query.from(customer).where(
+  customer.status.eq(<span class="hl-keyword">new</span> SQLSubQuery().from(customer2).unique(customer2.status.max()))
+  .list(customer.all())  
+</pre><p>Another example</p><pre class="programlisting"> 
+query.from(customer).where(  
+  customer.status.in(<span class="hl-keyword">new</span> SQLSubQuery().from(status).where(status.level.lt(<span class="hl-value">3</span>)).list(status.id))  
+  .list(customer.all())    
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e846"></a>2.4.10.&nbsp;Query extension support</h3></div></div></div><p>Custom query extensions to support engine specific syntax can be created by subclassing AbstractSQLQuery and adding flagging methods like 
+    in the given MySQLQuery example : </p><pre class="programlisting">          
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> MySQLQuery <span class="hl-keyword">extends</span> AbstractSQLQuery&lt;MySQLQuery&gt;{
+    
+    <span class="hl-keyword">public</span> MySQLQuery(Connection conn) {
+        <span class="hl-keyword">this</span>(conn, <span class="hl-keyword">new</span> MySQLTemplates(), <span class="hl-keyword">new</span> DefaultQueryMetadata());
+    }
+    
+    <span class="hl-keyword">public</span> MySQLQuery(Connection conn, SQLTemplates templates) {
+        <span class="hl-keyword">this</span>(conn, templates, <span class="hl-keyword">new</span> DefaultQueryMetadata());
+    }
+    
+    <span class="hl-keyword">protected</span> MySQLQuery(Connection conn, SQLTemplates templates, QueryMetadata metadata) {
+        <span class="hl-keyword">super</span>(conn, <span class="hl-keyword">new</span> Configuration(templates), metadata);
+    }
+    
+    <span class="hl-keyword">public</span> MySQLQuery bigResult(){
+        <span class="hl-keyword">return</span> addFlag(Position.AFTER_SELECT, <span class="hl-string">"SQL_BIG_RESULT "</span>);
+    }
+    
+    <span class="hl-keyword">public</span> MySQLQuery bufferResult(){
+        <span class="hl-keyword">return</span> addFlag(Position.AFTER_SELECT, <span class="hl-string">"SQL_BUFFER_RESULT "</span>);
+    }
+ 
+ 
+    <span class="hl-comment">// ...   </span>
+}        
+</pre><p>The flags are custom SQL snippets that can be inserted at specific points in the serialization. 
+  The supported positions are the enums of the com.mysema.query.QueryFlag.Position enum class.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e855"></a>2.4.11.&nbsp;Using DDL commands</h3></div></div></div><p>CREATE TABLE commands can be used in fluent form via the CreateTableClause. Here are some examples : </p><pre class="programlisting">      
+createTable(<span class="hl-string">"language"</span>)
+	.column(<span class="hl-string">"id"</span>, Integer.<span class="hl-keyword">class</span>).notNull()
+	.column(<span class="hl-string">"text"</span>, String.<span class="hl-keyword">class</span>).size(<span class="hl-value">256</span>).notNull()
+	.primaryKey(<span class="hl-string">"PK_LANGUAGE"</span>,<span class="hl-string">"id"</span>)
+	.execute();
+
+createTable(<span class="hl-string">"symbol"</span>)
+	.column(<span class="hl-string">"id"</span>, Long.<span class="hl-keyword">class</span>).notNull()
+	.column(<span class="hl-string">"lexical"</span>, String.<span class="hl-keyword">class</span>).size(<span class="hl-value">1024</span>).notNull()
+	.column(<span class="hl-string">"datatype"</span>, Long.<span class="hl-keyword">class</span>)
+	.column(<span class="hl-string">"lang"</span>, Integer.<span class="hl-keyword">class</span>)
+	.column(<span class="hl-string">"intval"</span>,Long.<span class="hl-keyword">class</span>)
+	.column(<span class="hl-string">"floatval"</span>,Double.<span class="hl-keyword">class</span>)
+	.column(<span class="hl-string">"datetimeval"</span>,Timestamp.<span class="hl-keyword">class</span>)
+	.primaryKey(<span class="hl-string">"PK_SYMBOL"</span>,<span class="hl-string">"id"</span>)
+	.foreignKey(<span class="hl-string">"FK_LANG"</span>,<span class="hl-string">"lang"</span>).references(<span class="hl-string">"language"</span>,<span class="hl-string">"id"</span>)
+	.execute();
+
+createTable(<span class="hl-string">"statement"</span>)
+	.column(<span class="hl-string">"model"</span>, Long.<span class="hl-keyword">class</span>)
+	.column(<span class="hl-string">"subject"</span>, Long.<span class="hl-keyword">class</span>).notNull()
+	.column(<span class="hl-string">"predicate"</span>, Long.<span class="hl-keyword">class</span>).notNull()
+	.column(<span class="hl-string">"object"</span>, Long.<span class="hl-keyword">class</span>).notNull()
+	.foreignKey(<span class="hl-string">"FK_MODEL"</span>,<span class="hl-string">"model"</span>).references(<span class="hl-string">"symbol"</span>,<span class="hl-string">"id"</span>)
+	.foreignKey(<span class="hl-string">"FK_SUBJECT"</span>,<span class="hl-string">"subject"</span>).references(<span class="hl-string">"symbol"</span>,<span class="hl-string">"id"</span>)
+	.foreignKey(<span class="hl-string">"FK_PREDICATE"</span>,<span class="hl-string">"predicate"</span>).references(<span class="hl-string">"symbol"</span>,<span class="hl-string">"id"</span>)
+	.foreignKey(<span class="hl-string">"FK_OBJECT"</span>,<span class="hl-string">"object"</span>).references(<span class="hl-string">"symbol"</span>,<span class="hl-string">"id"</span>)
+	.execute();    
+</pre><p>The factory method for CreateTableClause construction is :</p><pre class="programlisting">
+    <span class="hl-keyword">private</span> CreateTableClause createTable(String tableName) {
+        <span class="hl-keyword">return</span> <span class="hl-keyword">new</span> CreateTableClause(conn, templates, tableName);
+    }
+</pre><p>The constructor of CreateTableClause takes the connection, the templates and the table name. The rest is declared via
+  column, primaryKey and foreignKey invocations. 
+  </p><p>Here are the corresponding CREATE TABLE clauses as they are executed.</p><pre class="programlisting">      
+ CREATE TABLE language (
+  id INTEGER NOT NULL,
+  text VARCHAR(256) NOT NULL,
+  CONSTRAINT PK_LANGUAGE PRIMARY KEY(id)
+)
+
+ CREATE TABLE symbol (
+  id BIGINT NOT NULL,
+  lexical VARCHAR(1024) NOT NULL,
+  datatype BIGINT,
+  lang INTEGER,
+  intval BIGINT,
+  floatval DOUBLE,
+  datetimeval TIMESTAMP,
+  CONSTRAINT PK_SYMBOL PRIMARY KEY(id),
+  CONSTRAINT FK_LANG FOREIGN KEY(lang) REFERENCES language(id)
+)
+
+ CREATE TABLE statement (
+  model BIGINT,
+  subject BIGINT NOT NULL,
+  predicate BIGINT NOT NULL,
+  object BIGINT NOT NULL,
+  CONSTRAINT FK_MODEL FOREIGN KEY(model) REFERENCES symbol(id),
+  CONSTRAINT FK_SUBJECT FOREIGN KEY(subject) REFERENCES symbol(id),
+  CONSTRAINT FK_PREDICATE FOREIGN KEY(predicate) REFERENCES symbol(id),
+  CONSTRAINT FK_OBJECT FOREIGN KEY(object) REFERENCES symbol(id)
+)  
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e872"></a>2.4.12.&nbsp;Using Data manipulation commands</h3></div></div></div><p>All the DMLClause implementation in the Querydsl SQL module take three parameters, the Connection, the SQLTemplates instance
+    used in the queries and the main entity the DMLClause is bound to.
+    </p><p>Insert examples :</p><pre class="programlisting">
+QSurvey survey = QSurvey.survey;
+  
+<span class="hl-comment">// with columns</span>
+<span class="hl-keyword">new</span> SQLInsertClause(conn, dialect, survey)
+    .columns(survey.id, survey.name)
+    .values(<span class="hl-value">3</span>, <span class="hl-string">"Hello"</span>).execute();
+
+<span class="hl-comment">// without columns</span>
+<span class="hl-keyword">new</span> SQLInsertClause(conn, dialect, survey)
+    .values(<span class="hl-value">4</span>, <span class="hl-string">"Hello"</span>).execute();
+
+<span class="hl-comment">// with subquery</span>
+<span class="hl-keyword">new</span> SQLInsertClause(conn, dialect, survey)
+    .columns(survey.id, survey.name)
+    .select(<span class="hl-keyword">new</span> SQLSubQuery().from(survey2).list(survey2.id.add(<span class="hl-value">1</span>), survey2.name))
+    .execute();
+
+<span class="hl-comment">// with subquery, without columns</span>
+<span class="hl-keyword">new</span> SQLInsertClause(conn, dialect, survey)
+    .select(<span class="hl-keyword">new</span> SQLSubQuery().from(survey2).list(survey2.id.add(<span class="hl-value">10</span>), survey2.name))
+    .execute();
+</pre><p>Update examples :</p><pre class="programlisting">
+QSurvey survey = QSurvey.survey;
+
+<span class="hl-comment">// update with where</span>
+<span class="hl-keyword">new</span> SQLUpdateClause(conn, dialect, survey)
+    .where(survey.name.eq(<span class="hl-string">"XXX"</span>))
+    .set(survey.name, <span class="hl-string">"S"</span>)
+    .execute();
+  
+<span class="hl-comment">// update without where</span>
+<span class="hl-keyword">new</span> SQLUpdateClause(conn, dialect, survey)
+    .set(survey.name, <span class="hl-string">"S"</span>)
+    .execute()  
+</pre><p>Delete examples :</p><pre class="programlisting">
+QSurvey survey = QSurvey.survey;
+
+<span class="hl-comment">// delete with where</span>
+<span class="hl-keyword">new</span> SQLDelecteClause(conn, dialect, survey)
+    .where(survey.name.eq(<span class="hl-string">"XXX"</span>))
+    .execute();
+  
+<span class="hl-comment">// delete without where</span>
+<span class="hl-keyword">new</span> SQLDelecteClause(conn, dialect, survey)
+    .execute()  
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e889"></a>2.4.13.&nbsp;Batch support in DML clauses</h3></div></div></div><p>Querydsl SQL supports usage of JDBC batch updates through the DML APIs. If you have consecutive DML calls with a similar structure, 
+    you can bundle the the calls via addBatch() usage into one DMLClause. See the examples how it works for UPDATE, DELETE and INSERT.</p><pre class="programlisting">   	
+    <span class="hl-keyword">private</span> <span class="hl-keyword">static</span> <span class="hl-keyword">final</span> QSurvey survey = QSurvey.survey;
+
+    <span class="hl-annotation">@Test</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> updateExample() <span class="hl-keyword">throws</span> SQLException{
+        insert(survey).values(<span class="hl-value">2</span>, <span class="hl-string">"A"</span>).execute();
+        insert(survey).values(<span class="hl-value">3</span>, <span class="hl-string">"B"</span>).execute();
+
+        SQLUpdateClause update = update(survey);
+        update.set(survey.name, <span class="hl-string">"AA"</span>).where(survey.name.eq(<span class="hl-string">"A"</span>)).addBatch();
+        update.set(survey.name, <span class="hl-string">"BB"</span>).where(survey.name.eq(<span class="hl-string">"B"</span>)).addBatch();
+        assertEquals(<span class="hl-value">2</span>, update.execute());
+    }
+
+    <span class="hl-annotation">@Test</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> deleteExample() <span class="hl-keyword">throws</span> SQLException{
+        insert(survey).values(<span class="hl-value">2</span>, <span class="hl-string">"A"</span>).execute();
+        insert(survey).values(<span class="hl-value">3</span>, <span class="hl-string">"B"</span>).execute();
+
+        SQLDeleteClause delete = delete(survey);
+        delete.where(survey.name.eq(<span class="hl-string">"A"</span>)).addBatch();
+        delete.where(survey.name.eq(<span class="hl-string">"B"</span>)).addBatch();
+        assertEquals(<span class="hl-value">2</span>, delete.execute());
+    }
+
+    <span class="hl-annotation">@Test</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> insertExample(){
+        SQLInsertClause insert = insert(survey);
+        insert.set(survey.id, <span class="hl-value">5</span>).set(survey.name, <span class="hl-string">"5"</span>).addBatch();
+        insert.set(survey.id, <span class="hl-value">6</span>).set(survey.name, <span class="hl-string">"6"</span>).addBatch();
+        assertEquals(<span class="hl-value">2</span>, insert.execute());
+    }
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e896"></a>2.4.14.&nbsp;Bean class generation</h3></div></div></div><p>To create JavaBean DTO types for the tables of your schema use the MetaDataExporter like this :</p><pre class="programlisting">  
+java.sql.Connection conn = ...;
+MetaDataExporter exporter = <span class="hl-keyword">new</span> MetaDataExporter();
+exporter.setPackageName(<span class="hl-string">"com.myproject.mydomain"</span>);
+exporter.setTargetFolder(<span class="hl-keyword">new</span> File(<span class="hl-string">"src/main/java"</span>))	;
+exporter.setBeanSerializer(<span class="hl-keyword">new</span> BeanSerializer());   
+exporter.export(conn.getMetaData());  
+</pre><p>Now you can use the bean types as arguments to the populate method in DML clauses and you can project directly
+		to bean types in queries. Here is a simple example in JUnit form :</p><pre class="programlisting">    	
+    <span class="hl-annotation">@Test</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> Insert_Update_Query_and_Delete(){
+        QEmployee e = <span class="hl-keyword">new</span> QEmployee(<span class="hl-string">"e"</span>);
+           
+        <span class="hl-comment">// Insert</span>
+        Employee employee = <span class="hl-keyword">new</span> Employee();
+        employee.setFirstname(<span class="hl-string">"John"</span>);
+        Integer id = insert(e).populate(employee).executeWithKey(e.id);
+        employee.setId(id);
+
+        <span class="hl-comment">// Update</span>
+        employee.setLastname(<span class="hl-string">"Smith"</span>);
+        assertEquals(<span class="hl-value">1l</span>, update(e).populate(employee).where(e.id.eq(employee.getId())).execute());
+
+        <span class="hl-comment">// Query</span>
+        Employee smith = query().from(e).where(e.lastname.eq(<span class="hl-string">"Smith"</span>)).uniqueResult(e);
+        assertEquals(<span class="hl-string">"John"</span>, smith.getFirstname());
+        
+        <span class="hl-comment">// Delete </span>
+        assertEquals(<span class="hl-value">1l</span>, delete(e).where(e.id.eq(employee.getId())).execute());
+    }
+</pre><p>The factory methods used in the previous example are here :</p><pre class="programlisting">      	
+    <span class="hl-keyword">protected</span> SQLUpdateClause update(RelationalPath&lt;?&gt; e){
+        <span class="hl-keyword">return</span> <span class="hl-keyword">new</span> SQLUpdateClause(Connections.getConnection(), templates, e);
+    }
+
+    <span class="hl-keyword">protected</span> SQLInsertClause insert(RelationalPath&lt;?&gt; e){
+        <span class="hl-keyword">return</span> <span class="hl-keyword">new</span> SQLInsertClause(Connections.getConnection(), templates, e);
+    }
+
+    <span class="hl-keyword">protected</span> SQLDeleteClause delete(RelationalPath&lt;?&gt; e){
+        <span class="hl-keyword">return</span> <span class="hl-keyword">new</span> SQLDeleteClause(Connections.getConnection(), templates, e);
+    }
+
+    <span class="hl-keyword">protected</span> SQLMergeClause merge(RelationalPath&lt;?&gt; e){
+        <span class="hl-keyword">return</span> <span class="hl-keyword">new</span> SQLMergeClause(Connections.getConnection(), templates, e);
+    }
+
+    <span class="hl-keyword">protected</span> SQLQuery query() {
+        <span class="hl-keyword">return</span> <span class="hl-keyword">new</span> SQLQueryImpl(Connections.getConnection(), templates);  	
+  	}
+  	
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e911"></a>2.4.15.&nbsp;Custom syntax expressions</h3></div></div></div><p>
+		If you need to specify SQL function calls in Querydsl you can use TemplateExpressions to express them. For general
+		expressions you can use the SimpleTemplate class and for typed expressions BooleanTemplate, ComparableTemplate, DateTemplate,
+		DateTimeTemplate, EnumTemplate, NumberTemplate, StringTemplate and TimeTemplate.
+		</p><p>Here is an example for SimpleTemplate usage :</p><pre class="programlisting">
+Expression&lt;?&gt; arg1 = ...;
+Expression&lt;?&gt; arg2 = ...;
+Expression&lt;String&gt; expression = SimpleTemplate.create(String.<span class="hl-keyword">class</span>, <span class="hl-string">"myfunction({0},{1})"</span>, arg1, arg2);		
+</pre><p>And here is an example for a Number typed template expression :</p><pre class="programlisting">
+Expression&lt;?&gt; arg1 = ...;
+Expression&lt;?&gt; arg2 = ...;
+NumberExpression&lt;Integer&gt; expression = NumberTemplate.create(Integer.<span class="hl-keyword">class</span>, <span class="hl-string">"myfunction({0},{1})"</span>, arg1, arg2);		
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e924"></a>2.4.16.&nbsp;Custom types</h3></div></div></div><p>Querydsl SQL provides the possibility to declare custom type mappings for ResultSet/Statement interaction. The custom type mappings can be 
+	declared in com.mysema.query.sql.Configuration instances, which are supplied as constructor arguments to the actual queries :</p><pre class="programlisting">    
+    <span class="hl-annotation">@Test</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> ForSQLType(){
+        Configuration configuration = <span class="hl-keyword">new</span> Configuration(<span class="hl-keyword">new</span> H2Templates());
+        <span class="hl-comment">// overrides the mapping for Types.DATE</span>
+        configuration.register(<span class="hl-keyword">new</span> UtilDateType());
+    }
+	
+    <span class="hl-annotation">@Test</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> ForTableColumn(){
+        Configuration configuration = <span class="hl-keyword">new</span> Configuration(<span class="hl-keyword">new</span> H2Templates());
+        <span class="hl-comment">// declares a maping for the gender column in the person table</span>
+        configuration.register(<span class="hl-string">"person"</span>, <span class="hl-string">"gender"</span>,  <span class="hl-keyword">new</span> EnumByNameType&lt;Gender&gt;(Gender.<span class="hl-keyword">class</span>));
+        assertEquals(Gender.<span class="hl-keyword">class</span>, configuration.getJavaType(java.sql.Types.VARCHAR, <span class="hl-string">"person"</span>, <span class="hl-string">"gender"</span>));
+    }			
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.3.&nbsp;Querying Collections&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.5.&nbsp;Querying Lucene sources</td></tr></table></div></body></html>

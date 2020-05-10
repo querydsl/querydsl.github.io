@@ -1,0 +1,32 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.3.&nbsp;Path initialization</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch03.html" title="3.&nbsp;Advanced usage"><link rel="prev" href="ch03s02.html" title="3.2.&nbsp;Special expressions"><link rel="next" href="ch03s04.html" title="3.4.&nbsp;Custom type mappings"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.3.&nbsp;Path initialization</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">3.&nbsp;Advanced usage</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="paths"></a>3.3.&nbsp;Path initialization</h2></div></div></div><p>
+      By default Querydsl intializes only direct reference properties. In cases where longer initialization paths
+      are required, these have to be annotated in the domain types via com.mysema.query.annotations.QueryInit usage.
+      QueryInit is used on properties where deep initializations are needed. The following example demonstrates the
+      usage.       
+      </p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>      
+<span class="hl-keyword">class</span> Event {
+    <span class="hl-annotation">@QueryInit("customer")</span>
+    Account account;
+}      
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Account{
+    Customer customer;    
+}
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Customer{
+    String name;
+    <span class="hl-comment">// ...</span>
+}
+</pre><p>
+    This example enforces the initialization of the account.customer path, when an Event path is initialized
+    as a root path / variable. The path initialization format supports wildcards as well, e.g. "customer.*" or just "*".
+    </p><p>
+    The declarative path initialization replaces the manual one, which required the entity fields to be nonfinal. The
+    declarative format has the benefit to be applied to all top level instances of a Query type and to enable the usage
+    of final entity fields. 
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.2.&nbsp;Special expressions&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.4.&nbsp;Custom type mappings</td></tr></table></div></body></html>

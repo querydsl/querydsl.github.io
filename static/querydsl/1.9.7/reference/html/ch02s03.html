@@ -1,0 +1,110 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.3.&nbsp;Querying Collections</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s02.html" title="2.2.&nbsp;Querying JPA"><link rel="next" href="ch02s04.html" title="2.4.&nbsp;Querying SQL/JDBC sources"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.3.&nbsp;Querying Collections</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s04.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="collections_integration"></a>2.3.&nbsp;Querying Collections</h2></div></div></div><p>The querydsl-collections module can be used with generated query types and without. 
+  The first section describes the usage without generated query types :</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e548"></a>2.3.1.&nbsp;Usage without generated query types</h3></div></div></div><p>
+      To use querydsl-collections without generated query types you need to
+      use the Querydsl alias feature.
+      Here are some examples.
+    </p><p>
+      To get started, add the following static imports :
+  </p><pre class="programlisting">
+<span class="hl-keyword">import</span> <span class="hl-keyword">static</span> com.mysema.query.collections.MiniApi.*;
+<span class="hl-keyword">import</span> <span class="hl-keyword">static</span> com.mysema.query.alias.Alias.*; <span class="hl-comment">// for alias usage</span>
+</pre><p>
+      And now create an alias instance for the Cat class. Alias instances can only be created for
+      classes with an empty constructor. Make sure your class has one.
+    </p><p>  
+      The alias instance of type Cat and it's getter invocations are 
+      transformed into Querydsl paths by wrapping them into dollar method invocations. 
+       The call <span class="emphasis"><em>c.getKittens()</em></span> for example is internally
+      transformed into the property path c.kittens inside the dollar method.
+    </p><pre class="programlisting">
+Cat c = alias(Cat.<span class="hl-keyword">class</span>, <span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : from($(c),cats)
+  .where($(c.getKittens()).size().gt(<span class="hl-value">0</span>))
+  .list($(c.getName()))){
+    System.out.println(name);
+}
+</pre><p>
+      The following example is a variation of the previous, where the access
+      to the list size happens inside the dollar-method invocation.
+    </p><pre class="programlisting">
+Cat c = alias(Cat.<span class="hl-keyword">class</span>, <span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : from($(c),cats)
+  .where($(c.getKittens().size()).gt(<span class="hl-value">0</span>))
+  .list($(c.getName()))){
+    System.out.println(name);
+}
+</pre><p>
+      All non-primitive and non-String typed properties of aliases are aliases
+      themselves. So you may cascade method calls until you hit a
+      primitive or String type in the dollar-method scope.
+  </p><p>
+      e.g.
+  </p><pre class="programlisting">
+$(c.getMate().getName())
+</pre><p>
+      is transformed into <span class="emphasis"><em>c.mate.name</em></span> internally, but
+  </p><pre class="programlisting">
+$(c.getMate().getName().toLowerCase())
+</pre><p>
+      is not transformed properly, since the toLowerCase() invocation is not tracked.
+  </p><p>
+      Note also that you may only invoke getters, size(), contains(Object) and
+      get(int) on alias types. All other invocations throw exceptions.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e587"></a>2.3.2.&nbsp;Usage with generated query types</h3></div></div></div><p>
+      The example above can be expressed like this with generated query types
+    </p><pre class="programlisting">
+QCat cat = <span class="hl-keyword">new</span> QCat(<span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : from(cat,cats)
+  .where(cat.kittens.size().gt(<span class="hl-value">0</span>))
+  .list(cat.name)){
+    System.out.println(name);
+}
+</pre><p>When you use generated query types, you instantiate query types instead of alias instances and use the property
+   paths directly without any dollar-method wrapping.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e596"></a>2.3.3.&nbsp;Maven integration</h3></div></div></div><p>
+   If you are not using JPA or JDO you can generate Querydsl query types for your domain types by annotating them
+   with the com.mysema.query.annotations.QueryEntity annotation and adding the following plugin configuration into your
+   Maven configuration (pom.xml) :
+   </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+  <span class="hl-tag">&lt;plugins&gt;</span>
+    ...
+    <span class="hl-tag">&lt;plugin&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>maven-apt-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>0.3.2<span class="hl-tag">&lt;/version&gt;</span>
+      <span class="hl-tag">&lt;executions&gt;</span>
+        <span class="hl-tag">&lt;execution&gt;</span>
+          <span class="hl-tag">&lt;goals&gt;</span>
+            <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+          <span class="hl-tag">&lt;/goals&gt;</span>
+          <span class="hl-tag">&lt;configuration&gt;</span>
+            <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+            <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.QuerydslAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+          <span class="hl-tag">&lt;/configuration&gt;</span>
+        <span class="hl-tag">&lt;/execution&gt;</span>
+      <span class="hl-tag">&lt;/executions&gt;</span>
+    <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+  <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e603"></a>2.3.4.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the following tasks for Querydsl code generation :</p><pre class="programlisting">
+    <span class="hl-comment">&lt;!-- APT based code generation --&gt;</span>
+    <span class="hl-tag">&lt;javac</span> <span class="hl-attribute">srcdir</span>=<span class="hl-value">"${src}"</span> <span class="hl-attribute">classpathref</span>=<span class="hl-value">"cp"</span><span class="hl-tag">&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"-proc:only"</span><span class="hl-tag">/&gt;</span>      
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"-processor"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"com.mysema.query.apt.QuerydslAnnotationProcessor"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"-s"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"${generated}"</span><span class="hl-tag">/&gt;</span>
+    <span class="hl-tag">&lt;/javac&gt;</span>
+    
+    <span class="hl-comment">&lt;!-- compilation --&gt;</span>
+    <span class="hl-tag">&lt;javac</span> <span class="hl-attribute">classpathref</span>=<span class="hl-value">"cp"</span> <span class="hl-attribute">destdir</span>=<span class="hl-value">"${build}"</span><span class="hl-tag">&gt;</span>      
+      <span class="hl-tag">&lt;src</span> <span class="hl-attribute">path</span>=<span class="hl-value">"${src}"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;src</span> <span class="hl-attribute">path</span>=<span class="hl-value">"${generated}"</span><span class="hl-tag">/&gt;</span>
+    <span class="hl-tag">&lt;/javac&gt;</span>    
+</pre><p>Replace <span class="emphasis"><em>src</em></span> with your main source folder, <span class="emphasis"><em>generated</em></span> with your folder for generated sources 
+    and <span class="emphasis"><em>build</em></span> with your target folder.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.2.&nbsp;Querying JPA&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.4.&nbsp;Querying SQL/JDBC sources</td></tr></table></div></body></html>

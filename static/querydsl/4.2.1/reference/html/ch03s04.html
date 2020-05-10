@@ -1,0 +1,60 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.4.&nbsp;Alias usage</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl Reference Guide"><link rel="up" href="ch03.html" title="3.&nbsp;General usage"><link rel="prev" href="ch03s03.html" title="3.3.&nbsp;Code generation"><link rel="next" href="ch04.html" title="4.&nbsp;Troubleshooting"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.4.&nbsp;Alias usage</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">3.&nbsp;General usage</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="alias"></a>3.4.&nbsp;Alias usage</h2></div></div></div><p>
+    In cases where code generation is not an option, alias objects can be used as path
+    references for expression construction. They can be used via proxied Java Bean objects
+    through getter method invocations.
+  </p><p>
+    The following examples demonstrate how alias objects can be used as replacements
+    for expression creation based on generated types.
+  </p><p>
+    At first an example query with APT generated domain types:
+  </p><pre class="programlisting">
+QCat cat = <span class="hl-keyword">new</span> QCat(<span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : queryFactory.select(cat.name).from(cat,cats)
+    .where(cat.kittens.size().gt(<span class="hl-value">0</span>))
+    .fetch()) {
+    System.out.println(name);
+}
+</pre><p>
+    And now with an alias instance for the Cat class. The call <code class="code">c.getKittens()</code> inside
+    the dollar-method is internally transformed into the property path <code class="code">c.kittens</code>.
+  </p><pre class="programlisting">
+Cat c = alias(Cat.<span class="hl-keyword">class</span>, <span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : select($(c.getName())).from($(c),cats)
+    .where($(c.getKittens()).size().gt(<span class="hl-value">0</span>))
+    .fetch()) {
+    System.out.println(name);
+}
+</pre><p>
+    To use the alias functionality in your code, add the following two
+    imports
+  </p><pre class="programlisting">
+<span class="hl-keyword">import</span> <span class="hl-keyword">static</span> com.querydsl.core.alias.Alias.$;
+<span class="hl-keyword">import</span> <span class="hl-keyword">static</span> com.querydsl.core.alias.Alias.alias;
+</pre><p>
+    The following example is a variation of the previous, where the access to the list
+    size happens inside the dollar-method invocation.
+  </p><pre class="programlisting">
+Cat c = alias(Cat.<span class="hl-keyword">class</span>, <span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : queryFactory.select($(c.getName())).from($(c),cats)
+    .where($(c.getKittens().size()).gt(<span class="hl-value">0</span>))
+    .fetch()) {
+    System.out.println(name);
+}
+</pre><p>
+    All non-primitive and non-final typed properties of aliases are aliases
+    themselves. So you may cascade method calls until you hit a primitive or final type
+    in the dollar-method scope. e.g.
+  </p><pre class="programlisting">
+$(c.getMate().getName())
+</pre><p>
+    is transformed into *c.mate.name* internally, but
+  </p><pre class="programlisting">
+$(c.getMate().getName().toLowerCase())
+</pre><p>
+    is not transformed properly, since the <code class="code">toLowerCase()</code> invocation is not tracked.
+  </p><p>
+    Note also that you may only invoke getters, size(), contains(Object) and get(int)
+    on alias types. All other invocations throw exceptions.
+  </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.3.&nbsp;Code generation&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;4.&nbsp;Troubleshooting</td></tr></table></div></body></html>

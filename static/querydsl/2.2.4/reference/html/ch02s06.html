@@ -1,0 +1,25 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.6.&nbsp;Querying Hibernate Search sources</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s05.html" title="2.5.&nbsp;Querying Lucene sources"><link rel="next" href="ch02s07.html" title="2.7.&nbsp;Querying Mongodb"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.6.&nbsp;Querying Hibernate Search sources</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s05.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s07.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="hibernate_search_integration"></a>2.6.&nbsp;Querying Hibernate Search sources</h2></div></div></div><p>This chapter describes the querying functionality of
+		the Hibernate Search module.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1039"></a>2.6.1.&nbsp;Creating the Querydsl query types</h3></div></div></div><p>
+			See
+			<a href="ch02s02.html" title="2.2.&nbsp;Querying JPA">Querying JPA/Hibernate sources</a>
+			for instructions on how to create query types.
+		</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1047"></a>2.6.2.&nbsp;Querying</h3></div></div></div><p>Querying with Querydsl Hibernate Search is as simple as this :
+		</p><pre class="programlisting">
+QUser user = <span class="hl-keyword">new</span> QUser(<span class="hl-string">"user"</span>);
+
+SearchQuery&lt;User&gt; query = <span class="hl-keyword">new</span> SearchQuery&lt;User&gt;(session, user);
+
+List&lt;User&gt; list = query
+	.where(user.firstName.eq(<span class="hl-string">"Bob"</span>))
+	.list();
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1054"></a>2.6.3.&nbsp;General usage</h3></div></div></div><p>
+			For general usage instructions see
+			<a href="ch02s05.html" title="2.5.&nbsp;Querying Lucene sources">Querying Lucene sources</a>.
+		</p><p>
+          In the query serialization the only difference to the Querydsl Lucene module is that
+          paths are treated differently.
+          For <span class="emphasis"><em>org.hibernate.search.annotations.Field</em></span> annotated properties the name attribute is used 
+          with the property name as fallback for the field name.
+        </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s05.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s07.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.5.&nbsp;Querying Lucene sources&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.7.&nbsp;Querying Mongodb</td></tr></table></div></body></html>

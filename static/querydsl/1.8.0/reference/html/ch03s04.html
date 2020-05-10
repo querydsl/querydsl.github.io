@@ -1,0 +1,26 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.4.&nbsp;Inheritance in Querydsl types</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch03.html" title="3.&nbsp;General usage"><link rel="prev" href="ch03s03.html" title="3.3.&nbsp;Customizations"><link rel="next" href="ch03s05.html" title="3.5.&nbsp;Alias usage"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.4.&nbsp;Inheritance in Querydsl types</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s03.html">Prev</a>&nbsp;</td><th width="60%" align="center">3.&nbsp;General usage</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s05.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="type_inheritance"></a>3.4.&nbsp;Inheritance in Querydsl types</h2></div></div></div><p>
+      To avoid a generic signature in Querydsl query types the type hierarchies are flattened. The result is that
+      all generated query types are direct subclasses of com.mysema.query.types.path.PEntity and cannot be directly cast
+      to their Querydsl supertypes.
+      </p><p>
+      Instead of a direct Java cast, the supertype reference is accessible via the _super field. A _super-field is available
+      in all query types with a single supertype :
+      </p><pre class="programlisting">
+<span class="hl-comment">// from Account</span>
+QAccount <span class="hl-keyword">extends</span> PEntity&lt;Account&gt;{
+    <span class="hl-comment">// ...</span>
+}
+
+<span class="hl-comment">// from BankAccount extends Account</span>
+QBankAccount <span class="hl-keyword">extends</span> PEntity&lt;BankAccount&gt;{
+
+    <span class="hl-keyword">public</span> <span class="hl-keyword">final</span> QAccount _super = <span class="hl-keyword">new</span> QAccount(<span class="hl-keyword">this</span>);
+    
+    <span class="hl-comment">// ...</span>
+}            
+</pre><p>To cast from a supertype to a subtype you can use the as-method of the PEntity class :</p><pre class="programlisting">
+QAccount account = <span class="hl-keyword">new</span> QAccount(<span class="hl-string">"account"</span>);
+QBankAccount bankAccount = account.as(QBankAccount.<span class="hl-keyword">class</span>);    
+</pre></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s05.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.3.&nbsp;Customizations&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.5.&nbsp;Alias usage</td></tr></table></div></body></html>

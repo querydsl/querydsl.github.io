@@ -1,0 +1,218 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.2.&nbsp;Configuration</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch03.html" title="3.&nbsp;General usage"><link rel="prev" href="ch03.html" title="3.&nbsp;General usage"><link rel="next" href="ch03s03.html" title="3.3.&nbsp;Best practices"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.2.&nbsp;Configuration</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;</td><th width="60%" align="center">3.&nbsp;General usage</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s03.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1383"></a>3.2.&nbsp;Configuration</h2></div></div></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1386"></a>3.2.1.&nbsp;Path initialization</h3></div></div></div><p>
+      By default Querydsl initializes only direct reference properties. In cases where longer 
+      initialization paths are required, these have to be annotated in the domain types via 
+      com.mysema.query.annotations.QueryInit annotations. QueryInit is used on properties where 
+      deep initializations are needed. The following example demonstrates the usage.       
+      </p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>      
+<span class="hl-keyword">class</span> Event {
+    <span class="hl-annotation">@QueryInit("customer")</span>
+    Account account;
+}      
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Account{
+    Customer customer;    
+}
+
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">class</span> Customer{
+    String name;
+    <span class="hl-comment">// ...</span>
+}
+</pre><p>
+    This example enforces the initialization of the account.customer path, when an Event path is 
+    initialized as a root path / variable. The path initialization format supports wildcards as 
+    well, e.g. "customer.*" or just "*".
+    </p><p>
+    The automatic path initialization replaces the manual one, which required the entity fields to 
+    be non-final. The declarative format has the benefit to be applied to all top level instances of 
+    a Query type and to enable the usage of final entity fields. 
+    </p><p>
+    Automatic path initialization is the preferred initialization strategy, but manual 
+    initialization can be activated via the Config annotation, which is described below.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1399"></a>3.2.2.&nbsp;Customization of serialization</h3></div></div></div><p>
+      The serialization of Querydsl can be customized via Config annotations on packages and types. 
+      They customize the serialization of the annotated package or type.
+      </p><p>
+      The serialization options are 
+      <span class="emphasis"><em>entityAccessors</em></span> to generate accessor methods for entity paths instead of 
+      public final fields (default : false), <span class="emphasis"><em>listAccessors</em></span> to generate 
+      listProperty(int index) style methods (default : false), <span class="emphasis"><em>mapAccessors</em></span> to 
+      generate mapProperty(Key key) style accessor methods (default : false) and 
+      <span class="emphasis"><em>createDefaultVariable</em></span> to generate the default variable (default : true).
+      </p><p>Below are some examples.</p><p>Customization of Entity type serialization :</p><pre class="programlisting">
+<span class="hl-annotation">@Config(entityAccessors=true)</span>
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> User&nbsp;{
+	<span class="hl-comment">//...</span>
+}  	  
+</pre><p>Customization of package content :</p><pre class="programlisting">
+<span class="hl-annotation">@Config(listAccessors=true)</span>
+<span class="hl-keyword">package</span> com.mysema.query.domain.rel;
+
+<span class="hl-keyword">import</span> com.mysema.query.annotations.Config;
+</pre><p>
+    If you want to customize the serializer configuration globally, you can do this via the APT options 
+	<span class="emphasis"><em>querydsl.entityAccessors</em></span> to enable reference field accessors, 
+	<span class="emphasis"><em>querydsl.listAccessors</em></span> to enable accessors for direct indexed list access, 
+	<span class="emphasis"><em>querydsl.mapAccessors</em></span> to enable accessors for direct key based map access,
+	<span class="emphasis"><em>querydsl.prefix</em></span> to override the prefix for query types(default: Q),
+	<span class="emphasis"><em>querydsl.suffix</em></span> to set a suffix for query types,
+	<span class="emphasis"><em>querydsl.packageSuffix</em></span> to set a suffix for query type packages,
+	<span class="emphasis"><em>querydsl.createDefaultVariable</em></span> to set whether default variables are created.
+	</p><p>Using the Maven APT plugin this works for example like this : </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+  <span class="hl-tag">&lt;plugins&gt;</span>
+    ...
+    <span class="hl-tag">&lt;plugin&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>maven-apt-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>1.0.2<span class="hl-tag">&lt;/version&gt;</span>
+      <span class="hl-tag">&lt;executions&gt;</span>
+        <span class="hl-tag">&lt;execution&gt;</span>
+          <span class="hl-tag">&lt;goals&gt;</span>
+            <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+          <span class="hl-tag">&lt;/goals&gt;</span>
+          <span class="hl-tag">&lt;configuration&gt;</span>
+            <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+            <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.jpa.JPAAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+            <span class="hl-tag">&lt;options&gt;</span>
+              <span class="hl-tag">&lt;querydsl.entityAccessors&gt;</span>true<span class="hl-tag">&lt;/querydsl.entityAccessors&gt;</span>
+            <span class="hl-tag">&lt;/options&gt;</span>			
+          <span class="hl-tag">&lt;/configuration&gt;</span>
+        <span class="hl-tag">&lt;/execution&gt;</span>
+      <span class="hl-tag">&lt;/executions&gt;</span>
+    <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+  <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="custom_types"></a>3.2.3.&nbsp;Custom type mappings</h3></div></div></div><p>
+      Custom type mappings can be used on properties to override the derived Path type. This can be 
+      useful for example in cases where comparison and String operations should be blocked on 
+      certain String paths or Date / Time support for custom types needs to be added. Support for 
+      Date / Time types of the Joda time API and JDK (java.util.Date, Calendar and subtypes) 
+      is built in, but other APIs might need to be supported using this feature.
+      </p><p>The following example demonstrates the usage :</p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>      
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> MyEntity{      
+    <span class="hl-annotation">@QueryType(PropertyType.SIMPLE)</span>
+    <span class="hl-keyword">public</span> String stringAsSimple;
+        
+    <span class="hl-annotation">@QueryType(PropertyType.COMPARABLE)</span>
+    <span class="hl-keyword">public</span> String stringAsComparable;
+        
+    <span class="hl-annotation">@QueryType(PropertyType.NONE)</span>
+    <span class="hl-keyword">public</span> String stringNotInQuerydsl;    
+}        
+</pre><p>The value PropertyType.NONE can be used to skip a property in the Querydsl query type 
+      generation. This case is different from @Transient or @QueryTransient annotated properties, 
+      where properties are not persisted. PropertyType.NONE just omits the property from the 
+      Querydsl query type.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1466"></a>3.2.4.&nbsp;Delegate methods</h3></div></div></div><p>To declare a static method as a delegate method add the QueryDelegate annotation with the 
+	corresponding domain type as a value and provide a method 
+	signature that takes the corresponding Querydsl query type as the first argument.</p><p>Here is a simple example from a unit test: </p><pre class="programlisting">   
+    <span class="hl-annotation">@QueryEntity</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">static</span> <span class="hl-keyword">class</span> User{
+       
+        String name;
+       
+        User manager;
+       
+    }
+   
+    <span class="hl-annotation">@QueryDelegate(User.class)</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">static</span> BooleanPath isManagedBy(QUser user, User other){
+        <span class="hl-keyword">return</span> user.manager.eq(other);
+    }
+   
+</pre><p>And the generated methods in the QUser query type :</p><pre class="programlisting">   
+    <span class="hl-keyword">public</span> BooleanPath isManagedBy(QUser other) {
+        <span class="hl-keyword">return</span> com.mysema.query.domain.DelegateTest.isManagedBy(<span class="hl-keyword">this</span>, other);
+    }
+	
+</pre><p>Delegate methods can also be used to extend built-in types. Here are some examples </p><pre class="programlisting">   	
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QueryExtensions {
+
+    <span class="hl-annotation">@QueryDelegate(Date.class)</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">static</span> BooleanExpression inPeriod(DatePath&lt;Date&gt; date, Pair&lt;Date,Date&gt; period){
+        <span class="hl-keyword">return</span> date.goe(period.getFirst()).and(date.loe(period.getSecond()));
+    }
+
+    <span class="hl-annotation">@QueryDelegate(Timestamp.class)</span>
+    <span class="hl-keyword">public</span> <span class="hl-keyword">static</span> BooleanExpression inDatePeriod(DateTimePath&lt;Timestamp&gt; timestamp, Pair&lt;Date,Date&gt; period){
+        Timestamp first = <span class="hl-keyword">new</span> Timestamp(DateUtils.truncate(period.getFirst(), Calendar.DAY_OF_MONTH).getTime());
+        Calendar second = Calendar.getInstance();
+        second.setTime(DateUtils.truncate(period.getSecond(), Calendar.DAY_OF_MONTH));
+        second.add(<span class="hl-value">1</span>, Calendar.DAY_OF_MONTH);
+        <span class="hl-keyword">return</span> timestamp.goe(first).and(timestamp.lt(<span class="hl-keyword">new</span> Timestamp(second.getTimeInMillis())));
+    }
+    
+}    
+</pre><p>When delegate methods are declared for builtin types then subclasses with the proper 
+   delegate method usages are created : </p><pre class="programlisting">      
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QDate <span class="hl-keyword">extends</span> DatePath&lt;java.sql.Date&gt; {
+
+    <span class="hl-keyword">public</span> QDate(BeanPath&lt;? <span class="hl-keyword">extends</span> java.sql.Date&gt; entity) {
+        <span class="hl-keyword">super</span>(entity.getType(), entity.getMetadata());
+    }
+
+    <span class="hl-keyword">public</span> QDate(PathMetadata&lt;?&gt; metadata) {
+        <span class="hl-keyword">super</span>(java.sql.Date.<span class="hl-keyword">class</span>, metadata);
+    }
+
+    <span class="hl-keyword">public</span> BooleanExpression inPeriod(com.mysema.commons.lang.Pair&lt;java.sql.Date, java.sql.Date&gt; period) {
+        <span class="hl-keyword">return</span> QueryExtensions.inPeriod(<span class="hl-keyword">this</span>, period);
+    }
+
+}
+
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> QTimestamp <span class="hl-keyword">extends</span> DateTimePath&lt;java.sql.Timestamp&gt; {
+
+    <span class="hl-keyword">public</span> QTimestamp(BeanPath&lt;? <span class="hl-keyword">extends</span> java.sql.Timestamp&gt; entity) {
+        <span class="hl-keyword">super</span>(entity.getType(), entity.getMetadata());
+    }
+
+    <span class="hl-keyword">public</span> QTimestamp(PathMetadata&lt;?&gt; metadata) {
+        <span class="hl-keyword">super</span>(java.sql.Timestamp.<span class="hl-keyword">class</span>, metadata);
+    }
+
+    <span class="hl-keyword">public</span> BooleanExpression inDatePeriod(com.mysema.commons.lang.Pair&lt;java.sql.Date, java.sql.Date&gt; period) {
+        <span class="hl-keyword">return</span> QueryExtensions.inDatePeriod(<span class="hl-keyword">this</span>, period);
+    }
+
+}
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1487"></a>3.2.5.&nbsp;Query type generation for non annotated types</h3></div></div></div><p>
+		It is possible to create Querydsl query types for non annotated types by creating 
+		@QueryEntities annotations. Just place a QueryEntities annotation into a package of your 
+		choice and the classes to mirrored in the value attribute.
+		</p><p>To actually create the types use the com.mysema.query.apt.QuerydslAnnotationProcessor. 
+		In Maven you do it like this :</p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+  <span class="hl-tag">&lt;plugins&gt;</span>
+    ...
+    <span class="hl-tag">&lt;plugin&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>maven-apt-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>1.0.2<span class="hl-tag">&lt;/version&gt;</span>
+      <span class="hl-tag">&lt;executions&gt;</span>
+        <span class="hl-tag">&lt;execution&gt;</span>
+          <span class="hl-tag">&lt;goals&gt;</span>
+            <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+          <span class="hl-tag">&lt;/goals&gt;</span>
+          <span class="hl-tag">&lt;configuration&gt;</span>
+            <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+            <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.QuerydslAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+          <span class="hl-tag">&lt;/configuration&gt;</span>
+        <span class="hl-tag">&lt;/execution&gt;</span>
+      <span class="hl-tag">&lt;/executions&gt;</span>
+    <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+  <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.&nbsp;General usage&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.3.&nbsp;Best practices</td></tr></table></div></body></html>

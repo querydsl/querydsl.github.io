@@ -1,0 +1,132 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.3.&nbsp;Querying Collections</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch02.html" title="2.&nbsp;Getting started with Querydsl"><link rel="prev" href="ch02s02.html" title="2.2.&nbsp;Querying JPA/Hibernate sources"><link rel="next" href="ch02s04.html" title="2.4.&nbsp;Querying SQL/JDBC sources"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.3.&nbsp;Querying Collections</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Getting started with Querydsl</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s04.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="collections_integration"></a>2.3.&nbsp;Querying Collections</h2></div></div></div><p>
+    To use the querydsl-collections module with generated query
+    types, add
+    an appropriate APT configuration like in the querydsl-hql or querydsl-jdoql setup
+    setup.
+  </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e429"></a>2.3.1.&nbsp; Make the Querydsl collections API available in your class
+    </h3></div></div></div><p>
+      Add the following static import :
+  </p><pre class="programlisting">
+<span class="hl-keyword">import</span> <span class="hl-keyword">static</span> com.mysema.query.collections.MiniApi.*;
+<span class="hl-keyword">import</span> <span class="hl-keyword">static</span> com.mysema.query.alias.Alias.*; <span class="hl-comment">// for alias usage</span>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e436"></a>2.3.2.&nbsp;Use the simple API</h3></div></div></div><pre class="programlisting">
+List&lt;Cat&gt; cats = ...; <span class="hl-comment">// some value</span>
+QCat cat = <span class="hl-keyword">new</span> QCat(<span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (Cat cat : select(cats, cat.kittens.size().gt(<span class="hl-value">0</span>))){
+    System.out.println(cat.getName());
+}
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e441"></a>2.3.3.&nbsp;Use the full API</h3></div></div></div><p>
+      And here are some examples on using the full API
+  </p><pre class="programlisting">
+from(cat,cats).iterate(cat.name);
+from(cat,cats).iterate(cat.kittens);
+from(cat,cats).where(cat.kittens.size().gt(<span class="hl-value">0</span>)).iterate(cat.name);
+from(cat,cats).where(cat.name.eq(<span class="hl-string">"Kitty"</span>)).iterate(cat.name);
+from(cat,cats).where(cat.name.like(<span class="hl-string">"Kitt%"</span>)).iterate(cat.name);
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e448"></a>2.3.4.&nbsp;Use the factory methods</h3></div></div></div><p>
+      If you use the MiniApi without available expressions you can
+      use the
+      factory methods of the MiniApi, which are accessible via
+      the
+      dollar-method, e.g.
+  </p><pre class="programlisting">
+<span class="hl-keyword">for</span> (String s : from($(<span class="hl-string">"str"</span>), <span class="hl-string">"a"</span>,<span class="hl-string">"ab"</span>,<span class="hl-string">"cd"</span>,<span class="hl-string">"de"</span>).where($(<span class="hl-string">"str"</span>).startsWith(<span class="hl-string">"a"</span>)).iterate($(<span class="hl-string">"str"</span>))){
+    System.out.println(s);
+}
+</pre><p>
+      which prints out
+  </p><pre class="programlisting">
+a
+ab
+</pre><p>
+      For multiple variables the provided argument identifies the
+      created
+      path.
+  </p><p>
+      And here an example with a created integer path :
+  </p><pre class="programlisting">
+<span class="hl-keyword">for</span> (Integer i : from($(<span class="hl-value">0</span>),<span class="hl-value">1</span>,<span class="hl-value">2</span>,<span class="hl-value">3</span>,<span class="hl-value">4</span>).where($(<span class="hl-value">0</span>).lt(<span class="hl-value">4</span>)).iterate($(<span class="hl-value">0</span>))){
+    System.out.println(i);
+}
+</pre><p>
+      which prints out
+  </p><pre class="programlisting">
+1
+2
+3
+</pre><p>
+      And last but not least mixed arguments
+  </p><pre class="programlisting">
+<span class="hl-keyword">for</span> (Object o : from(<span class="hl-value">1</span>,<span class="hl-value">2</span>,<span class="hl-string">"abc"</span>,<span class="hl-value">5</span>,<span class="hl-value">3</span>).where($().ne(<span class="hl-string">"abc"</span>)).iterate($())){
+    System.out.println(o);
+}
+{</pre><p>
+      which prints out
+  </p><pre class="programlisting">
+1
+2
+5
+3
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e477"></a>2.3.5.&nbsp;Use the alias features</h3></div></div></div><p>
+      The alias usage builds on the factory methods for Expressions
+      and
+      extends them to support property access. Here are some
+      examples.
+    </p><p>
+      At first an example query with APT generated domain types :
+    </p><pre class="programlisting">
+QCat cat = <span class="hl-keyword">new</span> QCat(<span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : from(cat,cats)
+  .where(cat.kittens.size().gt(<span class="hl-value">0</span>))
+  .iterate(cat.name)){
+    System.out.println(name);
+}
+</pre><p>
+      And now with an alias instance for the Cat class. The call
+      "c.getKittens()" inside the dollar-method is internally
+      transformed into the property path c.kittens.
+  </p><pre class="programlisting">
+Cat c = alias(Cat.<span class="hl-keyword">class</span>, <span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : from($(c),cats)
+  .where($(c.getKittens()).size().gt(<span class="hl-value">0</span>))
+  .iterate($(c.getName()))){
+    System.out.println(name);
+}
+</pre><p>
+      The following example is a variation of the previous, where
+      the access
+      to the list size happens inside the dollar-method
+      invocation.
+    </p><pre class="programlisting">
+Cat c = alias(Cat.<span class="hl-keyword">class</span>, <span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : from($(c),cats)
+  .where($(c.getKittens().size()).gt(<span class="hl-value">0</span>))
+  .iterate($(c.getName()))){
+    System.out.println(name);
+}
+</pre><p>
+      All non-primitive and non-String typed properties of aliases
+      are aliases
+      themselves. So you may cascade method calls until you
+      hit a
+      primitive or String type in the dollar-method scope.
+  </p><p>
+      e.g.
+  </p><pre class="programlisting">
+$(c.getMate().getName())
+</pre><p>
+      is transformed into *c.mate.name* internally, but
+  </p><pre class="programlisting">
+$(c.getMate().getName().toLowerCase())
+</pre><p>
+      is not transformed properly, since the toLowerCase()
+      invocation is not
+      tracked.
+  </p><p>
+      Note also that you may only invoke getters, size(),
+      contains(Object) and
+      get(int) on alias types. All other invocations
+      throw exceptions.
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.2.&nbsp;Querying JPA/Hibernate sources&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.4.&nbsp;Querying SQL/JDBC sources</td></tr></table></div></body></html>

@@ -1,0 +1,72 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.3.&nbsp;Alternative code generation</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl - Reference Documentation"><link rel="up" href="ch03.html" title="3.&nbsp;General usage"><link rel="prev" href="ch03s02.html" title="3.2.&nbsp;Result post-processing"><link rel="next" href="ch03s04.html" title="3.4.&nbsp;Configuration"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.3.&nbsp;Alternative code generation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">3.&nbsp;General usage</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="d0e1661"></a>3.3.&nbsp;Alternative code generation</h2></div></div></div><p>The Java 6 APT annotation processing functionality is used in Querydsl for code generation 
+    in the JPA, JDO and Mongodb modules. For cases where annotated Java souces are not available,
+    such as the usage of a different JVM language such as Scala or Groovy or annotation addition
+    via bytecode manipulation the GenericExporter class can be used to scan the classpath
+    for annotated classes and generate query types for them.</p><p>GenericExporter can be used directly or via the querydsl-maven-plugin.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1668"></a>3.3.1.&nbsp;Direct usage</h3></div></div></div><p>To make GenericExporter available add a dependency to the querydsl-codegen module
+    	to your project, or to be more precise com.mysema.querydsl:querydsl-codegen:${querydsl.version}.</p><p>Below is an example for JPA</p><pre class="programlisting">    		
+GenericExporter exporter = <span class="hl-keyword">new</span> GenericExporter();
+exporter.setKeywords(Keywords.JPA);
+exporter.setEntityAnnotation(Entity.<span class="hl-keyword">class</span>);
+exporter.setEmbeddableAnnotation(Embeddable.<span class="hl-keyword">class</span>);
+exporter.setEmbeddedAnnotation(Embedded.<span class="hl-keyword">class</span>);        
+exporter.setSupertypeAnnotation(MappedSuperclass.<span class="hl-keyword">class</span>);
+exporter.setSkipAnnotation(Transient.<span class="hl-keyword">class</span>);
+exporter.setTargetFolder(<span class="hl-keyword">new</span> File(<span class="hl-string">"target/generated-sources/java"</span>));
+exporter.export(DomainClass.<span class="hl-keyword">class</span>.getPackage());    	
+</pre><p>This will export all the JPA annotated classes in the package of the DomainClass class
+		and subpackages to the target/generated-sources/java directory.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1679"></a>3.3.2.&nbsp;Usage via Maven</h3></div></div></div><p>The goals generic-export, jpa-export and jdo-export of the querydsl-maven-plugin
+    	can be used for GenericExporter usage via Maven.</p><p>Here is an example for JPA annotated classes</p><pre class="programlisting">    		
+<span class="hl-tag">&lt;plugin&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>  
+  <span class="hl-tag">&lt;executions&gt;</span>
+    <span class="hl-tag">&lt;execution&gt;</span>    
+      <span class="hl-tag">&lt;goals&gt;</span>
+        <span class="hl-tag">&lt;goal&gt;</span>jpa-export<span class="hl-tag">&lt;/goal&gt;</span>
+      <span class="hl-tag">&lt;/goals&gt;</span>
+      <span class="hl-tag">&lt;configuration&gt;</span>
+        <span class="hl-tag">&lt;targetFolder&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/targetFolder&gt;</span>
+        <span class="hl-tag">&lt;packages&gt;</span>
+          <span class="hl-tag">&lt;package&gt;</span>com.example.domain<span class="hl-tag">&lt;/package&gt;</span>
+        <span class="hl-tag">&lt;/packages&gt;</span>
+      <span class="hl-tag">&lt;/configuration&gt;</span>      
+    <span class="hl-tag">&lt;/execution&gt;</span>
+  <span class="hl-tag">&lt;/executions&gt;</span>
+<span class="hl-tag">&lt;/plugin&gt;</span>    		
+</pre><p>This will export the JPA annotated classes of the com.example.domain package
+		and subpackages to the target/generated-sources/java directory.</p><p>If you need Scala output of the classes, use a variant of the following configuration</p><pre class="programlisting">    					
+<span class="hl-tag">&lt;plugin&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>  
+  <span class="hl-tag">&lt;dependencies&gt;</span>
+    <span class="hl-tag">&lt;dependency&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-scala<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>${project.version}<span class="hl-tag">&lt;/version&gt;</span>
+    <span class="hl-tag">&lt;/dependency&gt;</span>
+    <span class="hl-tag">&lt;dependency&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>org.scala-lang<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>scala-library<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>${scala.version}<span class="hl-tag">&lt;/version&gt;</span>
+    <span class="hl-tag">&lt;/dependency&gt;</span>
+  <span class="hl-tag">&lt;/dependencies&gt;</span>
+  <span class="hl-tag">&lt;executions&gt;</span>
+    <span class="hl-tag">&lt;execution&gt;</span>
+      <span class="hl-tag">&lt;goals&gt;</span>
+        <span class="hl-tag">&lt;goal&gt;</span>jpa-export<span class="hl-tag">&lt;/goal&gt;</span>
+      <span class="hl-tag">&lt;/goals&gt;</span>
+      <span class="hl-tag">&lt;configuration&gt;</span>
+        <span class="hl-tag">&lt;targetFolder&gt;</span>target/generated-sources/scala<span class="hl-tag">&lt;/targetFolder&gt;</span>
+        <span class="hl-tag">&lt;scala&gt;</span>true<span class="hl-tag">&lt;/scala&gt;</span>
+        <span class="hl-tag">&lt;packages&gt;</span>
+          <span class="hl-tag">&lt;package&gt;</span>com.example.domain<span class="hl-tag">&lt;/package&gt;</span>
+        <span class="hl-tag">&lt;/packages&gt;</span>       
+      <span class="hl-tag">&lt;/configuration&gt;</span>
+    <span class="hl-tag">&lt;/execution&gt;</span>
+  <span class="hl-tag">&lt;/executions&gt;</span>
+<span class="hl-tag">&lt;/plugin&gt;</span>    			
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s04.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">3.2.&nbsp;Result post-processing&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.4.&nbsp;Configuration</td></tr></table></div></body></html>

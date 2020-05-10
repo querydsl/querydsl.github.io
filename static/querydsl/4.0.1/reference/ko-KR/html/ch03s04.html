@@ -1,0 +1,56 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.4. &#48324;&#52845; &#49324;&#50857;&#48277;</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl - &#47112;&#54140;&#47088;&#49828; &#47928;&#49436;"><link rel="up" href="ch03.html" title="3&#51109;. &#51068;&#48152; &#49324;&#50857;&#48277;"><link rel="prev" href="ch03s03.html" title="3.3. &#53076;&#46300; &#49373;&#49457;"><link rel="next" href="ch04.html" title="4&#51109;. &#47928;&#51228;&#54644;&#44208;"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.4. &#48324;&#52845; &#49324;&#50857;&#48277;</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s03.html">&#51060;&#51204;</a>&nbsp;</td><th width="60%" align="center">3&#51109;. &#51068;&#48152; &#49324;&#50857;&#48277;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch04.html">&#45796;&#51020;</a></td></tr></table><hr></div><div class="sect1" lang="ko-KR"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="alias"></a>3.4. &#48324;&#52845; &#49324;&#50857;&#48277;</h2></div></div></div><p>
+    &#53076;&#46300; &#49373;&#49457;&#51012; &#54624; &#49688; &#50630;&#45716; &#44221;&#50864;, &#54364;&#54788;&#49885; &#49373;&#49457;&#51012; &#50948;&#54620; &#44221;&#47196; &#52280;&#51312; &#47785;&#51201;&#51004;&#47196; &#48324;&#52845; &#44061;&#52404;&#47484; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+    &#51088;&#48148;&#48712; &#44061;&#52404;&#51032; &#54532;&#47197;&#49884;&#47484; &#49373;&#49457;&#54616;&#44256; &#54532;&#47197;&#49884; &#44061;&#52404;&#51032; getter &#47700;&#49436;&#46300;&#47484; &#44221;&#47196;&#47196; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+  </p><p>
+    &#45796;&#51020; &#50696;&#51228;&#45716; &#49373;&#49457;&#46108; &#53440;&#51077;&#51012; &#51060;&#50857;&#54620; &#54364;&#54788;&#49885; &#49373;&#49457;&#51012; &#45824;&#49888;&#54644;&#49436; &#50612;&#46523;&#44172; &#48324;&#52845; &#44061;&#52404;&#47484; &#49324;&#50857;&#54624; &#49688; &#51080;&#45716; &#48372;&#50668;&#51456;&#45796;.
+  </p><p>
+    &#47676;&#51200; &#45796;&#51020; &#50696;&#51228;&#45716; APT&#44032; &#49373;&#49457;&#46108; &#46020;&#47700;&#51064; &#53440;&#51077;&#51012; &#51060;&#50857;&#54644;&#49436; &#53244;&#47532;&#47484; &#49892;&#54665;&#54616;&#45716; &#53076;&#46300;&#47484; &#48372;&#51088;.
+  </p><pre class="programlisting">
+QCat cat = <span class="hl-keyword">new</span> QCat(<span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : query.from(cat,cats)
+    .where(cat.kittens.size().gt(<span class="hl-value">0</span>))
+    .list(cat.name)) {
+    System.out.println(name);
+}
+</pre><p>
+    &#44536;&#47532;&#44256;, &#45796;&#51020;&#51008; Cal &#53364;&#47000;&#49828;&#47484; &#51060;&#50857;&#54644;&#49436; &#48324;&#52845; &#51064;&#49828;&#53556;&#49828;&#47484; &#49324;&#50857;&#54616;&#45716; &#50696;&#51060;&#45796;.
+    $ &#47700;&#49436;&#46300; &#54028;&#46972;&#48120;&#53552;&#51064; <code class="code">c.getKittens()</code>&#45716; &#45236;&#48512;&#51201;&#51004;&#47196; &#54532;&#47196;&#54140;&#54000; &#44221;&#47196; <code class="code">c.kittens</code>&#47196; &#48320;&#54872;&#46108;&#45796;.
+  </p><pre class="programlisting">
+Cat c = alias(Cat.<span class="hl-keyword">class</span>, <span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : query.from($(c),cats)
+    .where($(c.getKittens()).size().gt(<span class="hl-value">0</span>))
+    .list($(c.getName()))) {
+    System.out.println(name);
+}
+</pre><p>
+    &#48324;&#52845; &#44592;&#45733;&#51012; &#49324;&#50857;&#54616;&#47140;&#47732; &#45796;&#51020;&#51032; &#46160; import&#47484; &#52628;&#44032;&#54644;&#50556; &#54620;&#45796;.
+  </p><pre class="programlisting">
+<span class="hl-keyword">import</span> <span class="hl-keyword">static</span> com.querydsl.core.alias.Alias.$;
+<span class="hl-keyword">import</span> <span class="hl-keyword">static</span> com.querydsl.core.alias.Alias.alias;
+</pre><p>
+    &#45796;&#51020; &#50696;&#45716; &#50526; &#50696;&#51228;&#51032; &#48320;&#54805;&#51060;&#45796;. $ &#47700;&#49436;&#46300; &#50504;&#50640;&#49436; &#47532;&#49828;&#53944;&#51032; size()&#50640; &#51217;&#44540;&#54616;&#44256; &#51080;&#45796;.
+  </p><pre class="programlisting">
+Cat c = alias(Cat.<span class="hl-keyword">class</span>, <span class="hl-string">"cat"</span>);
+<span class="hl-keyword">for</span> (String name : query.from($(c),cats)
+    .where($(c.getKittens().size()).gt(<span class="hl-value">0</span>))
+    .list($(c.getName()))) {
+    System.out.println(name);
+}
+</pre><p>
+    &#44592;&#48376; &#45936;&#51060;&#53552; &#53440;&#51077;&#51060; &#50500;&#45768;&#44256; final&#51060; &#50500;&#45772; &#47784;&#46304; &#48324;&#52845; &#54532;&#47196;&#54140;&#54000;&#45716; &#48324;&#52845; &#51088;&#52404;&#51060;&#45796;.
+    &#46384;&#46972;&#49436;, $ &#47700;&#49436;&#46300; &#45236;&#50640;&#49436; &#44592;&#48376; &#45936;&#51060;&#53552; &#53440;&#51077;&#51060;&#45208; final &#53440;&#51077;&#51060; &#45208;&#50724;&#44592; &#51204;&#44620;&#51648; &#47700;&#49436;&#46300;&#47484;
+    &#51060;&#50612;&#49436; &#54840;&#52636;&#54624; &#49688; &#51080;&#45796;. &#45796;&#51020;&#51008; &#50696;&#51060;&#45796;.
+  </p><pre class="programlisting">
+$(c.getMate().getName())
+</pre><p>
+    is transformed into *c.mate.name* internally, but
+  </p><pre class="programlisting">
+$(c.getMate().getName().toLowerCase())
+</pre><p>
+    &#51060; &#53076;&#46300;&#45716; &#45236;&#48512;&#51201;&#51004;&#47196; <code class="code">toLowerCase()</code>&#51004;&#47196; &#48320;&#54872;&#46108;&#45796;.
+  </p><p>
+    &#48324;&#52845; &#53440;&#51077;&#50640;&#49436;&#45716; getters, size(), contains(Object), get(int)&#47564; &#54840;&#52636;&#54624; &#49688; &#51080;&#51020;&#50640; &#50976;&#51032;&#54616;&#51088;.
+    &#47784;&#46304; &#45796;&#47480; &#47700;&#49436;&#46300; &#54840;&#52636;&#51008; &#51061;&#49481;&#49496;&#51012; &#48156;&#49373;&#49884;&#53416;&#45796;.
+  </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch03s03.html">&#51060;&#51204;</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch03.html">&#50948;&#47196;</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch04.html">&#45796;&#51020;</a></td></tr><tr><td width="40%" align="left" valign="top">3.3. &#53076;&#46300; &#49373;&#49457;&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">&#52376;&#51020;&#51004;&#47196;</a></td><td width="40%" align="right" valign="top">&nbsp;4&#51109;. &#47928;&#51228;&#54644;&#44208;</td></tr></table></div></body></html>

@@ -1,0 +1,296 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.2. JDO &#53244;&#47532;</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl - &#47112;&#54140;&#47088;&#49828; &#47928;&#49436;"><link rel="up" href="ch02.html" title="2&#51109;. &#53916;&#53664;&#47532;&#50620;"><link rel="prev" href="ch02.html" title="2&#51109;. &#53916;&#53664;&#47532;&#50620;"><link rel="next" href="ch02s03.html" title="2.3. SQL &#53244;&#47532;"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.2. JDO &#53244;&#47532;</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">&#51060;&#51204;</a>&nbsp;</td><th width="60%" align="center">2&#51109;. &#53916;&#53664;&#47532;&#50620;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s03.html">&#45796;&#51020;</a></td></tr></table><hr></div><div class="sect1" lang="ko-KR"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jdo_integration"></a>2.2. JDO &#53244;&#47532;</h2></div></div></div><p>
+    Querydsl&#51008; &#50689;&#49549; &#46020;&#47700;&#51064; &#47784;&#45944;&#50640; &#45824;&#54644; &#53244;&#47532;&#54624; &#49688; &#51080;&#45716; &#48276;&#50857;&#51201;&#51064; &#51221;&#51201; &#53440;&#51077; &#44396;&#47928;&#51012; &#51221;&#51032;&#54616;&#44256; &#51080;&#45796;.
+    JDO&#50752; JPA&#45716; Querydsl&#51060; &#51648;&#50896;&#54616;&#45716; &#51452;&#50836; &#44592;&#49696;&#51060;&#45796;. &#51060; &#50504;&#45236; &#47928;&#49436;&#50640;&#49436;&#45716; JDO&#50752; &#54632;&#44760; Querydsl&#51012;
+    &#49324;&#50857;&#54616;&#45716; &#48169;&#48277;&#51012; &#49444;&#47749;&#54620;&#45796;.
+  </p><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e440"></a>2.2.1. &#47700;&#51060;&#48656; &#53685;&#54633;</h3></div></div></div><p>
+      &#47700;&#51060;&#48656; &#54532;&#47196;&#51229;&#53944;&#51032; &#51032;&#51316; &#49444;&#51221;&#50640; &#45796;&#51020;&#51012; &#52628;&#44032;&#54620;&#45796;.
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-apt<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+  <span class="hl-tag">&lt;scope&gt;</span>provided<span class="hl-tag">&lt;/scope&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>        
+    
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-jdo<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>org.slf4j<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>slf4j-log4j12<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>1.6.1<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>    
+</pre><p>
+      &#45796;&#51020;&#51004;&#47196; Querydsl&#50640;&#49436; &#53244;&#47532; &#53440;&#51077;&#51012; &#49373;&#49457;&#54616;&#44592; &#50948;&#54644; &#49324;&#50857;&#54616;&#45716; &#47700;&#51060;&#48656; APT &#54540;&#47084;&#44536;&#51064;&#51012; &#49444;&#51221;&#54620;&#45796;.
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+    <span class="hl-tag">&lt;plugins&gt;</span>
+      ...
+      <span class="hl-tag">&lt;plugin&gt;</span>
+        <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+        <span class="hl-tag">&lt;artifactId&gt;</span>apt-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+        <span class="hl-tag">&lt;version&gt;</span>1.1.3<span class="hl-tag">&lt;/version&gt;</span>
+        <span class="hl-tag">&lt;executions&gt;</span>
+          <span class="hl-tag">&lt;execution&gt;</span>
+            <span class="hl-tag">&lt;goals&gt;</span>
+              <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+            <span class="hl-tag">&lt;/goals&gt;</span>
+            <span class="hl-tag">&lt;configuration&gt;</span>
+              <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+              <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.jdo.JDOAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+            <span class="hl-tag">&lt;/configuration&gt;</span>
+          <span class="hl-tag">&lt;/execution&gt;</span>
+        <span class="hl-tag">&lt;/executions&gt;</span>
+      <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+    <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre><p>
+      JDOAnnotationProcessor&#45716; <code class="code">javax.jdo.annotations.PersistenceCapable</code> &#50528;&#45432;&#53580;&#51060;&#49496;&#51060;
+      &#51201;&#50857;&#46108; &#53440;&#51077;&#51012; &#52286;&#50500;&#49436; &#44536; &#53440;&#51077;&#51012; &#50948;&#54620; &#53244;&#47532; &#53440;&#51077;&#51012; &#49373;&#49457;&#54620;&#45796;.
+    </p><p>
+      `mvn clean install`&#51012; &#49892;&#54665;&#54616;&#47732;, target/generated-sources/java &#46356;&#47113;&#53664;&#47532;&#50640; Query &#53440;&#51077;&#51060; &#49373;&#49457;&#46108;&#45796;.
+    </p><p>
+      &#51060;&#53364;&#47549;&#49828;&#47484; &#49324;&#50857;&#54624; &#44221;&#50864;, `mvn eclipse:eclipse`&#51012; &#49892;&#54665;&#54616;&#47732;
+      target/generated-sources/java &#46356;&#47113;&#53664;&#47532;&#44032; &#49548;&#49828; &#54260;&#45908;&#50640; &#52628;&#44032;&#46108;&#45796;.
+    </p><p>
+      &#49373;&#49457;&#46108; Query &#53440;&#51077;&#51012; &#51060;&#50857;&#54616;&#47732; JDO &#53244;&#47532; &#51064;&#49828;&#53556;&#49828;&#50752; &#53244;&#47532; &#46020;&#47700;&#51064; &#47784;&#45944; &#51064;&#49828;&#53556;&#49828;&#47484; &#49373;&#49457;&#54624; &#49688; &#51080;&#45796;.
+    </p></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e462"></a>2.2.2. Ant &#53685;&#54633;</h3></div></div></div><p>&#53364;&#47000;&#49828;&#54056;&#49828;&#50640; full-deps&#50640; &#54252;&#54632;&#46108; jar &#54028;&#51068;&#46308;&#51012; &#50948;&#52824;&#49884;&#53412;&#44256;,
+      &#45796;&#51020; &#53468;&#49828;&#53356;&#47484; &#51060;&#50857;&#54644;&#49436; Querydsl &#53076;&#46300;&#47484; &#49373;&#49457;&#54620;&#45796;.
+    </p><pre class="programlisting">
+    <span class="hl-comment">&lt;!-- APT based code generation --&gt;</span>
+    <span class="hl-tag">&lt;javac</span> <span class="hl-attribute">srcdir</span>=<span class="hl-value">"${src}"</span> <span class="hl-attribute">classpathref</span>=<span class="hl-value">"cp"</span><span class="hl-tag">&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"-proc:only"</span><span class="hl-tag">/&gt;</span>      
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"-processor"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"com.mysema.query.apt.jdo.JDOAnnotationProcessor"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"-s"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;compilerarg</span> <span class="hl-attribute">value</span>=<span class="hl-value">"${generated}"</span><span class="hl-tag">/&gt;</span>
+    <span class="hl-tag">&lt;/javac&gt;</span>
+    
+    <span class="hl-comment">&lt;!-- compilation --&gt;</span>
+    <span class="hl-tag">&lt;javac</span> <span class="hl-attribute">classpathref</span>=<span class="hl-value">"cp"</span> <span class="hl-attribute">destdir</span>=<span class="hl-value">"${build}"</span><span class="hl-tag">&gt;</span>      
+      <span class="hl-tag">&lt;src</span> <span class="hl-attribute">path</span>=<span class="hl-value">"${src}"</span><span class="hl-tag">/&gt;</span>
+      <span class="hl-tag">&lt;src</span> <span class="hl-attribute">path</span>=<span class="hl-value">"${generated}"</span><span class="hl-tag">/&gt;</span>
+    <span class="hl-tag">&lt;/javac&gt;</span>    
+</pre><p>
+      <span class="emphasis"><em>src</em></span>&#47484; &#47700;&#51064; &#49548;&#49828; &#54260;&#45908;&#47196; &#48320;&#44221;&#54616;&#44256;,
+      <span class="emphasis"><em>generated</em></span>&#47484; &#49373;&#49457;&#46108; &#49548;&#49828;&#47484; &#50948;&#54620; &#54260;&#45908;&#47196; &#48320;&#44221;&#54616;&#44256;,
+      <span class="emphasis"><em>build</em></span>&#47484; &#53364;&#47000;&#49828; &#49373;&#49457; &#54260;&#45908;&#47196; &#48320;&#44221;&#54620;&#45796;.
+    </p></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e480"></a>2.2.3. &#53244;&#47532; &#53440;&#51077; &#49324;&#50857;&#54616;&#44592;</h3></div></div></div><p>
+      Querydsl&#51012; &#51060;&#50857;&#54644;&#49436; &#53244;&#47532;&#47484; &#51089;&#49457;&#54616;&#47140;&#47732;, &#48320;&#49688;&#50752; Query &#44396;&#54788;&#52404;&#47484; &#49373;&#49457;&#54644;&#50556; &#54620;&#45796;.
+      &#47676;&#51200; &#48320;&#49688;&#48512;&#53552; &#49884;&#51089;&#54644;&#48372;&#51088;.
+    </p><p>
+      &#45796;&#51020;&#44284; &#44057;&#51008; &#46020;&#47700;&#51064; &#53440;&#51077;&#51060; &#51080;&#45796;&#44256; &#44032;&#51221;&#54616;&#45796;.
+    </p><pre class="programlisting">
+<span class="hl-annotation">@PersistenceCapable</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> Customer {
+  <span class="hl-keyword">private</span> String firstName;
+  <span class="hl-keyword">private</span> String lastName;
+  
+  <span class="hl-keyword">public</span> String getFirstName(){
+    <span class="hl-keyword">return</span> firstName;
+  }
+  
+  <span class="hl-keyword">public</span> String getLastName(){
+    <span class="hl-keyword">return</span> lastName;
+  }
+  
+  <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> setFirstName(String fn){
+    firstName = fn;
+  }
+  
+  <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> setLastName(String ln)[
+    lastName = ln;
+  }
+}
+</pre><p>
+      Querydsl&#51008; Customer&#50752; &#46041;&#51068;&#54620; &#54056;&#53412;&#51648;&#50640; QCustomer&#46972;&#45716; &#51060;&#47492;&#51012; &#44032;&#51652; &#53244;&#47532; &#53440;&#51077;&#51012; &#49373;&#49457;&#54620;&#45796;.
+      Querydsl &#53244;&#47532;&#50640;&#49436; Customer &#53440;&#51077;&#51012; &#50948;&#54620; &#51221;&#51201; &#53440;&#51077; &#48320;&#49688;&#47196; QCustomer&#47484; &#49324;&#50857;&#54620;&#45796;.
+    </p><p>
+      QCustomer&#45716; &#44592;&#48376; &#51064;&#49828;&#53556;&#49828; &#48320;&#49688;&#47484; &#44054;&#44256; &#51080;&#51004;&#47728;, &#45796;&#51020;&#44284; &#44057;&#51060; &#51221;&#51201; &#54596;&#46300;&#47196; &#51217;&#44540;&#54624; &#49688; &#51080;&#45796;.
+    </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+</pre><p>
+      &#45796;&#51020;&#52376;&#47100; Customer &#48320;&#49688;&#47484; &#51649;&#51217; &#51221;&#51032;&#54624; &#49688;&#46020; &#51080;&#45796;.
+    </p><pre class="programlisting">
+QCustomer customer = <span class="hl-keyword">new</span> QCustomer(<span class="hl-string">"myCustomer"</span>);
+</pre><p>
+      QCustomer&#45716; &#50896;&#47000; Customer &#53440;&#51077;&#51032; &#47784;&#46304; &#54532;&#47196;&#54140;&#54000;&#47484; public &#54596;&#46300;&#47196; &#48152;&#50689;&#54620;&#45796;.
+      firstName &#54596;&#45796;&#45716; &#45796;&#51020;&#44284; &#44057;&#51060; &#51217;&#44540;&#54624; &#49688; &#51080;&#45796;.
+    </p><pre class="programlisting">
+customer.firstName;
+</pre></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e503"></a>2.2.4. &#53244;&#47532;</h3></div></div></div><p>
+      JDOQuery&#44032; JDO &#47784;&#46280;&#51012; &#50948;&#54620; Query &#44396;&#54788;&#52404;&#51060;&#47728;, &#45796;&#51020;&#44284; &#44057;&#51060; &#51064;&#49828;&#53556;&#49828;&#47484; &#49373;&#49457;&#54620;&#45796;.
+    </p><pre class="programlisting">
+PersistenceManager pm = ...;
+JDOQuery query = <span class="hl-keyword">new</span> JDOQuery (pm);
+</pre><p>
+      firstName &#54532;&#47196;&#54140;&#54000;&#44032; Bob&#51064; Customer&#47484; &#51312;&#54924;&#54616;&#44256; &#49910;&#45796;&#47732; &#45796;&#51020;&#51032; &#53244;&#47532;&#47484; &#49324;&#50857;&#54616;&#47732; &#46108;&#45796;.
+    </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+JDOQuery query = <span class="hl-keyword">new</span> JDOQuery (pm);
+Customer bob = query.from(customer)
+  .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>))
+  .uniqueResult(customer);
+query.close();
+</pre><p>
+      from &#47700;&#49436;&#46300;&#45716; &#53244;&#47532; &#45824;&#49345;(&#49548;&#49828;)&#51012; &#51648;&#51221;&#54616;&#44256;, where &#48512;&#48516;&#51008; &#54596;&#53552;&#47484; &#51221;&#51032;&#54616;&#44256;,
+      uniqueResult&#45716; &#54532;&#47196;&#51229;&#49496;&#51012; &#51221;&#51032;&#54644;&#49436; 1&#44060; &#44208;&#44284;&#47564; &#47532;&#53556;&#54616;&#46972;&#44256; &#51648;&#49884;&#54620;&#45796;.
+    </p><p>
+      &#50668;&#47084; &#49548;&#49828;&#47196;&#48512;&#53552; &#53244;&#47532;&#47484; &#47564;&#46308;&#44256; &#49910;&#45796;&#47732; &#45796;&#51020;&#52376;&#47100; &#53244;&#47532;&#47484; &#49324;&#50857;&#54620;&#45796;.
+    </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+QCompany company = QCompany.company;
+query.from(customer, company);    
+</pre><p>
+      &#50668;&#47084; &#54596;&#53552;&#47484; &#49324;&#50857;&#54616;&#45716; &#48169;&#48277;&#51008; &#45796;&#51020;&#44284; &#44057;&#45796;.
+    </p><pre class="programlisting">
+query.from(customer)
+    .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>), customer.lastName.eq(<span class="hl-string">"Wilson"</span>));   
+</pre><p>&#46608;&#45716;, &#45796;&#51020;&#44284; &#44057;&#51060; &#54644;&#46020; &#46108;&#45796;.</p><pre class="programlisting">
+query.from(customer)
+    .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>).and(customer.lastName.eq(<span class="hl-string">"Wilson"</span>)));
+</pre><p>&#54596;&#53552; &#51312;&#44148;&#51012; or&#47196; &#51312;&#54633;&#54616;&#44256; &#49910;&#45796;&#47732; &#45796;&#51020; &#54056;&#53556;&#51012; &#49324;&#50857;&#54620;&#45796;.
+    </p><pre class="programlisting">
+query.from(customer)
+    .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>).or(customer.lastName.eq(<span class="hl-string">"Wilson"</span>)));
+</pre></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e532"></a>2.2.5. &#51068;&#48152; &#50857;&#48277;</h3></div></div></div><p>JDOQuery &#53364;&#47000;&#49828;&#51032; cascading &#47700;&#49436;&#46300;&#45716; &#45796;&#51020;&#44284; &#44057;&#45796;.</p><p>
+      <span class="emphasis"><em>from:</em></span>
+      &#53244;&#47532; &#49548;&#49828;&#47484; &#52628;&#44032;&#54620;&#45796;. &#52395; &#48264;&#51704; &#51064;&#51088;&#45716; &#47700;&#51064; &#49548;&#49828;&#44032; &#46104;&#44256;, &#45208;&#47672;&#51648;&#45716; &#48320;&#49688;&#47196; &#52712;&#44553;&#54620;&#45796;.
+    </p><p>
+      <span class="emphasis"><em>where:</em></span>
+      &#53244;&#47532; &#54596;&#53552;&#47484; &#52628;&#44032;&#54620;&#45796;. &#44032;&#48320;&#51064;&#51088;&#45208; and/or &#47700;&#49436;&#46300;&#47484; &#51060;&#50857;&#54644;&#49436; &#54596;&#53552;&#47484; &#52628;&#44032;&#54620;&#45796;.
+    </p><p>
+      <span class="emphasis"><em>groupBy:</em></span>
+      &#44032;&#48320;&#51064;&#51088; &#54805;&#49885;&#51032; &#51064;&#51088;&#47484; &#44592;&#51456;&#51004;&#47196; &#44536;&#47353;&#51012; &#52628;&#44032;&#54620;&#45796;.
+    </p><p>
+      <span class="emphasis"><em>having:</em></span>
+      Predicate &#54364;&#54788;&#49885;&#51012; &#51060;&#50857;&#54644;&#49436; "group by" &#44536;&#47353;&#54609;&#51032; &#54596;&#53552;&#47484; &#52628;&#44032;&#54620;&#45796;.
+    </p><p>
+      <span class="emphasis"><em>orderBy:</em></span>
+      &#51221;&#47148; &#54364;&#54788;&#49885;&#51012; &#51060;&#50857;&#54644;&#49436; &#51221;&#47148; &#49692;&#49436;&#47484; &#51648;&#51221;&#54620;&#45796;. &#49707;&#51088;&#45208; &#47928;&#51088;&#50676;&#50640; &#45824;&#54644;&#49436;&#45716;
+      asc()&#45208; desc()&#47484; &#49324;&#50857;&#54616;&#44256;, OrderSpecifier&#50640; &#51217;&#44540;&#54616;&#44592; &#50948;&#54644; &#45796;&#47480; &#48708;&#44368; &#54364;&#54788;&#49885;&#51012; &#49324;&#50857;&#54620;&#45796;.
+    </p><p>
+      <span class="emphasis"><em>limit, offset, restrict:</em></span>
+      &#44208;&#44284;&#51032; &#54168;&#51060;&#51669;&#51012; &#49444;&#51221;&#54620;&#45796;. limit&#51008; &#52572;&#45824; &#44208;&#44284; &#44060;&#49688;, offset&#51008; &#44208;&#44284;&#51032; &#49884;&#51089; &#54665;,
+      restrict&#45716; limit&#44284; offset&#51012; &#54632;&#44760; &#51221;&#51032;&#54620;&#45796;.
+    </p></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e567"></a>2.2.6. &#51221;&#47148;</h3></div></div></div><p>&#51221;&#47148;&#51012; &#50948;&#54620; &#44396;&#47928;&#51008; &#45796;&#51020;&#44284; &#44057;&#45796;.</p><pre class="programlisting"> 
+QCustomer customer = QCustomer.customer;
+query.from(customer)
+    .orderBy(customer.lastName.asc(), customer.firstName.desc())
+    .list(customer);
+</pre></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e574"></a>2.2.7. &#44536;&#47353;&#54609;</h3></div></div></div><p>&#44536;&#47353;&#54609;&#51008; &#45796;&#51020;&#44284; &#44057;&#51008; &#53076;&#46300;&#47196; &#52376;&#47532;&#54620;&#45796;.</p><pre class="programlisting"> 
+query.from(customer)
+    .groupBy(customer.lastName)
+    .list(customer.lastName);
+</pre></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e581"></a>2.2.8. DeleteClause</h3></div></div></div><p>Querydsl JDO&#50640;&#49436; DeleteClause&#45716; &#44036;&#45800;&#54620; delete-where-execute &#54805;&#53468;&#47484; &#52712;&#54620;&#45796;.
+      &#45796;&#51020;&#51008; &#47751; &#44032;&#51648; &#50696;&#45796;.
+    </p><pre class="programlisting">   
+QCustomer customer = QCustomer.customer;
+<span class="hl-comment">// delete all customers</span>
+<span class="hl-keyword">new</span> JDODeleteClause(pm, customer).execute();
+<span class="hl-comment">// delete all customers with a level less than 3</span>
+<span class="hl-keyword">new</span> JDODeleteClause(pm, customer).where(customer.level.lt(<span class="hl-value">3</span>)).execute();  
+</pre><p>JDODeleteClause &#49373;&#49457;&#51088;&#51032; &#46160; &#48264;&#51704; &#54028;&#46972;&#48120;&#53552;&#45716; &#49325;&#51228;&#54624; &#50644;&#54000;&#54000; &#45824;&#49345;&#51060;&#45796;.
+      where&#45716; &#54596;&#50836;&#50640; &#46384;&#46972; &#52628;&#44032;&#54624; &#49688; &#51080;&#51004;&#47728;, execute&#47484; &#49892;&#54665;&#54616;&#47732; &#49325;&#51228;&#47484; &#49688;&#54665;&#54616;&#44256;
+      &#49325;&#51228;&#46108; &#50644;&#54000;&#54000;&#51032; &#44060;&#49688;&#47484; &#47532;&#53556;&#54620;&#45796;.
+    </p></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e590"></a>2.2.9. &#49436;&#48652;&#53244;&#47532;</h3></div></div></div><p>&#49436;&#48652;&#53244;&#47532;&#47484; &#47564;&#46308;&#47140;&#47732; <code class="code">JDOSubQuery</code>&#47484; &#49324;&#50857;&#54616;&#47732; &#46108;&#45796;.
+    &#49436;&#48652;&#53244;&#47532;&#47484; &#47564;&#46308;&#44592; &#50948;&#54644; from &#47700;&#49436;&#46300;&#47196; &#53244;&#47532; &#54028;&#46972;&#48120;&#53552;&#47484; &#51221;&#51032;&#54616;&#44256;, unique&#45208; list&#47484; &#51060;&#50857;&#54620;&#45796;.
+    unique&#45716; &#45800;&#51068; &#44208;&#44284;&#47484; &#50948;&#54644; &#49324;&#50857;&#54616;&#44256; list&#45716; &#47532;&#49828;&#53944; &#44208;&#44284;&#47484; &#50948;&#54644; &#49324;&#50857;&#54620;&#45796;.
+    &#49436;&#48652;&#53244;&#47532;&#46020; &#53244;&#47532;&#52376;&#47100; &#53440;&#51077;&#50640; &#50504;&#51204;&#54620; Querydsl &#54364;&#54788;&#49885;&#51060;&#45796;.
+    </p><pre class="programlisting">
+QDepartment department = QDepartment.department;
+QDepartment d = <span class="hl-keyword">new</span> QDepartment(<span class="hl-string">"d"</span>);
+query.from(department)
+    .where(department.employees.size().eq(
+        <span class="hl-keyword">new</span> JDOSubQuery().from(d).unique(AggregationFunctions.max(d.employees.size()))
+     )).list(department);  
+</pre><p>&#50948; &#53076;&#46300;&#45716; &#45796;&#51020;&#51032; &#45348;&#51060;&#54000;&#48652; JDO &#53244;&#47532;&#47484; &#54364;&#54788;&#54620;&#45796;.</p><pre class="programlisting">
+SELECT this FROM com.mysema.query.jdoql.models.company.Department
+WHERE this.employees.size() == 
+(SELECT max(d.employees.size()) FROM com.mysema.query.jdoql.models.company.Department d)
+</pre><p>&#45796;&#47480; &#50696;&#51228;</p><pre class="programlisting">
+QEmployee employee = QEmployee.employee;
+QEmployee e = <span class="hl-keyword">new</span> QEmployee(<span class="hl-string">"e"</span>);
+query.from(employee)
+    .where(employee.weeklyhours.gt(
+        <span class="hl-keyword">new</span> JDOSubQuery().from(employee.department.employees, e)
+        .where(e.manager.eq(employee.manager))
+        .unique(AggregationFunctions.avg(e.weeklyhours))
+    )).list(employee);
+</pre><p>&#50948; &#53076;&#46300;&#45716; &#45796;&#51020;&#51032; &#45348;&#51060;&#54000;&#48652; JDO &#53244;&#47532;&#47484; &#54364;&#54788;&#54620;&#45796;.</p><pre class="programlisting">
+SELECT this FROM com.mysema.query.jdoql.models.company.Employee 
+WHERE this.weeklyhours &gt; 
+(SELECT avg(e.weeklyhours) FROM this.department.employees e WHERE e.manager == this.manager)
+</pre></div><div class="sect2" lang="ko-KR"><div class="titlepage"><div><div><h3 class="title"><a name="d0e612"></a>2.2.10. &#45348;&#54000;&#51060;&#48652; SQL &#49324;&#50857;&#54616;&#44592;</h3></div></div></div><p><code class="code">JDOSQLQuery</code> &#53364;&#47000;&#49828;&#47484; &#49324;&#50857;&#54616;&#47732; JDO&#51032;
+    &#45348;&#51060;&#54000;&#48652; SQL&#51012; Querydsl&#50640;&#49436; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+    </p><p>&#51060;&#44152; &#49324;&#50857;&#54616;&#47140;&#47732; SQL &#49828;&#53412;&#47560;&#47484; &#50948;&#54620; Querydsl &#53244;&#46972; &#54000;&#51077;&#51012; &#49373;&#49457;&#54644;&#50556; &#54620;&#45796;.
+      &#45796;&#51020;&#51008; &#51060;&#47484; &#50948;&#54620; Maven &#49444;&#51221; &#50696;&#47484; &#48372;&#50668;&#51452;&#44256; &#51080;&#45796;.
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+    <span class="hl-tag">&lt;plugins&gt;</span>
+      ...
+      <span class="hl-tag">&lt;plugin&gt;</span>
+        <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+        <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-maven-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+        <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
+        <span class="hl-tag">&lt;executions&gt;</span>
+          <span class="hl-tag">&lt;execution&gt;</span>
+            <span class="hl-tag">&lt;goals&gt;</span>
+              <span class="hl-tag">&lt;goal&gt;</span>export<span class="hl-tag">&lt;/goal&gt;</span>
+            <span class="hl-tag">&lt;/goals&gt;</span>
+          <span class="hl-tag">&lt;/execution&gt;</span>
+        <span class="hl-tag">&lt;/executions&gt;</span>
+        <span class="hl-tag">&lt;configuration&gt;</span>
+          <span class="hl-tag">&lt;jdbcDriver&gt;</span>org.apache.derby.jdbc.EmbeddedDriver<span class="hl-tag">&lt;/jdbcDriver&gt;</span>
+          <span class="hl-tag">&lt;jdbcUrl&gt;</span>jdbc:derby:target/demoDB;create=true<span class="hl-tag">&lt;/jdbcUrl&gt;</span>
+          <span class="hl-tag">&lt;packageName&gt;</span>com.mycompany.mydomain<span class="hl-tag">&lt;/packageName&gt;</span>
+          <span class="hl-tag">&lt;targetFolder&gt;</span>${project.basedir}/target/generated-sources/java<span class="hl-tag">&lt;/targetFolder&gt;</span>
+        <span class="hl-tag">&lt;/configuration&gt;</span>
+        <span class="hl-tag">&lt;dependencies&gt;</span>
+          <span class="hl-tag">&lt;dependency&gt;</span>
+            <span class="hl-tag">&lt;groupId&gt;</span>org.apache.derby<span class="hl-tag">&lt;/groupId&gt;</span>
+            <span class="hl-tag">&lt;artifactId&gt;</span>derby<span class="hl-tag">&lt;/artifactId&gt;</span>
+            <span class="hl-tag">&lt;version&gt;</span>${derby.version}<span class="hl-tag">&lt;/version&gt;</span>
+          <span class="hl-tag">&lt;/dependency&gt;</span>
+        <span class="hl-tag">&lt;/dependencies&gt;</span>
+      <span class="hl-tag">&lt;/plugin&gt;</span>
+      ...
+    <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre><p>&#51648;&#51221;&#54620; &#50948;&#52824;&#50640; &#53244;&#47532; &#53440;&#51077;&#51012; &#49457;&#44277;&#51201;&#51004;&#47196; &#49373;&#49457;&#54664;&#45796;&#47732;, &#53244;&#47532;&#50640;&#49436; &#44536; &#53440;&#51077;&#51012; &#49324;&#50857;&#54624; &#49688; &#51080;&#45796;.
+    </p><p>&#54620; &#44060; &#52972;&#47100; &#53244;&#47532;:</p><pre class="programlisting">
+<span class="hl-comment">// serialization templates</span>
+SQLTemplates templates = <span class="hl-keyword">new</span> DerbyTemplates(); 
+<span class="hl-comment">// query types (S* for SQL, Q* for domain types)</span>
+SAnimal cat = <span class="hl-keyword">new</span> SAnimal(<span class="hl-string">"cat"</span>);   
+SAnimal mate = <span class="hl-keyword">new</span> SAnimal(<span class="hl-string">"mate"</span>); 
+ 
+JDOSQLQuery query = <span class="hl-keyword">new</span> JDOSQLQuery(pm, templates);
+List&lt;String&gt; names = query.from(cat).list(cat.name);
+</pre><p>&#45796;&#51473; &#52972;&#47100; &#53244;&#47532;:</p><pre class="programlisting">
+query = <span class="hl-keyword">new</span> JDOSQLQuery(pm, templates);
+List&lt;Object[]&gt; rows = query.from(cat).list(cat.id, cat.name);
+</pre><p>&#47784;&#46304; &#52972;&#47100; &#53244;&#47532;:</p><pre class="programlisting">
+List&lt;Object[]&gt; rows = query.from(cat).list(cat.all());
+ </pre><p>&#51312;&#51064;&#51012; &#51060;&#50857;&#54620; &#53244;&#47532;: </p><pre class="programlisting">
+query = <span class="hl-keyword">new</span> JDOSQLQuery(pm, templates);
+cats = query.from(cat)
+    .innerJoin(mate).on(cat.mateId.eq(mate.id))
+    .where(cat.dtype.eq(<span class="hl-string">"Cat"</span>), mate.dtype.eq(<span class="hl-string">"Cat"</span>))
+    .list(catEntity);
+</pre><p>&#53244;&#47532; &#44208;&#44284;&#47484; DTO&#47196; &#44396;&#54616;&#44592;: </p><pre class="programlisting">
+query = <span class="hl-keyword">new</span> JDOSQLQuery(pm, templates);
+List&lt;CatDTO&gt; catDTOs = query.from(cat)
+    .orderBy(cat.name.asc())
+    .list(ConstructorExpression.create(CatDTO.<span class="hl-keyword">class</span>, cat.id, cat.name));
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">&#51060;&#51204;</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">&#50948;&#47196;</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s03.html">&#45796;&#51020;</a></td></tr><tr><td width="40%" align="left" valign="top">2&#51109;. &#53916;&#53664;&#47532;&#50620;&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">&#52376;&#51020;&#51004;&#47196;</a></td><td width="40%" align="right" valign="top">&nbsp;2.3. SQL &#53244;&#47532;</td></tr></table></div></body></html>

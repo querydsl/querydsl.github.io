@@ -1,0 +1,217 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.2.&nbsp;Querying JPA/Hibernate sources</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"><link rel="start" href="index.html" title="Querydsl"><link rel="up" href="ch02.html" title="2.&nbsp;Getting started with Querydsl"><link rel="prev" href="ch02.html" title="2.&nbsp;Getting started with Querydsl"><link rel="next" href="ch02s03.html" title="2.3.&nbsp;Querying Collections"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.2.&nbsp;Querying JPA/Hibernate sources</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Getting started with Querydsl</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s03.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="hql_integration"></a>2.2.&nbsp;Querying JPA/Hibernate sources</h2></div></div></div><p>
+    Querydsl defines a general statically typed syntax for querying on top of
+    persisted domain model data. JDO and JPA are the primary integration
+    technologies for Querydsl. This guide describes how to use Querydsl
+    in combination with JPA/Hibernate.
+    </p><p>
+  Querydsl for JPA/Hibernate is an alternative to both HQL and Criteria queries. It combines the dynamic nature
+  of Criteria queries with the expressiveness of HQL and all that in a fully typesafe manner.  
+  </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e241"></a>2.2.1.&nbsp;Maven integration</h3></div></div></div><p>
+      Add the following dependencies to your Maven project and make sure that
+      the Maven 2 repo of Mysema Source
+      (http://source.mysema.com/maven2/releases) is accessible from your
+      POM :
+    </p><pre class="programlisting">
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-apt<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>0.5.4<span class="hl-tag">&lt;/version&gt;</span>
+  <span class="hl-tag">&lt;scope&gt;</span>provided<span class="hl-tag">&lt;/scope&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>    
+    
+<span class="hl-tag">&lt;dependency&gt;</span>
+  <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.querydsl<span class="hl-tag">&lt;/groupId&gt;</span>
+  <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-hql<span class="hl-tag">&lt;/artifactId&gt;</span>
+  <span class="hl-tag">&lt;version&gt;</span>0.5.4<span class="hl-tag">&lt;/version&gt;</span>
+<span class="hl-tag">&lt;/dependency&gt;</span>
+</pre><p>
+      And now, configure the Maven APT plugin :
+  </p><pre class="programlisting">
+<span class="hl-tag">&lt;project&gt;</span>
+  <span class="hl-tag">&lt;build&gt;</span>
+  <span class="hl-tag">&lt;plugins&gt;</span>
+    ...
+    <span class="hl-tag">&lt;plugin&gt;</span>
+      <span class="hl-tag">&lt;groupId&gt;</span>com.mysema.maven<span class="hl-tag">&lt;/groupId&gt;</span>
+      <span class="hl-tag">&lt;artifactId&gt;</span>maven-apt-plugin<span class="hl-tag">&lt;/artifactId&gt;</span>
+      <span class="hl-tag">&lt;version&gt;</span>0.3.0<span class="hl-tag">&lt;/version&gt;</span>
+      <span class="hl-tag">&lt;executions&gt;</span>
+        <span class="hl-tag">&lt;execution&gt;</span>
+          <span class="hl-tag">&lt;goals&gt;</span>
+            <span class="hl-tag">&lt;goal&gt;</span>process<span class="hl-tag">&lt;/goal&gt;</span>
+          <span class="hl-tag">&lt;/goals&gt;</span>
+          <span class="hl-tag">&lt;configuration&gt;</span>
+            <span class="hl-tag">&lt;outputDirectory&gt;</span>target/generated-sources/java<span class="hl-tag">&lt;/outputDirectory&gt;</span>
+            <span class="hl-tag">&lt;processor&gt;</span>com.mysema.query.apt.jpa.JPAAnnotationProcessor<span class="hl-tag">&lt;/processor&gt;</span>
+          <span class="hl-tag">&lt;/configuration&gt;</span>
+        <span class="hl-tag">&lt;/execution&gt;</span>
+      <span class="hl-tag">&lt;/executions&gt;</span>
+    <span class="hl-tag">&lt;/plugin&gt;</span>
+    ...
+  <span class="hl-tag">&lt;/plugins&gt;</span>
+  <span class="hl-tag">&lt;/build&gt;</span>
+<span class="hl-tag">&lt;/project&gt;</span>
+</pre><p>
+      The JPAAnnotationProcessor finds domain types annotated with the
+      javax.persistence.Entity annotation and generates query types for
+      them.
+    </p><p>
+    If you use Hibernate annotations in your domain types you should use 
+    the APT processor com.mysema.query.apt.hibernate.HibernateAnnotationProcessor&gt;
+    instead.
+    </p><p>
+      Run mvn eclipse:eclipse or clean install and you will get your Query
+      types generated into target/generated-sources/java.
+
+      Now you are able to construct JPAQL/HQL query instances and instances of
+      the query domain model.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e258"></a>2.2.2.&nbsp;Using query types</h3></div></div></div><p>
+      To create queries with Querydsl you need to instantiate variables and
+      Query implementations. We will start with the variables.
+    </p><p>
+      Let's assume that your project has the following domain type :
+    </p><pre class="programlisting">
+<span class="hl-annotation">@Entity</span>
+<span class="hl-keyword">public</span> <span class="hl-keyword">class</span> Customer {
+    <span class="hl-keyword">private</span> String firstName;
+    <span class="hl-keyword">private</span> String lastName;
+
+    <span class="hl-keyword">public</span> String getFirstName(){
+        <span class="hl-keyword">return</span> firstName;
+    }
+
+    <span class="hl-keyword">public</span> String getLastName(){
+        <span class="hl-keyword">return</span> lastName;
+    }
+
+    <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> setFirstName(String fn){
+        firstName = fn;
+    }
+
+    <span class="hl-keyword">public</span> <span class="hl-keyword">void</span> setLastName(String ln)[
+        lastName = ln;
+    }
+}
+</pre><p>
+      Querydsl will generate a query type with the simple name QCustomer into the
+      same package as Customer. QCustomer can be used as a statically
+      typed variable in Querydsl queries as a representative for the
+      Customer type.
+  </p><p>
+      QCustomer has a default instance variable which can be accessed as a static
+      field :
+  </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+</pre><p>
+      Alternatively you can define your own Customer variables like this :
+  </p><pre class="programlisting">
+QCustomer customer = <span class="hl-keyword">new</span> QCustomer(<span class="hl-string">"myCustomer"</span>);
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e277"></a>2.2.3.&nbsp;Querying with HQL</h3></div></div></div><p>
+      For the HQL-module HibernateQuery is the main Query implementation. It is
+      instantiated like this :
+    </p><pre class="programlisting">
+<span class="hl-comment">// where session is a Hibernate session</span>
+HQLQuery query = <span class="hl-keyword">new</span> HibernateQuery (session); 
+</pre><p>To use the JPA API instead of the Hibernate API, you can instantiate a HQLQuery like this :</p><pre class="programlisting">
+<span class="hl-comment">// where entityManager is a JPA EntityManager   </span>
+HQLQuery query = <span class="hl-keyword">new</span> JPAQuery (entityManager); 
+</pre><p>
+      To retrieve the customer with the first name Bob you would construct a
+      query like this :
+  </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+HQLQuery query = <span class="hl-keyword">new</span> HibernateQuery (session);
+Customer bob = query.from(customer)
+  .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>))
+  .uniqueResult(customer);
+</pre><p>
+      The from call defines the query source, the where part defines the
+      filter and uniqueResult defines the projection and tells Querydsl
+      to return a single element. Easy, right?
+  </p><p>
+    To create a query with multiple sources you just use the HQLQuery interface like this :
+  </p><pre class="programlisting">
+query.from(customer, company);    
+</pre><p>
+   And to use multiple filters use it like this
+   </p><pre class="programlisting">
+query.from(customer)
+    .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>), customer.lastName.eq(<span class="hl-string">"Wilson"</span>));   
+</pre><p>Or like this</p><pre class="programlisting">
+query.form(customer)
+    .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>).and(customer.lastName.eq(<span class="hl-string">"Wilson"</span>)));
+</pre><p>In native HQL form the query would be written like this : </p><pre class="programlisting">
+from Customer as customer
+    where customer.firstName = "Bob" and customer.lastName = "Wilson"
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e310"></a>2.2.4.&nbsp;Using joins</h3></div></div></div><p>Querydsl supports the following join variants in HQL/JPAQL : inner join, join, left join and full join.
+    Join usage is typesafe, and follows the following pattern :</p><pre class="programlisting">  
+query.from(cat)
+    .innerJoin(cat.mate, mate)
+    .leftJoin(cat.kittens, kitten)
+    .list(cat);
+</pre><p>The native HQL version of the query would be </p><pre class="programlisting">
+from Cat as cat
+    inner join cat.mate as mate
+    left outer join cat.kittens as kitten
+</pre><p>Another example</p><pre class="programlisting"> 
+query.from(cat)
+    .leftJoin(cat.kittens, kitten)
+    .on(kitten.bodyWeight.gt(<span class="hl-value">10.0</span>))
+    .list(cat);
+</pre><p>With the following HQL version</p><pre class="programlisting">  
+from Cat as cat
+    left join cat.kittens as kitten
+    with kitten.bodyWeight &gt; 10.0  
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e329"></a>2.2.5.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the HQLQuery method like this</p><p><span class="emphasis"><em>from :</em></span> Define the query sources here.</p><p><span class="emphasis"><em>innerJoin, join, leftJoin, fullJoin, on</em></span> : Defined join elements using these constructs. For the join methods the first argument is the join expression and the second the shorter alias.</p><p><span class="emphasis"><em>where :</em></span> Define the query filters, either in varargs form separated via commas or cascaded via the and-operator.</p><p><span class="emphasis"><em>groupBy :</em></span> Define the group by arguments in varargs form.</p><p><span class="emphasis"><em>having :</em></span> Define the having filter of the "group by" grouping as an varags array of EBoolean expressions.</p><p><span class="emphasis"><em>orderBy :</em></span> Define the ordering of the result as an varargs array of order expressions. Use asc() and desc() on numeric, string and other comparable expression to access the OrderSpecifier instances. </p><p><span class="emphasis"><em>limit, offset, restrict :</em></span> Define the paging of the result. Limit for max results, offset for skipping rows and restrict for defining both in one call.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e362"></a>2.2.6.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting"> 
+query.from(customer)
+    .orderBy(customer.lastName.asc(), customer.firstName.desc())
+    .list(customer);
+</pre><p>which is equivalent to the following native HQL</p><pre class="programlisting">  
+from Customer as customer
+    order by customer.lastName asc, customer.firstName desc
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e373"></a>2.2.7.&nbsp;Grouping</h3></div></div></div><p>Grouping can be done in the following form</p><pre class="programlisting"> 
+query.from(customer)
+    .groupBy(customer.lastName)
+    .list(customer.lastName);
+</pre><p>which is equivalent to the following native HQL</p><pre class="programlisting">  
+select customer.lastName
+    from Customer as customer
+    group by customer.lastName
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e384"></a>2.2.8.&nbsp;Delete clauses</h3></div></div></div><p>Delete clauses in Querydsl HQL follow a simple delete-where-execute form. Here are some examples :</p><pre class="programlisting">   
+QCat cat = QCat.cat;
+<span class="hl-comment">// delete all cats</span>
+<span class="hl-keyword">new</span> HibernateDeleteClause(session, cat).execute();
+<span class="hl-comment">// delete all cats with kittens</span>
+<span class="hl-keyword">new</span> HibernateDeleteClause(session, cat).where(cat.kittens.isNotEmpty()).execute();  
+</pre><p>The second parameter of the HibernateDeleteClause constructor is the entity to be deleted.
+  The where call is optional and the execute call performs the deletion and returns the amount of deleted entities.</p><p>For JPA based Delete usage, use the JPADeleteClause instead.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e395"></a>2.2.9.&nbsp;Update clauses</h3></div></div></div><p>Update clauses in Querydsl HQL follow a simple update-set/where-execute form. Here are some examples :</p><pre class="programlisting">   
+QCat cat = QCat.cat;
+<span class="hl-comment">// rename cats named Bob to Bobby</span>
+<span class="hl-keyword">new</span> HibernateUpdateClause(session, cat).where(cat.name.eq(<span class="hl-string">"Bob"</span>))
+    .set(cat.name, <span class="hl-string">"Bobby"</span>)
+    .execute();  
+</pre><p>The second parameter of the HibernateUpdateClause constructor is the entity to be updated.
+  The set invocations define the property updates in SQL-Update-style and the execute call performs
+  the Update and returns the amount of updated entities.</p><p>For JPA based Update usage, use the JPAUpdateClause instead.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e406"></a>2.2.10.&nbsp;Subqueries</h3></div></div></div><p>To create a subquery you create a HQLSubQuery instance, define the query parameters 
+  via from, where etc and use
+  unique or list to create a subquery, which is just a type-safe Querydsl expression for the query.
+  unique is used for a unique (single) result and list for a list result.</p><pre class="programlisting">
+query().from(department)
+    .where(department.employees.size().eq(
+        <span class="hl-keyword">new</span> HQLSubQuery().from(d).unique(d.employees.size().max())
+     )).list(department);
+</pre><p>Another example</p><pre class="programlisting">
+query().from(employee)
+    .where(employee.weeklyhours.gt(
+        <span class="hl-keyword">new</span> HQLSubQuery().from(employee.department.employees, e)
+        .where(e.manager.eq(employee.manager))
+        .unique(AggregationFunctions.avg(e.weeklyhours))
+    )).list(employee);
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e417"></a>2.2.11.&nbsp;Exposing the original query</h3></div></div></div><p>If you need to do tune the original Query before the execution of the query you can expose it like this :</p><pre class="programlisting">
+HibernateQuery query = <span class="hl-keyword">new</span> HibernateQuery(session);
+org.hibernate.Query hibQuery = query.from(employee).createQuery(employee);
+hibQuery.setResultTransformer(someTransformer);
+List results = hibQuery.list();
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.&nbsp;Getting started with Querydsl&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.3.&nbsp;Querying Collections</td></tr></table></div></body></html>
