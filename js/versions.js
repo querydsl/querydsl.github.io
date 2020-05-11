@@ -17,7 +17,7 @@ $(document).ready(function() {
   });
 
   var updateDocumentationVersion = function(version) {
-    var prefix = "http://www.querydsl.com/static/querydsl/" + version;
+    var prefix = "static/querydsl/" + version;
     var isOldVersion = parseFloat(version) < 3.2;
     var docLocation = isOldVersion ? "/reference/html/" : "/reference/html_single/";
     $("#docs .docs").attr("href", prefix + docLocation);
