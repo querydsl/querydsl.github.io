@@ -21,9 +21,7 @@ $(document).ready(function() {
     var isOldVersion = parseFloat(version) < 3.2;
     var docLocation = isOldVersion ? "/reference/html/" : "/reference/html_single/";
     $("#docs .docs").attr("href", prefix + docLocation);
-    //$("#docs .korean").attr("href", prefix + "/reference/ko-KR/html_single");
     $("#docs .javadocs").attr("href", prefix + "/apidocs/");
-    $("#docs .downloads").attr("href", prefix);
   };
 
   $("#docs .version").change(function() {
