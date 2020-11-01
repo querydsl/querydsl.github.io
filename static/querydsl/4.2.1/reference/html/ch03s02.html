@@ -5,7 +5,7 @@
   constructor invocation and for the creation of more complex objects. The functionality of the
   FactoryExpression implementations of Querydsl can be accessed via the
   <code class="code">com.querydsl.core.types.Projections</code> class.</p><p>For the <code class="code">com.querydsl.core.ResultTransformer</code> interface <code class="code">GroupBy</code> is the
-  main implementation.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2173"></a>3.2.1.&nbsp;Returning multiple columns</h3></div></div></div><p>Since Querydsl 3.0 the default type for multi-column results is <code class="code">com.querydsl.core.Tuple</code>.
+  main implementation.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2178"></a>3.2.1.&nbsp;Returning multiple columns</h3></div></div></div><p>Since Querydsl 3.0 the default type for multi-column results is <code class="code">com.querydsl.core.Tuple</code>.
     Tuple provides provides a typesafe Map like interface to access column data from a Tuple row object.</p><pre class="programlisting">
 List&lt;Tuple&gt; result = query.select(employee.firstName, employee.lastName)
                           .from(employee).fetch();
@@ -20,7 +20,7 @@ List&lt;Tuple&gt; result = query.select(<span class="hl-keyword">new</span> QTup
      System.out.println(<span class="hl-string">"firstName "</span> + row.get(employee.firstName));
      System.out.println(<span class="hl-string">"lastName "</span> + row.get(employee.lastName));
 }}
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2187"></a>3.2.2.&nbsp;Bean population</h3></div></div></div><p>In cases where Beans need to be populated based on the results of the query, Bean projections
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2192"></a>3.2.2.&nbsp;Bean population</h3></div></div></div><p>In cases where Beans need to be populated based on the results of the query, Bean projections
     can be used like this</p><pre class="programlisting">
 List&lt;UserDTO&gt; dtos = query.select(
     Projections.bean(UserDTO.<span class="hl-keyword">class</span>, user.firstName, user.lastName)).fetch();
@@ -28,7 +28,7 @@ List&lt;UserDTO&gt; dtos = query.select(
    used instead</p><pre class="programlisting">
 List&lt;UserDTO&gt; dtos = query.select(
     Projections.fields(UserDTO.<span class="hl-keyword">class</span>, user.firstName, user.lastName)).fetch();
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2198"></a>3.2.3.&nbsp;Constructor usage</h3></div></div></div><p>Constructor based row transformation can be used like this</p><pre class="programlisting">
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2203"></a>3.2.3.&nbsp;Constructor usage</h3></div></div></div><p>Constructor based row transformation can be used like this</p><pre class="programlisting">
 List&lt;UserDTO&gt; dtos = query.select(
     Projections.constructor(UserDTO.<span class="hl-keyword">class</span>, user.firstName, user.lastName)).fetch();
 </pre><p>As an alternative to the generic Constructor expression usage constructors
@@ -74,7 +74,7 @@ List&lt;Customer&gt; dtos = query.select(QCustomer.create(customer.id, customer.
 List&lt;Customer&gt; dtos = query
     .select(Projections.constructor(Customer.<span class="hl-keyword">class</span>, customer.id, customer.name))
     .from(customer).fetch();
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2228"></a>3.2.4.&nbsp;Result aggregation</h3></div></div></div><p>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2233"></a>3.2.4.&nbsp;Result aggregation</h3></div></div></div><p>
       The
       <code class="code">com.querydsl.core.group.GroupBy</code>
       class provides aggregation functionality which can be used to aggregate query results
