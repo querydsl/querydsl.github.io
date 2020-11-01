@@ -1,8 +1,8 @@
 $(document).ready(function() {
   var versions = [
     "4.2.1",
-    "4.1.4"
-    "3.7.4"
+    "4.1.4",
+    "3.7.4",
     "2.9.0"];
 
   _.each(versions, function(arg) {
