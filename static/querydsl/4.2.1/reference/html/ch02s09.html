@@ -8,7 +8,7 @@
   <span class="hl-tag">&lt;artifactId&gt;</span>querydsl-scala<span class="hl-tag">&lt;/artifactId&gt;</span>
   <span class="hl-tag">&lt;version&gt;</span>${querydsl.version}<span class="hl-tag">&lt;/version&gt;</span>
 <span class="hl-tag">&lt;/dependency&gt;</span>
-</pre><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1933"></a>2.9.1.&nbsp;DSL expressions for Scala</h3></div></div></div><p>Querydsl for Scala provides an alternative DSL for expression construction. The
+</pre><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1938"></a>2.9.1.&nbsp;DSL expressions for Scala</h3></div></div></div><p>Querydsl for Scala provides an alternative DSL for expression construction. The
       Scala DSL utilizes language features such as operator overloading,
       function pointers and implicit imports for enhanced readability and conciseness.
     </p><p>Here is an overview of the main alternatives :</p><pre class="programlisting">
@@ -45,7 +45,7 @@ expr mod 5              expr % 5
 // collection
 list.get(0)             list(0)
 map.get("X")            map("X")
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1943"></a>2.9.2.&nbsp;Querying with SQL</h3></div></div></div><p>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1948"></a>2.9.2.&nbsp;Querying with SQL</h3></div></div></div><p>
       Like with Querydsl SQL for Java you need to generate Query types to be able to construct
       your queries. The following code examples show how this is done:
     </p><p>Generation without Bean types :</p><pre class="programlisting">
@@ -73,7 +73,7 @@ exporter.setBeanSerializerClass(classOf[ScalaBeanSerializer])
 exporter.setCreateScalaSources(true)
 exporter.setTypeMappings(ScalaTypeMappings.create)
 exporter.export(connection.getMetaData)
-</pre><div class="sect3" lang="en-US"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1956"></a>2.9.2.1.&nbsp;Code generation</h4></div></div></div><p>Scala sources for SQL metatypes and projections can be generated with
+</pre><div class="sect3" lang="en-US"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1961"></a>2.9.2.1.&nbsp;Code generation</h4></div></div></div><p>Scala sources for SQL metatypes and projections can be generated with
         querydsl-maven-plugin. Here is an example configuration
       </p><pre class="programlisting">
 <span class="hl-tag">&lt;project&gt;</span>
@@ -116,7 +116,7 @@ exporter.export(connection.getMetaData)
     <span class="hl-tag">&lt;/plugins&gt;</span>
   <span class="hl-tag">&lt;/build&gt;</span>
 <span class="hl-tag">&lt;/project&gt;</span>
-</pre><p>The maven goal to execute is querydsl:export.</p></div></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1965"></a>2.9.3.&nbsp;Querying with other backends</h3></div></div></div><p>When querying with other backends the Expression model has to be created
+</pre><p>The maven goal to execute is querydsl:export.</p></div></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1970"></a>2.9.3.&nbsp;Querying with other backends</h3></div></div></div><p>When querying with other backends the Expression model has to be created
       manually or alternatively the alias functionality can be used.
     </p><p>Here is a minimal example with JPA :</p><pre class="programlisting">
 <span class="hl-annotation">@Entity</span>
