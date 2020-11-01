@@ -1,0 +1,125 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>3.&nbsp;General usage</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl Reference Guide"><link rel="up" href="index.html" title="Querydsl Reference Guide"><link rel="prev" href="ch02s09.html" title="2.9.&nbsp;Querying in Scala"><link rel="next" href="ch03s02.html" title="3.2.&nbsp;Result handling"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3.&nbsp;General usage</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s09.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03s02.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en-US"><div class="titlepage"><div><div><h2 class="title"><a name="general"></a>3.&nbsp;General usage</h2></div></div></div><p>
+    The General usage section covers aspects that are not covered in the tutorial section of the reference documentation.
+    It follows a use case oriented structure.
+    </p><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="creating_queries"></a>3.1.&nbsp;Creating queries</h2></div></div></div><p>Query construction in Querydsl involves calling query methods with expression arguments. Since
+  query methods are mostly module specific and have already been presented in the tutorial section,
+  this part will focus on expressions.</p><p>Expressions are normally constructed by accessing fields and calling methods on the generated
+  expression types of your domain module. For cases where code generation is not applicable generic ways
+  to construct expressions can be used instead.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2023"></a>3.1.1.&nbsp;Complex predicates</h3></div></div></div><p>
+      To construct complex boolean expressions, use the <code class="code">com.querydsl.core.BooleanBuilder</code> class. It
+      implements Predicate and can be used in cascaded form:
+    </p><pre class="programlisting">
+<span class="hl-keyword">public</span> List&lt;Customer&gt; getCustomer(String... names) {
+    QCustomer customer = QCustomer.customer;
+    JPAQuery&lt;Customer&gt; query = queryFactory.selectFrom(customer);
+    BooleanBuilder builder = <span class="hl-keyword">new</span> BooleanBuilder();
+    <span class="hl-keyword">for</span> (String name : names) {
+        builder.or(customer.name.eq(name));
+    }
+    query.where(builder); <span class="hl-comment">// customer.name eq name1 OR customer.name eq name2 OR ...</span>
+    <span class="hl-keyword">return</span> query.fetch();
+}
+</pre><p><code class="code">BooleanBuilder</code> is mutable and represents initially null and after each <code class="code">and</code>
+    or <code class="code">or</code> call the result of the operation.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2043"></a>3.1.2.&nbsp;Dynamic expressions</h3></div></div></div><p>
+      The <code class="code">com.querydsl.core.types.dsl.Expressions</code>
+      class is a static factory class for dynamic expression construction.
+      The factory methods are named by the returned type and are mostly self-documenting.
+    </p><p>
+    In general the <code class="code">Expressions</code> class should be used only in cases where fluent DSL forms
+    can't be used, such as dynamic paths, custom syntax or custom operations.
+    </p><p>The following expression </p><pre class="programlisting">
+QPerson person = QPerson.person;
+person.firstName.startsWith(<span class="hl-string">"P"</span>);
+</pre><p>could be constructed like this if Q-types wouldn't be available </p><pre class="programlisting">
+Path&lt;Person&gt; person = Expressions.path(Person.<span class="hl-keyword">class</span>, <span class="hl-string">"person"</span>);
+Path&lt;String&gt; personFirstName = Expressions.path(String.<span class="hl-keyword">class</span>, person, <span class="hl-string">"firstName"</span>);
+Constant&lt;String&gt; constant = Expressions.constant(<span class="hl-string">"P"</span>);
+Expressions.predicate(Ops.STARTS_WITH, personFirstName, constant);
+</pre><p>Path instances represent variables and properties, Constants are constants,
+      Operations are operations and TemplateExpression instances can be used to express
+      expressions as String templates.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2066"></a>3.1.3.&nbsp;Dynamic paths</h3></div></div></div><p>In addition to the <code class="code">Expressions</code> based expression creation Querydsl provides
+    also a more fluent API for dynamic path creation.</p><p>
+      For dynamic path generation the <code class="code">com.querydsl.core.types.dsl.PathBuilder</code> class can be used. It extends
+      <code class="code">EntityPathBase</code> and can be used as an alternative to class generation and alias-usage
+      for path generation.
+    </p><p>
+    Compared to the Expressions API PathBuilder doesn't provide direct support for unknown operations
+    or custom syntax, but the syntax is closer to the normal DSL.
+    </p><p>String property:</p><pre class="programlisting">
+PathBuilder&lt;User&gt; entityPath = <span class="hl-keyword">new</span>
+PathBuilder&lt;User&gt;(User.<span class="hl-keyword">class</span>, <span class="hl-string">"entity"</span>);
+<span class="hl-comment">// fully generic access</span>
+entityPath.get(<span class="hl-string">"userName"</span>);
+<span class="hl-comment">// .. or with supplied type</span>
+entityPath.get(<span class="hl-string">"userName"</span>, String.<span class="hl-keyword">class</span>);
+<span class="hl-comment">// .. and correct signature</span>
+entityPath.getString(<span class="hl-string">"userName"</span>).lower();
+</pre><p>List property with component type: </p><pre class="programlisting">
+entityPath.getList(<span class="hl-string">"list"</span>, String.<span class="hl-keyword">class</span>).get(<span class="hl-value">0</span>);
+</pre><p>Using a component expression type:</p><pre class="programlisting">
+entityPath.getList(<span class="hl-string">"list"</span>, String.<span class="hl-keyword">class</span>, StringPath.<span class="hl-keyword">class</span>).get(<span class="hl-value">0</span>).lower();
+</pre><p>Map property with key and value type: </p><pre class="programlisting">
+entityPath.getMap(<span class="hl-string">"map"</span>, String.<span class="hl-keyword">class</span>, String.<span class="hl-keyword">class</span>).get(<span class="hl-string">"key"</span>);
+</pre><p>Using a component expression type:</p><pre class="programlisting">
+entityPath.getMap(<span class="hl-string">"map"</span>, String.<span class="hl-keyword">class</span>, String.<span class="hl-keyword">class</span>, StringPath.<span class="hl-keyword">class</span>).get(<span class="hl-string">"key"</span>).lower();
+</pre><p>For PathBuilder validation a PathBuilderValidator can be used. It can be injected in the constructor
+    and will be used transitively for the new PathBuilder</p><pre class="programlisting">
+PathBuilder&lt;Customer&gt; customer = <span class="hl-keyword">new</span> PathBuilder&lt;Customer&gt;(Customer.<span class="hl-keyword">class</span>, <span class="hl-string">"customer"</span>, validator);
+</pre><p>PathBuilderValidator.FIELDS will verify field existence, PathBuilderValidator.PROPERTIES validates
+      Bean properties and JPAPathBuilderValidator validates using a JPA metamodel.
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2110"></a>3.1.4.&nbsp;Case expressions</h3></div></div></div><p>To construct case-when-then-else expressions use the
+      <code class="code">CaseBuilder</code> class like this:
+    </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+Expression&lt;String&gt; cases = <span class="hl-keyword">new</span> CaseBuilder()
+    .when(customer.annualSpending.gt(<span class="hl-value">10000</span>)).then(<span class="hl-string">"Premier"</span>)
+    .when(customer.annualSpending.gt(<span class="hl-value">5000</span>)).then(<span class="hl-string">"Gold"</span>)
+    .when(customer.annualSpending.gt(<span class="hl-value">2000</span>)).then(<span class="hl-string">"Silver"</span>)
+    .otherwise(<span class="hl-string">"Bronze"</span>);
+<span class="hl-comment">// The cases expression can now be used in a projection or condition</span>
+</pre><p>For case expressions with equals-operations use the following simpler form instead:
+    </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+Expression&lt;String&gt; cases = customer.annualSpending
+    .when(<span class="hl-value">10000</span>).then(<span class="hl-string">"Premier"</span>)
+    .when(<span class="hl-value">5000</span>).then(<span class="hl-string">"Gold"</span>)
+    .when(<span class="hl-value">2000</span>).then(<span class="hl-string">"Silver"</span>)
+    .otherwise(<span class="hl-string">"Bronze"</span>);
+<span class="hl-comment">// The cases expression can now be used in a projection or condition</span>
+</pre><p>Case expressions are not yet supported in JDOQL.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2126"></a>3.1.5.&nbsp;Casting expressions</h3></div></div></div><p>
+      To avoid a generic signature in expression types the type hierarchies are
+      flattened. The result is that all generated query types are direct subclasses of
+      <code class="code">com.querydsl.core.types.dsl.EntityPathBase</code>
+      or
+      <code class="code">com.querydsl.core.types.dsl.BeanPath</code>
+      and cannot be directly cast to their logical supertypes.
+    </p><p>
+      Instead of a direct Java cast, the supertype reference is accessible via the
+      <code class="code">_super</code> field. A _super-field is available in all generated query types with a single
+      supertype:
+    </p><pre class="programlisting">
+<span class="hl-comment">// from Account</span>
+QAccount <span class="hl-keyword">extends</span> EntityPathBase&lt;Account&gt; {
+    <span class="hl-comment">// ...</span>
+}
+
+<span class="hl-comment">// from BankAccount extends Account</span>
+QBankAccount <span class="hl-keyword">extends</span> EntityPathBase&lt;BankAccount&gt; {
+
+    <span class="hl-keyword">public</span> <span class="hl-keyword">final</span> QAccount _super = <span class="hl-keyword">new</span> QAccount(<span class="hl-keyword">this</span>);
+
+    <span class="hl-comment">// ...</span>
+}
+</pre><p>To cast from a supertype to a subtype you can use the
+      as-method of the
+      EntityPathBase class:
+    </p><pre class="programlisting">
+QAccount account = <span class="hl-keyword">new</span> QAccount(<span class="hl-string">"account"</span>);
+QBankAccount bankAccount = account.as(QBankAccount.<span class="hl-keyword">class</span>);
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2148"></a>3.1.6.&nbsp;Select literals</h3></div></div></div><p>Literals can be selected by referring to them via Constant expressions. Here is a simple example </p><pre class="programlisting">
+query.select(Expressions.constant(<span class="hl-value">1</span>),
+             Expressions.constant(<span class="hl-string">"abc"</span>));
+</pre><p>Constant expressions are often used in subqueries.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s09.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.9.&nbsp;Querying in Scala&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.2.&nbsp;Result handling</td></tr></table></div></body></html>
