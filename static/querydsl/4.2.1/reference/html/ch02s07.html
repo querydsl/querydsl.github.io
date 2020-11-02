@@ -1,6 +1,6 @@
 <html><head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-   <title>2.7.&nbsp;Querying Mongodb</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl Reference Guide"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s06.html" title="2.6.&nbsp;Querying Hibernate Search"><link rel="next" href="ch02s08.html" title="2.8.&nbsp;Querying Collections"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.7.&nbsp;Querying Mongodb</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s06.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s08.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mongodb_integration"></a>2.7.&nbsp;Querying Mongodb</h2></div></div></div><p>This chapter describes the querying functionality of the Mongodb module.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1720"></a>2.7.1.&nbsp;Maven integration</h3></div></div></div><p>
+   <title>2.7.&nbsp;Querying Mongodb</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl Reference Guide"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s06.html" title="2.6.&nbsp;Querying Hibernate Search"><link rel="next" href="ch02s08.html" title="2.8.&nbsp;Querying Collections"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.7.&nbsp;Querying Mongodb</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s06.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s08.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mongodb_integration"></a>2.7.&nbsp;Querying Mongodb</h2></div></div></div><p>This chapter describes the querying functionality of the Mongodb module.</p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1715"></a>2.7.1.&nbsp;Maven integration</h3></div></div></div><p>
       Add the following dependencies to your Maven project:
     </p><pre class="programlisting">
 <span class="hl-tag">&lt;dependency&gt;</span>
@@ -62,7 +62,7 @@
     </p><p>
       Now you are able to construct Mongodb queries and instances of the
       query domain model.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1742"></a>2.7.2.&nbsp;Querying</h3></div></div></div><p>Querying with Querydsl Mongodb with Morphia is as simple as this:
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1737"></a>2.7.2.&nbsp;Querying</h3></div></div></div><p>Querying with Querydsl Mongodb with Morphia is as simple as this:
     </p><pre class="programlisting">
 Morphia morphia;
 Datastore datastore;
@@ -72,7 +72,7 @@ MorphiaQuery&lt;User&gt; query = <span class="hl-keyword">new</span> MorphiaQuer
 List&lt;User&gt; list = query
     .where(user.firstName.eq(<span class="hl-string">"Bob"</span>))
     .fetch();
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1749"></a>2.7.3.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the MongodbQuery class like this</p><p>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1744"></a>2.7.3.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the MongodbQuery class like this</p><p>
       <span class="emphasis"><em>where:</em></span>
       Add the query filters, either in varargs form separated via commas or
       cascaded via the and-operator. Supported operations are operations performed on PStrings except
@@ -96,28 +96,28 @@ List&lt;User&gt; list = query
       <span class="emphasis"><em>limit, offset, restrict:</em></span>
       Set the paging of the result. Limit for max results,
       offset for skipping rows and restrict for defining both in one call.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1781"></a>2.7.4.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting">
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1776"></a>2.7.4.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting">
 query
     .where(doc.title.like(<span class="hl-string">"*"</span>))
     .orderBy(doc.title.asc(), doc.year.desc())
     .fetch();
-</pre><p>The results are sorted ascending based on title and year.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1790"></a>2.7.5.&nbsp;Limit</h3></div></div></div><p>The syntax for declaring a limit is </p><pre class="programlisting">
+</pre><p>The results are sorted ascending based on title and year.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1785"></a>2.7.5.&nbsp;Limit</h3></div></div></div><p>The syntax for declaring a limit is </p><pre class="programlisting">
 query
     .where(doc.title.like(<span class="hl-string">"*"</span>))
     .limit(<span class="hl-value">10</span>)
     .fetch();
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1797"></a>2.7.6.&nbsp;Offset</h3></div></div></div><p>The syntax for declaring an offset is </p><pre class="programlisting">
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1792"></a>2.7.6.&nbsp;Offset</h3></div></div></div><p>The syntax for declaring an offset is </p><pre class="programlisting">
 query
     .where(doc.title.like(<span class="hl-string">"*"</span>))
     .offset(<span class="hl-value">3</span>)
     .fetch();
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1804"></a>2.7.7.&nbsp;Geospatial queries</h3></div></div></div><p>Support for geospatial queries is available for Double typed arrays (Double[])
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1799"></a>2.7.7.&nbsp;Geospatial queries</h3></div></div></div><p>Support for geospatial queries is available for Double typed arrays (Double[])
       via the near-method:
     </p><pre class="programlisting">
 query
     .where(geoEntity.location.near(<span class="hl-value">50.0</span>, <span class="hl-value">50.0</span>))
     .fetch();
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1811"></a>2.7.8.&nbsp;Select only relevant fields</h3></div></div></div><p>To select only relevant fields you can use the overloaded projection methods
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1806"></a>2.7.8.&nbsp;Select only relevant fields</h3></div></div></div><p>To select only relevant fields you can use the overloaded projection methods
       fetch, iterate, fetchOne and fetchFirst methods like this
     </p><pre class="programlisting">
 query
