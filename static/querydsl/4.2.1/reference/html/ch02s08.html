@@ -3,7 +3,7 @@
    <title>2.8.&nbsp;Querying Collections</title><link rel="stylesheet" href="css/stylesheet.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.74.0"><link rel="home" href="index.html" title="Querydsl Reference Guide"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s07.html" title="2.7.&nbsp;Querying Mongodb"><link rel="next" href="ch02s09.html" title="2.9.&nbsp;Querying in Scala"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.8.&nbsp;Querying Collections</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s07.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s09.html">Next</a></td></tr></table><hr></div><div class="sect1" lang="en-US"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="collections_integration"></a>2.8.&nbsp;Querying Collections</h2></div></div></div><p>The querydsl-collections module can be used with generated query types and
     without.
     The first section describes the usage without generated query types:
-  </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1825"></a>2.8.1.&nbsp;Usage without generated query types</h3></div></div></div><p>
+  </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1820"></a>2.8.1.&nbsp;Usage without generated query types</h3></div></div></div><p>
       To use querydsl-collections without generated query types you need to
       use the
       Querydsl alias feature. Here are some examples.
@@ -62,7 +62,7 @@ $(c.getMate().getName().toLowerCase())
     </p><p>
       Note also that you may only invoke getters, size(), contains(Object) and
       get(int) on alias types. All other invocations throw exceptions.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1867"></a>2.8.2.&nbsp;Usage with generated query types</h3></div></div></div><p>
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1862"></a>2.8.2.&nbsp;Usage with generated query types</h3></div></div></div><p>
       The example above can be expressed like this with generated expression types
     </p><pre class="programlisting">
 QCat cat = <span class="hl-keyword">new</span> QCat(<span class="hl-string">"cat"</span>);
@@ -74,7 +74,7 @@ QCat cat = <span class="hl-keyword">new</span> QCat(<span class="hl-string">"cat
 </pre><p>When you use generated query types, you instantiate expressions instead of alias
       instances
       and use the property paths directly without any dollar-method wrapping.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1876"></a>2.8.3.&nbsp;Maven integration</h3></div></div></div><p>
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1871"></a>2.8.3.&nbsp;Maven integration</h3></div></div></div><p>
       Add the following dependencies to your Maven project:
     </p><pre class="programlisting">
 <span class="hl-tag">&lt;dependency&gt;</span>
@@ -127,7 +127,7 @@ QCat cat = <span class="hl-keyword">new</span> QCat(<span class="hl-string">"cat
   <span class="hl-tag">&lt;/plugins&gt;</span>
   <span class="hl-tag">&lt;/build&gt;</span>
 <span class="hl-tag">&lt;/project&gt;</span>
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1890"></a>2.8.4.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1885"></a>2.8.4.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the
       following tasks for Querydsl code generation:
     </p><pre class="programlisting">
     <span class="hl-comment">&lt;!-- APT based code generation --&gt;</span>
@@ -152,7 +152,7 @@ QCat cat = <span class="hl-keyword">new</span> QCat(<span class="hl-string">"cat
       with your folder for generated sources and
       <span class="emphasis"><em>build</em></span>
       with your target folder.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1908"></a>2.8.5.&nbsp;Hamcrest matchers</h3></div></div></div><p>Querydsl Collections provides Hamcrest matchers. With these imports</p><pre class="programlisting">
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1903"></a>2.8.5.&nbsp;Hamcrest matchers</h3></div></div></div><p>Querydsl Collections provides Hamcrest matchers. With these imports</p><pre class="programlisting">
 <span class="hl-keyword">import</span> <span class="hl-keyword">static</span> org.hamcrest.core.IsEqual.equalTo;
 <span class="hl-keyword">import</span> <span class="hl-keyword">static</span> com.querydsl.collections.PathMatcher.hasValue;
 <span class="hl-keyword">import</span> <span class="hl-keyword">static</span> org.junit.Assert.assertEquals;
@@ -167,7 +167,7 @@ assertThat(car, hasValue($.horsePower, equalTo(<span class="hl-value">123</span>
       The Hamcrest matchers have been contributed by
       <a class="ulink" href="https://github.com/jeroenvs" target="_top">Jeroen van Schagen</a>
       .
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1924"></a>2.8.6.&nbsp;Usage with the Eclipse Compiler for Java</h3></div></div></div><p>If Querydsl Collections is used with a JRE where the system compiler is not available,
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1919"></a>2.8.6.&nbsp;Usage with the Eclipse Compiler for Java</h3></div></div></div><p>If Querydsl Collections is used with a JRE where the system compiler is not available,
     CollQuery instances can also be configured to use the Eclipse Compiler for Java (ECJ) instead:</p><pre class="programlisting">
 DefaultEvaluatorFactory evaluatorFactory = <span class="hl-keyword">new</span> DefaultEvaluatorFactory(
     CollQueryTemplates.DEFAULT,

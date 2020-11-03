@@ -6,7 +6,7 @@
     technologies for
     Querydsl. This guide describes how to use Querydsl
     in combination with JDO.
-  </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e487"></a>2.2.1.&nbsp;Maven integration</h3></div></div></div><p>
+  </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e482"></a>2.2.1.&nbsp;Maven integration</h3></div></div></div><p>
       Add the following dependencies to your Maven project:
     </p><pre class="programlisting">
 <span class="hl-tag">&lt;dependency&gt;</span>
@@ -68,7 +68,7 @@
       include target/generated-sources/java as a source folder.
     </p><p>
       Now you are able to construct JDO query instances and instances of the query domain model.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e509"></a>2.2.2.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e504"></a>2.2.2.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the
       following tasks for Querydsl code generation:
     </p><pre class="programlisting">
     <span class="hl-comment">&lt;!-- APT based code generation --&gt;</span>
@@ -94,7 +94,7 @@
       and
       <span class="emphasis"><em>build</em></span>
       with your target folder.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e527"></a>2.2.3.&nbsp;Using query types</h3></div></div></div><p>
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e522"></a>2.2.3.&nbsp;Using query types</h3></div></div></div><p>
       To create queries with Querydsl you need to instantiate variables and Query
       implementations. We will start with the variables.
     </p><p>
@@ -140,7 +140,7 @@ QCustomer customer = <span class="hl-keyword">new</span> QCustomer(<span class="
       fields. The firstName field can be accessed like this
     </p><pre class="programlisting">
 customer.firstName;
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e550"></a>2.2.4.&nbsp;Querying with JDO</h3></div></div></div><p>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e545"></a>2.2.4.&nbsp;Querying with JDO</h3></div></div></div><p>
       For the JDO-module <code class="code">JDOQuery</code> is the main Query implementation. It
       is instantiated like this:
     </p><pre class="programlisting">
@@ -181,7 +181,7 @@ queryFactory.selectFrom(customer)
     </p><pre class="programlisting">
 queryFactory.selectFrom(customer)
     .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>).or(customer.lastName.eq(<span class="hl-string">"Wilson"</span>)));
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e597"></a>2.2.5.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the JDOQuery class like this</p><p>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e592"></a>2.2.5.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the JDOQuery class like this</p><p>
       <span class="emphasis"><em>select:</em></span>
       Set the projection of the query. (Not necessary if created via query factory)
     </p><p>
@@ -208,16 +208,16 @@ queryFactory.selectFrom(customer)
       <span class="emphasis"><em>limit, offset, restrict:</em></span>
       Set the paging of the result. Limit for max results,
       offset for skipping rows and restrict for defining both in one call.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e637"></a>2.2.6.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting">
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e632"></a>2.2.6.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting">
 QCustomer customer = QCustomer.customer;
 queryFactory.selectFrom(customer)
     .orderBy(customer.lastName.asc(), customer.firstName.desc())
     .fetch();
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e644"></a>2.2.7.&nbsp;Grouping</h3></div></div></div><p>Grouping can be done in the following form</p><pre class="programlisting">
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e639"></a>2.2.7.&nbsp;Grouping</h3></div></div></div><p>Grouping can be done in the following form</p><pre class="programlisting">
 queryFactory.select(customer.lastName).from(customer)
     .groupBy(customer.lastName)
     .fetch();
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e651"></a>2.2.8.&nbsp;Delete clauses</h3></div></div></div><p>Delete clauses in Querydsl JDO follow a simple delete-where-execute form. Here
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e646"></a>2.2.8.&nbsp;Delete clauses</h3></div></div></div><p>Delete clauses in Querydsl JDO follow a simple delete-where-execute form. Here
       are some examples:
     </p><pre class="programlisting">
 QCustomer customer = QCustomer.customer;
@@ -228,7 +228,7 @@ queryFactory.delete(customer).where(customer.level.lt(<span class="hl-value">3</
 </pre><p>The second parameter of the JDODeleteClause constructor is the entity to be
       deleted. The where call is optional and the execute call performs the deletion and
       returns the amount of deleted entities.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e660"></a>2.2.9.&nbsp;Subqueries</h3></div></div></div><p>To create a subquery you can use one of the factory methods of <code class="code">JDOExpressions</code>
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e655"></a>2.2.9.&nbsp;Subqueries</h3></div></div></div><p>To create a subquery you can use one of the factory methods of <code class="code">JDOExpressions</code>
       and add the query parameters via from, where etc.
     </p><pre class="programlisting">
 QDepartment department = QDepartment.department;
@@ -253,7 +253,7 @@ queryFactory.selectFrom(employee)
 SELECT this FROM com.querydsl.jdo.models.company.Employee
 WHERE this.weeklyhours &gt;
 (SELECT avg(e.weeklyhours) FROM this.department.employees e WHERE e.manager == this.manager)
-    </pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e682"></a>2.2.10.&nbsp;Using Native SQL</h3></div></div></div><p>Querydsl supports Native SQL in JDO via the <code class="code">JDOSQLQuery</code> class.</p><p>To use it, you must generate Querydsl query types for your SQL schema. This can
+    </pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e677"></a>2.2.10.&nbsp;Using Native SQL</h3></div></div></div><p>Querydsl supports Native SQL in JDO via the <code class="code">JDOSQLQuery</code> class.</p><p>To use it, you must generate Querydsl query types for your SQL schema. This can
       be done for example with the following Maven configuration:
     </p><pre class="programlisting">
 <span class="hl-tag">&lt;project&gt;</span>

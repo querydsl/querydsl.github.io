@@ -12,7 +12,7 @@
     Querydsl for JPA is an alternative to both JPQL and Criteria queries. It combines the
     dynamic nature of Criteria queries with the expressiveness of JPQL and all that in a fully
     typesafe manner.
-  </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e137"></a>2.1.1.&nbsp;Maven integration</h3></div></div></div><p>
+  </p><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e132"></a>2.1.1.&nbsp;Maven integration</h3></div></div></div><p>
       Add the following dependencies to your Maven project:
     </p><pre class="programlisting">
 <span class="hl-tag">&lt;dependency&gt;</span>
@@ -77,7 +77,7 @@
     </p><p>
       Now you are able to construct JPA query instances and instances of
       the query domain model.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e161"></a>2.1.2.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e156"></a>2.1.2.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the
       following tasks for Querydsl code generation:
     </p><pre class="programlisting">
     <span class="hl-comment">&lt;!-- APT based code generation --&gt;</span>
@@ -103,7 +103,7 @@
       and
       <span class="emphasis"><em>build</em></span>
       with your target folder.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e179"></a>2.1.3.&nbsp;Using Querydsl JPA in Roo</h3></div></div></div><p>
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e174"></a>2.1.3.&nbsp;Using Querydsl JPA in Roo</h3></div></div></div><p>
       If you are using Querydsl JPA with Spring Roo you can replace
       <code class="code">com.querydsl.apt.jpa.JPAAnnotationProcessor</code>
       with
@@ -115,7 +115,7 @@
       annotated classes.
     </p><p>
       APT based code generation doesn't work well with AspectJ IDTs.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e201"></a>2.1.4.&nbsp;Generating the model from hbm.xml files</h3></div></div></div><p>If you are using Hibernate with an XML based configuration, you can use the XML
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e196"></a>2.1.4.&nbsp;Generating the model from hbm.xml files</h3></div></div></div><p>If you are using Hibernate with an XML based configuration, you can use the XML
       metadata to create your Querydsl model.
     </p><p><code class="code">com.querydsl.jpa.codegen.HibernateDomainExporter</code> provides the
       functionality for this:</p><pre class="programlisting">
@@ -130,7 +130,7 @@ exporter.export();
       via reflection.
     </p><p>All JPA annotations are ignored, but Querydsl annotations such as @QueryInit and
       @QueryType are taken into account.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e216"></a>2.1.5.&nbsp;Using query types</h3></div></div></div><p>
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e211"></a>2.1.5.&nbsp;Using query types</h3></div></div></div><p>
       To create queries with Querydsl you need to instantiate variables and
       Query implementations. We will start with the variables.
     </p><p>
@@ -171,7 +171,7 @@ QCustomer customer = QCustomer.customer;
       Alternatively you can define your own Customer variables like this:
     </p><pre class="programlisting">
 QCustomer customer = <span class="hl-keyword">new</span> QCustomer(<span class="hl-string">"myCustomer"</span>);
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e235"></a>2.1.6.&nbsp;Querying</h3></div></div></div><p>The Querydsl JPA module supports both the JPA and the Hibernate API.</p><p>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e230"></a>2.1.6.&nbsp;Querying</h3></div></div></div><p>The Querydsl JPA module supports both the JPA and the Hibernate API.</p><p>
       To use the JPA API you use <code class="code">JPAQuery</code> instances for your queries like
       this:
     </p><pre class="programlisting">
@@ -215,7 +215,7 @@ where customer.firstName = "Bob" and customer.lastName = "Wilson"
     </p><pre class="programlisting">
 queryFactory.selectFrom(customer)
     .where(customer.firstName.eq(<span class="hl-string">"Bob"</span>).or(customer.lastName.eq(<span class="hl-string">"Wilson"</span>)));
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e307"></a>2.1.7.&nbsp;Using joins</h3></div></div></div><p>Querydsl supports the following join variants in JPQL: inner join, join, left
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e302"></a>2.1.7.&nbsp;Using joins</h3></div></div></div><p>Querydsl supports the following join variants in JPQL: inner join, join, left
       join and right join. Join usage is typesafe, and follows the following pattern:
     </p><pre class="programlisting">
 QCat cat = QCat.cat;
@@ -238,7 +238,7 @@ queryFactory.selectFrom(cat)
 select cat from Cat as cat
 left join cat.kittens as kitten
 on kitten.bodyWeight &gt; 10.0
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e326"></a>2.1.8.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the JPQLQuery interface like this</p><p>
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e321"></a>2.1.8.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the JPQLQuery interface like this</p><p>
       <span class="emphasis"><em>select:</em></span>
       Set the projection of the query. (Not necessary if created via query factory)
     </p><p>
@@ -269,7 +269,7 @@ on kitten.bodyWeight &gt; 10.0
       <span class="emphasis"><em>limit, offset, restrict:</em></span>
       Set the paging of the result. Limit for max results,
       offset for skipping rows and restrict for defining both in one call.
-    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e371"></a>2.1.9.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting">
+    </p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e366"></a>2.1.9.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting">
 QCustomer customer = QCustomer.customer;
 queryFactory.selectFrom(customer)
     .orderBy(customer.lastName.asc(), customer.firstName.desc())
@@ -277,7 +277,7 @@ queryFactory.selectFrom(customer)
 </pre><p>which is equivalent to the following native JPQL</p><pre class="programlisting">
 select customer from Customer as customer
 order by customer.lastName asc, customer.firstName desc
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e382"></a>2.1.10.&nbsp;Grouping</h3></div></div></div><p>Grouping can be done in the following form</p><pre class="programlisting">
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e377"></a>2.1.10.&nbsp;Grouping</h3></div></div></div><p>Grouping can be done in the following form</p><pre class="programlisting">
 queryFactory.select(customer.lastName).from(customer)
     .groupBy(customer.lastName)
     .fetch();
@@ -285,7 +285,7 @@ queryFactory.select(customer.lastName).from(customer)
 select customer.lastName
 from Customer as customer
 group by customer.lastName
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e393"></a>2.1.11.&nbsp;Delete clauses</h3></div></div></div><p>Delete clauses in Querydsl JPA follow a simple delete-where-execute form. Here
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e388"></a>2.1.11.&nbsp;Delete clauses</h3></div></div></div><p>Delete clauses in Querydsl JPA follow a simple delete-where-execute form. Here
       are some
       examples:
     </p><pre class="programlisting">
@@ -297,7 +297,7 @@ queryFactory.delete(customer).where(customer.level.lt(<span class="hl-value">3</
 </pre><p>The where call is optional and the execute call performs the deletion and returns the
       amount of deleted entities.
     </p><p>DML clauses in JPA don't take JPA level cascade rules into account and don't provide
-    fine-grained second level cache interaction.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e404"></a>2.1.12.&nbsp;Update clauses</h3></div></div></div><p>Update clauses in Querydsl JPA follow a simple update-set/where-execute form.
+    fine-grained second level cache interaction.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e399"></a>2.1.12.&nbsp;Update clauses</h3></div></div></div><p>Update clauses in Querydsl JPA follow a simple update-set/where-execute form.
       Here are some examples:
     </p><pre class="programlisting">
 QCustomer customer = QCustomer.customer;
@@ -308,7 +308,7 @@ queryFactory.update(customer).where(customer.name.eq(<span class="hl-string">"Bo
 </pre><p>The set invocations define the property updates in SQL-Update-style and the execute call
       performs the Update and returns the amount of updated entities.
     </p><p>DML clauses in JPA don't take JPA level cascade rules into account and don't provide
-    fine-grained second level cache interaction.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e415"></a>2.1.13.&nbsp;Subqueries</h3></div></div></div><p>To create a subquery you use the static factory methods of <code class="code">JPAExpressions</code> and
+    fine-grained second level cache interaction.</p></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e410"></a>2.1.13.&nbsp;Subqueries</h3></div></div></div><p>To create a subquery you use the static factory methods of <code class="code">JPAExpressions</code> and
       define the query parameters via from, where etc.
     </p><pre class="programlisting">
 QDepartment department = QDepartment.department;
@@ -326,13 +326,13 @@ queryFactory.selectFrom(employee)
             .from(employee.department.employees, e)
             .where(e.manager.eq(employee.manager))))
     .fetch();
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e429"></a>2.1.14.&nbsp;Exposing the original query</h3></div></div></div><p>If you need to tune the original Query before the execution of the query you
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e424"></a>2.1.14.&nbsp;Exposing the original query</h3></div></div></div><p>If you need to tune the original Query before the execution of the query you
       can expose it like this:
     </p><pre class="programlisting">
 Query jpaQuery = queryFactory.selectFrom(employee).createQuery();
 <span class="hl-comment">// ...</span>
 List results = jpaQuery.getResultList();
-</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e436"></a>2.1.15.&nbsp;Using Native SQL in JPA queries</h3></div></div></div><p>Querydsl supports Native SQL in JPA via the JPASQLQuery class.
+</pre></div><div class="sect2" lang="en-US"><div class="titlepage"><div><div><h3 class="title"><a name="d0e431"></a>2.1.15.&nbsp;Using Native SQL in JPA queries</h3></div></div></div><p>Querydsl supports Native SQL in JPA via the JPASQLQuery class.
     </p><p>To use it, you must generate Querydsl query types for your SQL schema. This can
       be done for example with the following Maven configuration:
     </p><pre class="programlisting">
