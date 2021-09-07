@@ -1,5 +1,6 @@
 $(document).ready(function() {
   var versions = [
+    "5.0.0",
     "4.4.0",
     "4.3.1",
     "4.2.2",
