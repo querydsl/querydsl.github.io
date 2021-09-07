@@ -1,0 +1,171 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.8.&nbsp;Querying Collections</title><link rel="stylesheet" type="text/css" href="css/stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="Querydsl Reference Guide"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s07.html" title="2.7.&nbsp;Querying Mongodb"><link rel="next" href="ch02s09.html" title="2.9.&nbsp;Querying in Scala"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.8.&nbsp;Querying Collections</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s07.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s09.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="collections_integration"></a>2.8.&nbsp;Querying Collections</h2></div></div></div><p>The querydsl-collections module can be used with generated query types and
+    without.
+    The first section describes the usage without generated query types:
+  </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1855"></a>2.8.1.&nbsp;Usage without generated query types</h3></div></div></div><p>
+      To use querydsl-collections without generated query types you need to
+      use the
+      Querydsl alias feature. Here are some examples.
+    </p><p>
+      To get started, add the following static imports:
+    </p><pre class="programlisting">
+<em class="hl-comment" style="color: silver">// needed for access of the Querydsl Collections API</em>
+<strong class="hl-keyword">import</strong> <strong class="hl-keyword">static</strong> com.querydsl.collections.CollQueryFactory.*;
+<em class="hl-comment" style="color: silver">// needed, if you use the $-invocations</em>
+<strong class="hl-keyword">import</strong> <strong class="hl-keyword">static</strong> com.querydsl.core.alias.Alias.*;
+</pre><p>
+      And now create an alias instance for the Cat class. Alias instances can only be
+      created for non-final classes with an empty constructor. Make sure your class has one.
+    </p><p>
+      The alias instance of type Cat and its getter invocations are
+      transformed into paths by wrapping them into dollar method invocations.
+      The call
+      <code class="code">c.getKittens()</code>
+      for example is internally
+      transformed into the property path <code class="code">c.kittens</code> inside the
+      dollar method.
+    </p><pre class="programlisting">
+Cat c = alias(Cat.<strong class="hl-keyword">class</strong>, <strong class="hl-string"><em style="color:red">"cat"</em></strong>);
+<strong class="hl-keyword">for</strong> (String name : select($(c.getName())).from($(c),cats)
+  .where($(c.getKittens()).size().gt(<span class="hl-number">0</span>))
+  .fetch()) {
+    System.out.println(name);
+}
+</pre><p>
+      The following example is a variation of the previous, where the access
+      to the
+      list size happens inside the dollar-method invocation.
+    </p><pre class="programlisting">
+Cat c = alias(Cat.<strong class="hl-keyword">class</strong>, <strong class="hl-string"><em style="color:red">"cat"</em></strong>);
+<strong class="hl-keyword">for</strong> (String name : select($(c.getName())).from($(c),cats)
+  .where($(c.getKittens().size()).gt(<span class="hl-number">0</span>))
+  .fetch()) {
+    System.out.println(name);
+}
+</pre><p>
+      All non-primitive and non-final typed properties of aliases are aliases
+      themselves. So you may cascade method calls until you hit a
+      primitive or non-final type (e.g. java.lang.String) in the dollar-method scope.
+    </p><p>
+      e.g.
+    </p><pre class="programlisting">
+$(c.getMate().getName())
+</pre><p>
+      is transformed into
+      <span class="emphasis"><em>c.mate.name</em></span>
+      internally, but
+    </p><pre class="programlisting">
+$(c.getMate().getName().toLowerCase())
+</pre><p>
+      is not transformed properly, since the toLowerCase() invocation is not tracked.
+    </p><p>
+      Note also that you may only invoke getters, size(), contains(Object) and
+      get(int) on alias types. All other invocations throw exceptions.
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1897"></a>2.8.2.&nbsp;Usage with generated query types</h3></div></div></div><p>
+      The example above can be expressed like this with generated expression types
+    </p><pre class="programlisting">
+QCat cat = <strong class="hl-keyword">new</strong> QCat(<strong class="hl-string"><em style="color:red">"cat"</em></strong>);
+<strong class="hl-keyword">for</strong> (String name : select(cat.name).from(cat,cats)
+  .where(cat.kittens.size().gt(<span class="hl-number">0</span>))
+  .fetch()) {
+    System.out.println(name);
+}
+</pre><p>When you use generated query types, you instantiate expressions instead of alias
+      instances
+      and use the property paths directly without any dollar-method wrapping.
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1906"></a>2.8.3.&nbsp;Maven integration</h3></div></div></div><p>
+      Add the following dependencies to your Maven project:
+    </p><pre class="programlisting">
+<strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.querydsl<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>querydsl-apt<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${querydsl.version}<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;scope&gt;</strong>provided<strong class="hl-tag" style="color: #000096">&lt;/scope&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+
+<strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.querydsl<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>querydsl-collections<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${querydsl.version}<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+</pre><p>
+      If you are not using JPA or JDO you can generate expression types for your
+      domain types by
+      annotating them with the
+      <code class="code">com.querydsl.core.annotations.QueryEntity</code>
+      annotation and adding the
+      following plugin configuration into your Maven configuration (pom.xml):
+    </p><pre class="programlisting">
+<strong class="hl-tag" style="color: #000096">&lt;project&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;build&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;plugins&gt;</strong>
+    ...
+    <strong class="hl-tag" style="color: #000096">&lt;plugin&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.mysema.maven<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>apt-maven-plugin<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>1.1.3<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;executions&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;execution&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;goals&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;goal&gt;</strong>process<strong class="hl-tag" style="color: #000096">&lt;/goal&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;/goals&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;configuration&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;outputDirectory&gt;</strong>target/generated-sources/java<strong class="hl-tag" style="color: #000096">&lt;/outputDirectory&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;processor&gt;</strong>com.querydsl.apt.QuerydslAnnotationProcessor<strong class="hl-tag" style="color: #000096">&lt;/processor&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;/configuration&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;/execution&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/executions&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/plugin&gt;</strong>
+    ...
+  <strong class="hl-tag" style="color: #000096">&lt;/plugins&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/build&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/project&gt;</strong>
+</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1920"></a>2.8.4.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the
+      following tasks for Querydsl code generation:
+    </p><pre class="programlisting">
+    <em class="hl-comment" style="color: silver">&lt;!-- APT based code generation --&gt;</em>
+    <strong class="hl-tag" style="color: #000096">&lt;javac</strong> <span class="hl-attribute" style="color: #F5844C">srcdir</span>=<span class="hl-value" style="color: #993300">"${src}"</span> <span class="hl-attribute" style="color: #F5844C">classpathref</span>=<span class="hl-value" style="color: #993300">"cp"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;compilerarg</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"-proc:only"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;compilerarg</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"-processor"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;compilerarg</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"com.querydsl.apt.QuerydslAnnotationProcessor"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;compilerarg</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"-s"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;compilerarg</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"${generated}"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/javac&gt;</strong>
+
+    <em class="hl-comment" style="color: silver">&lt;!-- compilation --&gt;</em>
+    <strong class="hl-tag" style="color: #000096">&lt;javac</strong> <span class="hl-attribute" style="color: #F5844C">classpathref</span>=<span class="hl-value" style="color: #993300">"cp"</span> <span class="hl-attribute" style="color: #F5844C">destdir</span>=<span class="hl-value" style="color: #993300">"${build}"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;src</strong> <span class="hl-attribute" style="color: #F5844C">path</span>=<span class="hl-value" style="color: #993300">"${src}"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;src</strong> <span class="hl-attribute" style="color: #F5844C">path</span>=<span class="hl-value" style="color: #993300">"${generated}"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/javac&gt;</strong>
+</pre><p>
+      Replace
+      <span class="emphasis"><em>src</em></span>
+      with your main source folder,
+      <span class="emphasis"><em>generated</em></span>
+      with your folder for generated sources and
+      <span class="emphasis"><em>build</em></span>
+      with your target folder.
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1938"></a>2.8.5.&nbsp;Hamcrest matchers</h3></div></div></div><p>Querydsl Collections provides Hamcrest matchers. With these imports</p><pre class="programlisting">
+<strong class="hl-keyword">import</strong> <strong class="hl-keyword">static</strong> org.hamcrest.core.IsEqual.equalTo;
+<strong class="hl-keyword">import</strong> <strong class="hl-keyword">static</strong> com.querydsl.collections.PathMatcher.hasValue;
+<strong class="hl-keyword">import</strong> <strong class="hl-keyword">static</strong> org.junit.Assert.assertEquals;
+<strong class="hl-keyword">import</strong> <strong class="hl-keyword">static</strong> org.junit.Assert.assertThat;
+</pre><p>they can be used like this:</p><pre class="programlisting">
+Car car = <strong class="hl-keyword">new</strong> Car();
+car.setHorsePower(<span class="hl-number">123</span>);
+
+assertThat(car, hasValue($.horsePower));
+assertThat(car, hasValue($.horsePower, equalTo(<span class="hl-number">123</span>)));
+</pre><p>
+      The Hamcrest matchers have been contributed by
+      <a class="ulink" href="https://github.com/jeroenvs" target="_top">Jeroen van Schagen</a>
+      .
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1954"></a>2.8.6.&nbsp;Usage with the Eclipse Compiler for Java</h3></div></div></div><p>If Querydsl Collections is used with a JRE where the system compiler is not available,
+    CollQuery instances can also be configured to use the Eclipse Compiler for Java (ECJ) instead:</p><pre class="programlisting">
+DefaultEvaluatorFactory evaluatorFactory = <strong class="hl-keyword">new</strong> DefaultEvaluatorFactory(
+    CollQueryTemplates.DEFAULT,
+    <strong class="hl-keyword">new</strong> ECJEvaluatorFactory(getClass().getClassLoader()));
+QueryEngine queryEngine = <strong class="hl-keyword">new</strong> DefaultQueryEngine(evaluatorFactory);
+CollQuery query = <strong class="hl-keyword">new</strong> CollQuery(queryEngine);
+</pre></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s07.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s09.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.7.&nbsp;Querying Mongodb&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.9.&nbsp;Querying in Scala</td></tr></table></div></body></html>

@@ -1,0 +1,405 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.&nbsp;Tutorials</title><link rel="stylesheet" type="text/css" href="css/stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="Querydsl Reference Guide"><link rel="up" href="index.html" title="Querydsl Reference Guide"><link rel="prev" href="ch01s02.html" title="1.2.&nbsp;Principles"><link rel="next" href="ch02s02.html" title="2.2.&nbsp;Querying JDO"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.&nbsp;Tutorials</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch01s02.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch02s02.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="tutorials"></a>2.&nbsp;Tutorials</h1></div></div></div><p>
+    Instead of a general Getting started guide we provide integration
+    guides for the main backends of Querydsl.
+    </p><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="jpa_integration"></a>2.1.&nbsp;Querying JPA</h2></div></div></div><p>
+    Querydsl defines a general statically typed syntax for querying on top of
+    persisted domain model data. JDO and JPA are the primary integration
+    technologies for Querydsl. This guide describes how to use Querydsl
+    in combination with JPA.
+  </p><p>
+    Querydsl for JPA is an alternative to both JPQL and Criteria queries. It combines the
+    dynamic nature of Criteria queries with the expressiveness of JPQL and all that in a fully
+    typesafe manner.
+  </p><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e147"></a>2.1.1.&nbsp;Maven integration</h3></div></div></div><p>
+      Add the following dependencies to your Maven project:
+    </p><pre class="programlisting">
+<strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.querydsl<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>querydsl-apt<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${querydsl.version}<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;scope&gt;</strong>provided<strong class="hl-tag" style="color: #000096">&lt;/scope&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+
+<strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.querydsl<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>querydsl-jpa<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${querydsl.version}<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+</pre><p>
+      And now, configure the Maven APT plugin:
+    </p><pre class="programlisting">
+<strong class="hl-tag" style="color: #000096">&lt;project&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;build&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;plugins&gt;</strong>
+    ...
+    <strong class="hl-tag" style="color: #000096">&lt;plugin&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.mysema.maven<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>apt-maven-plugin<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>1.1.3<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;executions&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;execution&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;goals&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;goal&gt;</strong>process<strong class="hl-tag" style="color: #000096">&lt;/goal&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;/goals&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;configuration&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;outputDirectory&gt;</strong>target/generated-sources/java<strong class="hl-tag" style="color: #000096">&lt;/outputDirectory&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;processor&gt;</strong>com.querydsl.apt.jpa.JPAAnnotationProcessor<strong class="hl-tag" style="color: #000096">&lt;/processor&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;/configuration&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;/execution&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/executions&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/plugin&gt;</strong>
+    ...
+  <strong class="hl-tag" style="color: #000096">&lt;/plugins&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/build&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/project&gt;</strong>
+</pre><p>
+      The JPAAnnotationProcessor finds domain types annotated with the
+      javax.persistence.Entity annotation and generates query types for them.
+    </p><p>
+      If you use Hibernate annotations in your domain types you should use
+      the APT processor
+      <code class="code">com.querydsl.apt.hibernate.HibernateAnnotationProcessor</code>
+      instead.
+    </p><p>
+      Run clean install and you will get your Query types generated into
+      target/generated-sources/java.
+    </p><p>
+      If you use Eclipse, run mvn eclipse:eclipse to update your Eclipse project to
+      include target/generated-sources/java as a source folder.
+    </p><p>
+      Now you are able to construct JPA query instances and instances of
+      the query domain model.
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e171"></a>2.1.2.&nbsp;Ant integration</h3></div></div></div><p>Place the jar files from the full-deps bundle on your classpath and use the
+      following tasks for Querydsl code generation:
+    </p><pre class="programlisting">
+    <em class="hl-comment" style="color: silver">&lt;!-- APT based code generation --&gt;</em>
+    <strong class="hl-tag" style="color: #000096">&lt;javac</strong> <span class="hl-attribute" style="color: #F5844C">srcdir</span>=<span class="hl-value" style="color: #993300">"${src}"</span> <span class="hl-attribute" style="color: #F5844C">classpathref</span>=<span class="hl-value" style="color: #993300">"cp"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;compilerarg</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"-proc:only"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;compilerarg</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"-processor"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;compilerarg</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"com.querydsl.apt.jpa.JPAAnnotationProcessor"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;compilerarg</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"-s"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;compilerarg</strong> <span class="hl-attribute" style="color: #F5844C">value</span>=<span class="hl-value" style="color: #993300">"${generated}"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/javac&gt;</strong>
+
+    <em class="hl-comment" style="color: silver">&lt;!-- compilation --&gt;</em>
+    <strong class="hl-tag" style="color: #000096">&lt;javac</strong> <span class="hl-attribute" style="color: #F5844C">classpathref</span>=<span class="hl-value" style="color: #993300">"cp"</span> <span class="hl-attribute" style="color: #F5844C">destdir</span>=<span class="hl-value" style="color: #993300">"${build}"</span><strong class="hl-tag" style="color: #000096">&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;src</strong> <span class="hl-attribute" style="color: #F5844C">path</span>=<span class="hl-value" style="color: #993300">"${src}"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;src</strong> <span class="hl-attribute" style="color: #F5844C">path</span>=<span class="hl-value" style="color: #993300">"${generated}"</span><strong class="hl-tag" style="color: #000096">/&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;/javac&gt;</strong>
+</pre><p>
+      Replace
+      <span class="emphasis"><em>src</em></span>
+      with your main source folder,
+      <span class="emphasis"><em>generated</em></span>
+      with your folder for generated sources
+      and
+      <span class="emphasis"><em>build</em></span>
+      with your target folder.
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e189"></a>2.1.3.&nbsp;Using Querydsl JPA in Roo</h3></div></div></div><p>
+      If you are using Querydsl JPA with Spring Roo you can replace
+      <code class="code">com.querydsl.apt.jpa.JPAAnnotationProcessor</code>
+      with
+      <code class="code">com.querydsl.apt.roo.RooAnnotationProcessor</code>
+      which will handle
+      <code class="code">@RooJpaEntity</code> and <code class="code">@RooJpaActiveRecord</code>
+      annotated classes instead of
+      <code class="code">@Entity</code>
+      annotated classes.
+    </p><p>
+      APT based code generation doesn't work well with AspectJ IDTs.
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e211"></a>2.1.4.&nbsp;Generating the model from hbm.xml files</h3></div></div></div><p>If you are using Hibernate with an XML based configuration, you can use the XML
+      metadata to create your Querydsl model.
+    </p><p><code class="code">com.querydsl.jpa.codegen.HibernateDomainExporter</code> provides the
+      functionality for this:</p><pre class="programlisting">
+HibernateDomainExporter exporter = <strong class="hl-keyword">new</strong> HibernateDomainExporter(
+  <strong class="hl-string"><em style="color:red">"Q"</em></strong>,                     <em class="hl-comment" style="color: silver">// name prefix</em>
+  <strong class="hl-keyword">new</strong> File(<strong class="hl-string"><em style="color:red">"target/gen3"</em></strong>), <em class="hl-comment" style="color: silver">// target folder</em>
+  configuration);          <em class="hl-comment" style="color: silver">// instance of org.hibernate.cfg.Configuration</em>
+
+exporter.export();
+</pre><p>The HibernateDomainExporter needs to be executed within a classpath where the
+      domain types are visible, since the property types are resolved
+      via reflection.
+    </p><p>All JPA annotations are ignored, but Querydsl annotations such as @QueryInit and
+      @QueryType are taken into account.
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e226"></a>2.1.5.&nbsp;Using query types</h3></div></div></div><p>
+      To create queries with Querydsl you need to instantiate variables and
+      Query implementations. We will start with the variables.
+    </p><p>
+      Let's assume that your project has the following domain type:
+    </p><pre class="programlisting">
+<em><span class="hl-annotation" style="color: gray">@Entity</span></em>
+<strong class="hl-keyword">public</strong> <strong class="hl-keyword">class</strong> Customer {
+    <strong class="hl-keyword">private</strong> String firstName;
+    <strong class="hl-keyword">private</strong> String lastName;
+
+    <strong class="hl-keyword">public</strong> String getFirstName() {
+        <strong class="hl-keyword">return</strong> firstName;
+    }
+
+    <strong class="hl-keyword">public</strong> String getLastName() {
+        <strong class="hl-keyword">return</strong> lastName;
+    }
+
+    <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> setFirstName(String fn) {
+        firstName = fn;
+    }
+
+    <strong class="hl-keyword">public</strong> <strong class="hl-keyword">void</strong> setLastName(String ln) {
+        lastName = ln;
+    }
+}
+</pre><p>
+      Querydsl will generate a query type with the simple name QCustomer into the
+      same package as Customer. QCustomer can be used as a statically
+      typed variable in Querydsl queries as a representative for the
+      Customer type.
+    </p><p>
+      QCustomer has a default instance variable which can be accessed as a static
+      field:
+    </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+</pre><p>
+      Alternatively you can define your own Customer variables like this:
+    </p><pre class="programlisting">
+QCustomer customer = <strong class="hl-keyword">new</strong> QCustomer(<strong class="hl-string"><em style="color:red">"myCustomer"</em></strong>);
+</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e245"></a>2.1.6.&nbsp;Querying</h3></div></div></div><p>The Querydsl JPA module supports both the JPA and the Hibernate API.</p><p>
+      To use the JPA API you use <code class="code">JPAQuery</code> instances for your queries like
+      this:
+    </p><pre class="programlisting">
+<em class="hl-comment" style="color: silver">// where entityManager is a JPA EntityManager</em>
+JPAQuery&lt;?&gt; query = <strong class="hl-keyword">new</strong> JPAQuery&lt;Void&gt;(entityManager);
+</pre><p>If you are using the Hibernate API instead, you can instantiate a
+    <code class="code">HibernateQuery</code> like this:
+    </p><pre class="programlisting">
+<em class="hl-comment" style="color: silver">// where session is a Hibernate session</em>
+HibernateQuery&lt;?&gt; query = <strong class="hl-keyword">new</strong> HibernateQuery&lt;Void&gt;(session);
+</pre><p>Both <code class="code">JPAQuery</code> and <code class="code">HibernateQuery</code> implement the <code class="code">JPQLQuery</code> interface.</p><p>For the examples of this chapter the queries are created via a <code class="code">JPAQueryFactory</code> instance.
+      <code class="code">JPAQueryFactory</code> should be the preferred option to obtain <code class="code">JPAQuery</code> instances.</p><p>For the Hibernate API <code class="code">HibernateQueryFactory</code> can be used</p><p>
+      To retrieve the customer with the first name Bob you would construct a
+      query like this:
+    </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+Customer bob = queryFactory.selectFrom(customer)
+  .where(customer.firstName.eq(<strong class="hl-string"><em style="color:red">"Bob"</em></strong>))
+  .fetchOne();
+</pre><p>
+      The selectFrom call defines the query source and projection, the where part defines the
+      filter and fetchOne tells Querydsl to return a single element. Easy, right?
+    </p><p>
+      To create a query with multiple sources you use the query like this:
+    </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+QCompany company = QCompany.company;
+query.from(customer, company);
+</pre><p>
+      And to use multiple filters use it like this
+    </p><pre class="programlisting">
+queryFactory.selectFrom(customer)
+    .where(customer.firstName.eq(<strong class="hl-string"><em style="color:red">"Bob"</em></strong>), customer.lastName.eq(<strong class="hl-string"><em style="color:red">"Wilson"</em></strong>));
+</pre><p>Or like this</p><pre class="programlisting">
+queryFactory.selectFrom(customer)
+    .where(customer.firstName.eq(<strong class="hl-string"><em style="color:red">"Bob"</em></strong>).and(customer.lastName.eq(<strong class="hl-string"><em style="color:red">"Wilson"</em></strong>)));
+</pre><p>In native JPQL form the query would be written like this: </p><pre class="programlisting">
+select customer from Customer as customer
+where customer.firstName = "Bob" and customer.lastName = "Wilson"
+</pre><p>If you want to combine the filters via "or" then use the following pattern
+    </p><pre class="programlisting">
+queryFactory.selectFrom(customer)
+    .where(customer.firstName.eq(<strong class="hl-string"><em style="color:red">"Bob"</em></strong>).or(customer.lastName.eq(<strong class="hl-string"><em style="color:red">"Wilson"</em></strong>)));
+</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e317"></a>2.1.7.&nbsp;Using joins</h3></div></div></div><p>Querydsl supports the following join variants in JPQL: inner join, join, left
+      join and right join. Join usage is typesafe, and follows the following pattern:
+    </p><pre class="programlisting">
+QCat cat = QCat.cat;
+QCat mate = <strong class="hl-keyword">new</strong> QCat(<strong class="hl-string"><em style="color:red">"mate"</em></strong>);
+QCat kitten = <strong class="hl-keyword">new</strong> QCat(<strong class="hl-string"><em style="color:red">"kitten"</em></strong>);
+queryFactory.selectFrom(cat)
+    .innerJoin(cat.mate, mate)
+    .leftJoin(cat.kittens, kitten)
+    .fetch();
+</pre><p>The native JPQL version of the query would be </p><pre class="programlisting">
+select cat from Cat as cat
+inner join cat.mate as mate
+left outer join cat.kittens as kitten
+</pre><p>Another example</p><pre class="programlisting">
+queryFactory.selectFrom(cat)
+    .leftJoin(cat.kittens, kitten)
+    .on(kitten.bodyWeight.gt(<span class="hl-number">10.0</span>))
+    .fetch();
+</pre><p>With the following JPQL version</p><pre class="programlisting">
+select cat from Cat as cat
+left join cat.kittens as kitten
+on kitten.bodyWeight &gt; 10.0
+</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e336"></a>2.1.8.&nbsp;General usage</h3></div></div></div><p>Use the the cascading methods of the JPQLQuery interface like this</p><p>
+      <span class="emphasis"><em>select:</em></span>
+      Set the projection of the query. (Not necessary if created via query factory)
+    </p><p>
+      <span class="emphasis"><em>from:</em></span>
+      Add the query sources here.
+    </p><p>
+      <span class="emphasis"><em>innerJoin, join, leftJoin, rightJoin, on:</em></span>
+      Add join elements using these constructs.
+      For the join methods the first argument is the join source and the second the target
+      (alias).
+    </p><p>
+      <span class="emphasis"><em>where:</em></span>
+      Add query filters, either in varargs form separated via commas or
+      cascaded via the and-operator.
+    </p><p>
+      <span class="emphasis"><em>groupBy:</em></span>
+      Add group by arguments in varargs form.
+    </p><p>
+      <span class="emphasis"><em>having:</em></span>
+      Add having filters of the "group by" grouping as an varags array of
+      Predicate expressions.
+    </p><p>
+      <span class="emphasis"><em>orderBy:</em></span>
+      Add ordering of the result as an varargs array of order expressions.
+      Use asc() and desc() on numeric, string and other comparable expression to access the
+      OrderSpecifier instances.
+    </p><p>
+      <span class="emphasis"><em>limit, offset, restrict:</em></span>
+      Set the paging of the result. Limit for max results,
+      offset for skipping rows and restrict for defining both in one call.
+    </p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e381"></a>2.1.9.&nbsp;Ordering</h3></div></div></div><p>The syntax for declaring ordering is </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+queryFactory.selectFrom(customer)
+    .orderBy(customer.lastName.asc(), customer.firstName.desc())
+    .fetch();
+</pre><p>which is equivalent to the following native JPQL</p><pre class="programlisting">
+select customer from Customer as customer
+order by customer.lastName asc, customer.firstName desc
+</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e392"></a>2.1.10.&nbsp;Grouping</h3></div></div></div><p>Grouping can be done in the following form</p><pre class="programlisting">
+queryFactory.select(customer.lastName).from(customer)
+    .groupBy(customer.lastName)
+    .fetch();
+</pre><p>which is equivalent to the following native JPQL</p><pre class="programlisting">
+select customer.lastName
+from Customer as customer
+group by customer.lastName
+</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e403"></a>2.1.11.&nbsp;Delete clauses</h3></div></div></div><p>Delete clauses in Querydsl JPA follow a simple delete-where-execute form. Here
+      are some
+      examples:
+    </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+<em class="hl-comment" style="color: silver">// delete all customers</em>
+queryFactory.delete(customer).execute();
+<em class="hl-comment" style="color: silver">// delete all customers with a level less than 3</em>
+queryFactory.delete(customer).where(customer.level.lt(<span class="hl-number">3</span>)).execute();
+</pre><p>The where call is optional and the execute call performs the deletion and returns the
+      amount of deleted entities.
+    </p><p>DML clauses in JPA don't take JPA level cascade rules into account and don't provide
+    fine-grained second level cache interaction.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e414"></a>2.1.12.&nbsp;Update clauses</h3></div></div></div><p>Update clauses in Querydsl JPA follow a simple update-set/where-execute form.
+      Here are some examples:
+    </p><pre class="programlisting">
+QCustomer customer = QCustomer.customer;
+<em class="hl-comment" style="color: silver">// rename customers named Bob to Bobby</em>
+queryFactory.update(customer).where(customer.name.eq(<strong class="hl-string"><em style="color:red">"Bob"</em></strong>))
+    .set(customer.name, <strong class="hl-string"><em style="color:red">"Bobby"</em></strong>)
+    .execute();
+</pre><p>The set invocations define the property updates in SQL-Update-style and the execute call
+      performs the Update and returns the amount of updated entities.
+    </p><p>DML clauses in JPA don't take JPA level cascade rules into account and don't provide
+    fine-grained second level cache interaction.</p></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e425"></a>2.1.13.&nbsp;Subqueries</h3></div></div></div><p>To create a subquery you use the static factory methods of <code class="code">JPAExpressions</code> and
+      define the query parameters via from, where etc.
+    </p><pre class="programlisting">
+QDepartment department = QDepartment.department;
+QDepartment d = <strong class="hl-keyword">new</strong> QDepartment(<strong class="hl-string"><em style="color:red">"d"</em></strong>);
+queryFactory.selectFrom(department)
+    .where(department.size.eq(
+        JPAExpressions.select(d.size.max()).from(d)))
+     .fetch();
+</pre><p>Another example</p><pre class="programlisting">
+QEmployee employee = QEmployee.employee;
+QEmployee e = <strong class="hl-keyword">new</strong> QEmployee(<strong class="hl-string"><em style="color:red">"e"</em></strong>);
+queryFactory.selectFrom(employee)
+    .where(employee.weeklyhours.gt(
+        JPAExpressions.select(e.weeklyhours.avg())
+            .from(employee.department.employees, e)
+            .where(e.manager.eq(employee.manager))))
+    .fetch();
+</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e439"></a>2.1.14.&nbsp;Exposing the original query</h3></div></div></div><p>If you need to tune the original Query before the execution of the query you
+      can expose it like this:
+    </p><pre class="programlisting">
+Query jpaQuery = queryFactory.selectFrom(employee).createQuery();
+<em class="hl-comment" style="color: silver">// ...</em>
+List results = jpaQuery.getResultList();
+</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e446"></a>2.1.15.&nbsp;Using Native SQL in JPA queries</h3></div></div></div><p>Querydsl supports Native SQL in JPA via the JPASQLQuery class.
+    </p><p>To use it, you must generate Querydsl query types for your SQL schema. This can
+      be done for example with the following Maven configuration:
+    </p><pre class="programlisting">
+<strong class="hl-tag" style="color: #000096">&lt;project&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;build&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;plugins&gt;</strong>
+      ...
+      <strong class="hl-tag" style="color: #000096">&lt;plugin&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.querydsl<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>querydsl-maven-plugin<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${querydsl.version}<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;executions&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;execution&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;goals&gt;</strong>
+              <strong class="hl-tag" style="color: #000096">&lt;goal&gt;</strong>export<strong class="hl-tag" style="color: #000096">&lt;/goal&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;/goals&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;/execution&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;/executions&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;configuration&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;jdbcDriver&gt;</strong>org.apache.derby.jdbc.EmbeddedDriver<strong class="hl-tag" style="color: #000096">&lt;/jdbcDriver&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;jdbcUrl&gt;</strong>jdbc:derby:target/demoDB;create=true<strong class="hl-tag" style="color: #000096">&lt;/jdbcUrl&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;packageName&gt;</strong>com.mycompany.mydomain<strong class="hl-tag" style="color: #000096">&lt;/packageName&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;targetFolder&gt;</strong>${project.basedir}/target/generated-sources/java<strong class="hl-tag" style="color: #000096">&lt;/targetFolder&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;/configuration&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;dependencies&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.apache.derby<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>derby<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${derby.version}<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;/dependencies&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/plugin&gt;</strong>
+      ...
+    <strong class="hl-tag" style="color: #000096">&lt;/plugins&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/build&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/project&gt;</strong>
+</pre><p>When the query types have successfully been generated into the location of your
+      choice, you can use them in your queries.
+    </p><p>Single column query:</p><pre class="programlisting">
+<em class="hl-comment" style="color: silver">// serialization templates</em>
+SQLTemplates templates = <strong class="hl-keyword">new</strong> DerbyTemplates();
+<em class="hl-comment" style="color: silver">// query types (S* for SQL, Q* for domain types)</em>
+SAnimal cat = <strong class="hl-keyword">new</strong> SAnimal(<strong class="hl-string"><em style="color:red">"cat"</em></strong>);
+SAnimal mate = <strong class="hl-keyword">new</strong> SAnimal(<strong class="hl-string"><em style="color:red">"mate"</em></strong>);
+QCat catEntity = QCat.cat;
+
+JPASQLQuery&lt;?&gt; query = <strong class="hl-keyword">new</strong> JPASQLQuery&lt;Void&gt;(entityManager, templates);
+List&lt;String&gt; names = query.select(cat.name).from(cat).fetch();
+</pre><p>If you mix entity (e.g. QCat) and table (e.g. SAnimal) references in your query you need to make sure that they
+    use the same variable names. SAnimal.animal has the variable name "animal", so a new instance
+    (new SAnimal("cat")) was used instead.</p><p>An alternative pattern could be</p><pre class="programlisting">
+QCat catEntity = QCat.cat;
+SAnimal cat = <strong class="hl-keyword">new</strong> SAnimal(catEntity.getMetadata().getName());
+</pre><p>Query multiple columns:</p><pre class="programlisting">
+query = <strong class="hl-keyword">new</strong> JPASQLQuery&lt;Void&gt;(entityManager, templates);
+List&lt;Tuple&gt; rows = query.select(cat.id, cat.name).from(cat).fetch();
+</pre><p>Query all columns:</p><pre class="programlisting">
+List&lt;Tuple&gt; rows = query.select(cat.all()).from(cat).fetch();
+ </pre><p>Query in SQL, but project as entity: </p><pre class="programlisting">
+query = <strong class="hl-keyword">new</strong> JPASQLQuery&lt;Void&gt;(entityManager, templates);
+List&lt;Cat&gt; cats = query.select(catEntity).from(cat).orderBy(cat.name.asc()).fetch();
+</pre><p>Query with joins: </p><pre class="programlisting">
+query = <strong class="hl-keyword">new</strong> JPASQLQuery&lt;Void&gt;(entityManager, templates);
+cats = query.select(catEntity).from(cat)
+    .innerJoin(mate).on(cat.mateId.eq(mate.id))
+    .where(cat.dtype.eq(<strong class="hl-string"><em style="color:red">"Cat"</em></strong>), mate.dtype.eq(<strong class="hl-string"><em style="color:red">"Cat"</em></strong>))
+    .fetch();
+</pre><p>Query and project into DTO: </p><pre class="programlisting">
+query = <strong class="hl-keyword">new</strong> JPASQLQuery&lt;Void&gt;(entityManager, templates);
+List&lt;CatDTO&gt; catDTOs = query.select(Projections.constructor(CatDTO.<strong class="hl-keyword">class</strong>, cat.id, cat.name))
+    .from(cat)
+    .orderBy(cat.name.asc())
+    .fetch();
+</pre><p>If you are using the Hibernate API instead of the JPA API, then use
+      <code class="code">HibernateSQLQuery</code> instead.
+    </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch01s02.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch02s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">1.2.&nbsp;Principles&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.2.&nbsp;Querying JDO</td></tr></table></div></body></html>

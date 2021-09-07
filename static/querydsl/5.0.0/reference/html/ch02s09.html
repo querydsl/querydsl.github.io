@@ -1,0 +1,162 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>2.9.&nbsp;Querying in Scala</title><link rel="stylesheet" type="text/css" href="css/stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="Querydsl Reference Guide"><link rel="up" href="ch02.html" title="2.&nbsp;Tutorials"><link rel="prev" href="ch02s08.html" title="2.8.&nbsp;Querying Collections"><link rel="next" href="ch03.html" title="3.&nbsp;General usage"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2.9.&nbsp;Querying in Scala</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s08.html">Prev</a>&nbsp;</td><th width="60%" align="center">2.&nbsp;Tutorials</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td></tr></table><hr></div><div class="sect1"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="scala"></a>2.9.&nbsp;Querying in Scala</h2></div></div></div><p>Generic support for Querydsl usage in Scala is available via querydsl-scala
+    module. To add it to your Maven build, use the following snippet:
+  </p><pre class="programlisting">
+<strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.querydsl<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>querydsl-scala<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${querydsl.version}<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+</pre><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1968"></a>2.9.1.&nbsp;DSL expressions for Scala</h3></div></div></div><p>Querydsl for Scala provides an alternative DSL for expression construction. The
+      Scala DSL utilizes language features such as operator overloading,
+      function pointers and implicit imports for enhanced readability and conciseness.
+    </p><p>Here is an overview of the main alternatives :</p><pre class="programlisting">
+//Standard              Alternative
+
+expr isNotNull          expr is not(null)
+expr isNull             expr is null
+expr eq "Ben"           expr === "Ben"
+expr ne "Ben"           expr !== "Ben"
+expr append "X"         expr + "X"
+expr isEmpty            expr is empty
+expr isNotEmpty         expr not empty
+
+// boolean
+left and right          left &amp;&amp; right
+left or right           left || right
+expr not                !expr
+
+// comparison
+expr lt 5               expr &lt; 5
+expr loe 5              expr &lt;= 5
+expr gt 5               expr &gt; 5
+expr goe 5              expr &gt;= 5
+expr notBetween(2,6)    expr not between (2,6)
+expr negate             -expr
+
+// numeric
+expr add 3              expr + 3
+expr subtract 3         expr - 3
+expr divide 3           expr / 3
+expr multiply 3         expr * 3
+expr mod 5              expr % 5
+
+// collection
+list.get(0)             list(0)
+map.get("X")            map("X")
+</pre></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e1978"></a>2.9.2.&nbsp;Querying with SQL</h3></div></div></div><p>
+      Like with Querydsl SQL for Java you need to generate Query types to be able to construct
+      your queries. The following code examples show how this is done:
+    </p><p>Generation without Bean types :</p><pre class="programlisting">
+val directory = <strong class="hl-keyword">new</strong> java.io.File(<strong class="hl-string"><em style="color:red">"target/jdbcgen1"</em></strong>)
+val namingStrategy = <strong class="hl-keyword">new</strong> DefaultNamingStrategy()
+val exporter = <strong class="hl-keyword">new</strong> MetaDataExporter()
+exporter.setNamePrefix(<strong class="hl-string"><em style="color:red">"Q"</em></strong>)
+exporter.setPackageName(<strong class="hl-string"><em style="color:red">"com.querydsl"</em></strong>)
+exporter.setSchemaPattern(<strong class="hl-string"><em style="color:red">"PUBLIC"</em></strong>)
+exporter.setTargetFolder(directory)
+exporter.setSerializerClass(classOf[ScalaMetaDataSerializer])
+exporter.setCreateScalaSources(true)
+exporter.setTypeMappings(ScalaTypeMappings.create)
+exporter.export(connection.getMetaData)
+</pre><p>Generation with Bean types :</p><pre class="programlisting">
+val directory = <strong class="hl-keyword">new</strong> java.io.File(<strong class="hl-string"><em style="color:red">"target/jdbcgen2"</em></strong>)
+val namingStrategy = <strong class="hl-keyword">new</strong> DefaultNamingStrategy()
+val exporter = <strong class="hl-keyword">new</strong> MetaDataExporter()
+exporter.setNamePrefix(<strong class="hl-string"><em style="color:red">"Q"</em></strong>)
+exporter.setPackageName(<strong class="hl-string"><em style="color:red">"com.querydsl"</em></strong>)
+exporter.setSchemaPattern(<strong class="hl-string"><em style="color:red">"PUBLIC"</em></strong>)
+exporter.setTargetFolder(directory)
+exporter.setSerializerClass(classOf[ScalaMetaDataSerializer])
+exporter.setBeanSerializerClass(classOf[ScalaBeanSerializer])
+exporter.setCreateScalaSources(true)
+exporter.setTypeMappings(ScalaTypeMappings.create)
+exporter.export(connection.getMetaData)
+</pre><div class="sect3"><div class="titlepage"><div><div><h4 class="title"><a name="d0e1991"></a>2.9.2.1.&nbsp;Code generation</h4></div></div></div><p>Scala sources for SQL metatypes and projections can be generated with
+        querydsl-maven-plugin. Here is an example configuration
+      </p><pre class="programlisting">
+<strong class="hl-tag" style="color: #000096">&lt;project&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;build&gt;</strong>
+    <strong class="hl-tag" style="color: #000096">&lt;plugins&gt;</strong>
+      ...
+      <strong class="hl-tag" style="color: #000096">&lt;plugin&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.querydsl<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>querydsl-maven-plugin<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${querydsl.version}<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;configuration&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;jdbcDriver&gt;</strong>com.mysql.jdbc.Driver<strong class="hl-tag" style="color: #000096">&lt;/jdbcDriver&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;jdbcUrl&gt;</strong>jdbc:mysql://localhost:3306/test<strong class="hl-tag" style="color: #000096">&lt;/jdbcUrl&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;jdbcUser&gt;</strong>matko<strong class="hl-tag" style="color: #000096">&lt;/jdbcUser&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;jdbcPassword&gt;</strong>matko<strong class="hl-tag" style="color: #000096">&lt;/jdbcPassword&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;packageName&gt;</strong>com.example.schema<strong class="hl-tag" style="color: #000096">&lt;/packageName&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;targetFolder&gt;</strong>${project.basedir}/src/main/scala<strong class="hl-tag" style="color: #000096">&lt;/targetFolder&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;exportBeans&gt;</strong>true<strong class="hl-tag" style="color: #000096">&lt;/exportBeans&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;createScalaSources&gt;</strong>true<strong class="hl-tag" style="color: #000096">&lt;/createScalaSources&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;/configuration&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;dependencies&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>mysql<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>mysql-connector-java<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>5.1.16<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>com.querydsl<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>querydsl-scala<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${querydsl.version}<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;dependency&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;groupId&gt;</strong>org.scala-lang<strong class="hl-tag" style="color: #000096">&lt;/groupId&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;artifactId&gt;</strong>scala-library<strong class="hl-tag" style="color: #000096">&lt;/artifactId&gt;</strong>
+            <strong class="hl-tag" style="color: #000096">&lt;version&gt;</strong>${scala.version}<strong class="hl-tag" style="color: #000096">&lt;/version&gt;</strong>
+          <strong class="hl-tag" style="color: #000096">&lt;/dependency&gt;</strong>
+        <strong class="hl-tag" style="color: #000096">&lt;/dependencies&gt;</strong>
+      <strong class="hl-tag" style="color: #000096">&lt;/plugin&gt;</strong>
+      ...
+    <strong class="hl-tag" style="color: #000096">&lt;/plugins&gt;</strong>
+  <strong class="hl-tag" style="color: #000096">&lt;/build&gt;</strong>
+<strong class="hl-tag" style="color: #000096">&lt;/project&gt;</strong>
+</pre><p>The maven goal to execute is querydsl:export.</p></div></div><div class="sect2"><div class="titlepage"><div><div><h3 class="title"><a name="d0e2000"></a>2.9.3.&nbsp;Querying with other backends</h3></div></div></div><p>When querying with other backends the Expression model has to be created
+      manually or alternatively the alias functionality can be used.
+    </p><p>Here is a minimal example with JPA :</p><pre class="programlisting">
+<em><span class="hl-annotation" style="color: gray">@Entity</span></em>
+<strong class="hl-keyword">class</strong> User {
+  <em><span class="hl-annotation" style="color: gray">@BeanProperty</span></em>
+  <em><span class="hl-annotation" style="color: gray">@Id</span></em>
+  var id: Integer = _;
+  <em><span class="hl-annotation" style="color: gray">@BeanProperty</span></em>
+  var userName: String = _;
+  <em><span class="hl-annotation" style="color: gray">@BeanProperty</span></em>
+  <em><span class="hl-annotation" style="color: gray">@ManyToOne</span></em>
+  var department: Department = _;
+}
+
+<em><span class="hl-annotation" style="color: gray">@Entity</span></em>
+<strong class="hl-keyword">class</strong> Department {
+  <em><span class="hl-annotation" style="color: gray">@BeanProperty</span></em>
+  <em><span class="hl-annotation" style="color: gray">@Id</span></em>
+  var id: Integer = _;
+  <em><span class="hl-annotation" style="color: gray">@BeanProperty</span></em>
+  var name: String = _;
+}
+</pre><p>And here are some query examples</p><p>List</p><pre class="programlisting">
+val person = Person as <strong class="hl-string"><em style="color:red">"person"</em></strong>
+
+selectFrom(person).where(person.firstName like <strong class="hl-string"><em style="color:red">"Rob%"</em></strong>).fetch()
+</pre><p>Unique result</p><pre class="programlisting">
+selectFrom(person).where(person.firstName like <strong class="hl-string"><em style="color:red">"Rob%"</em></strong>).fetchOne()
+</pre><p>Long where</p><pre class="programlisting">
+selectFrom(person)
+  .where(person.firstName like <strong class="hl-string"><em style="color:red">"Rob%"</em></strong>, person.lastName like <strong class="hl-string"><em style="color:red">"An%"</em></strong>)
+  .fetch()
+</pre><p>Order</p><pre class="programlisting">
+selectFrom(person).orderBy(person.firstName asc).fetch()
+</pre><p>Not null</p><pre class="programlisting">
+selectFrom(person)
+  .where(person.firstName isEmpty, person.lastName isNotNull)
+  .fetch()
+</pre><p>The factory method for query creation is</p><pre class="programlisting">
+def query() = <strong class="hl-keyword">new</strong> JPAQuery(entityManager)
+</pre><p>In addition to queries you need variables which can be created like this</p><pre class="programlisting">
+val person = Person as <strong class="hl-string"><em style="color:red">"person"</em></strong>
+</pre><p>Note: the Scala support is not yet available if you use Hibernate with an XML based configuration. HibernateDomainExporter currently only outputs Java source files.</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s08.html">Prev</a>&nbsp;</td><td width="20%" align="center"><a accesskey="u" href="ch02.html">Up</a></td><td width="40%" align="right">&nbsp;<a accesskey="n" href="ch03.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">2.8.&nbsp;Querying Collections&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;3.&nbsp;General usage</td></tr></table></div></body></html>
